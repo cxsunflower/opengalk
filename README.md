@@ -1,8 +1,9 @@
 # 开源公安联考机考web版系统
-
+#### SpringBoot3 + Vue3前后端分离项目
 本篇README.md面向开发者
 
 ## 目录
+- [概览](#概览)
 - [功能实现](#功能实现)
 - [上手指南](#上手指南)
     - [开发前的配置要求](#开发前的配置要求)
@@ -12,10 +13,26 @@
 - [版本控制](#版本控制)
 - [作者](#作者)
 - [鸣谢](#鸣谢)
+## 概览
+
+用户中心
+![](readme_imgs/用户中心.png)
+用户管理
+![](readme_imgs/用户管理.png)
+试卷管理
+![](readme_imgs/试卷管理.png)
+添加试卷
+![](readme_imgs/添加试卷.png)
+模拟考试
+![](readme_imgs/模拟考试.png)
+公专考试页面
+![](readme_imgs/公专考试页面.png)
 
 ## 功能实现
 
 ### 已实现
+
+- 简易登陆注册
 - 用户管理
 - 学校管理
 - 试卷管理
@@ -23,21 +40,26 @@
 - 公安专业科目考试
 
 ### 待实现
+
+- qq和微信登陆
+- 分模块练习
+- 讨论区
 - 个人设置（每日记录）
 - 行政职业能力测试考试
 - 首页内容
 
+    。。。更多待实现功能
 
 ## 上手指南
 
 ### 开发前的配置要求
 
-1. Intellij idea开发工具
+1. 尽量使用Intellij idea开发工具
 2. jdk17版本及以上jdk
 3. pnpm包管理
 4. 非IE 11版本以下浏览器
 5. postgres数据库
-6. redis缓存服务器
+6. redis缓存数据库
 
 ### 文件目录说明
 
@@ -87,7 +109,7 @@ opengalk
     - 使用pnpm管理vue依赖
 
 4. 开启redis（6379端口）
-5. 管理
+5. 启动项目之后的管理
 
     登陆地址：http://localhost:8082
 
@@ -98,6 +120,8 @@ opengalk
 ## 本项目使用到的框架
 
 - [Spring Boot](https://spring.io/projects/spring-boot/)
+- [Spring Security](https://spring.io/projects/spring-security)
+- [MyBatis Plus](https://baomidou.com)
 - [Vue](https://cn.vuejs.org/)
 - [Element Plus](https://element-plus.org/zh-CN/)
 
