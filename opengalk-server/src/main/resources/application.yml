@@ -1,0 +1,41 @@
+server:
+  port: 8081
+spring:
+  servlet:
+    multipart:
+      max-file-size: 5MB
+  devtools:
+    livereload:
+      port: 33333
+  # 数据池
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    username: postgres
+    password: 123456
+    url: jdbc:postgresql://localhost:5432/opengalk
+  # 序列化
+  jackson:
+    # 序列化忽略空值
+    default-property-inclusion: non_null
+    # 反序列化忽略空值
+    deserialization:
+      fail-on-unknown-properties: false
+  data:
+    redis:
+      port: 6379
+mybatis-plus:
+  global-config:
+    db-config:
+      # 全局逻辑删除的实体字段名
+      logic-delete-field: isDeleted
+      # 逻辑已删除值(默认为 1)
+      logic-delete-value: 1
+      # 逻辑未删除值(默认为 0)
+      logic-not-delete-value: 0
+  mapper-locations: classpath:/数据访问层xml/*.xml
+  type-aliases-package: com.opengalk.server.实体类
+logging:
+  config: classpath:log4j2.yml
+
+
+

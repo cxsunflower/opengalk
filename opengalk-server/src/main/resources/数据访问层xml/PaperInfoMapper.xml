@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.opengalk.server.数据访问层.PaperInfoMapper">
+    <update id="addGZPaper">
+        create table paper."${uuid}"
+        (
+            id       smallint not null primary key,
+            type     smallint not null,
+            subject  varchar  not null,
+            picture  varchar,
+            option_a varchar  not null,
+            option_b varchar  not null,
+            option_c varchar  not null,
+            option_d varchar  not null,
+            answer   varchar  not null
+        );
+    </update>
+
+    <select id="isPaperExist" parameterType="java.lang.String">
+        select count(*)
+        from pg_class
+        where relname = #{uuid};
+    </select>
+
+    <insert id="insertGZSubject" parameterType="GZSubjectObject">
+        insert into paper."${uuid}"(id, type, subject, picture, option_a, option_b, option_c, option_d, answer)
+        values (#{id}, #{type}, #{subject}, #{picture}, #{optionA}, #{optionB}, #{optionC}, #{optionD}, #{answer})
+    </insert>
+
+    <insert id="deleteGZPaper" parameterType="java.lang.String">
+        drop table paper."${uuid}";
+    </insert>
+
+    <select id="getGZPaperById" resultType="GZSubjectObject">
+        select *
+        from paper."${uuid}"
+    </select>
+
+    <select id="getGZPaperByIdWithNoAnswer" resultType="GZSubjectObject">
+        select id,
+               type,
+               subject,
+               picture,
+               option_a,
+               option_b,
+               option_c,
+               option_d
+        from paper."${uuid}"
+    </select>
+
+    <select id="getAnswerById" resultType="java.lang.String">
+        select answer
+        from paper."${uuid}"
+    </select>
+
+    <select id="getPaperList" resultType="paperInfo">
+        select pi.id, pi.name,pr.score
+        from "paper".paper_info as pi
+                 left join "paper".paper_record as pr on pr.user_id = #{userId} and pi.id = pr.id
+        where pi.is_deleted = 0
+    </select>
+
+
+</mapper>

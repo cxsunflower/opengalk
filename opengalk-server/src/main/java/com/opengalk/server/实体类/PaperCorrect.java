@@ -1,0 +1,47 @@
+package com.opengalk.server.实体类;
+
+import com.baomidou.mybatisplus.annotation.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.io.Serial;
+import java.io.Serializable;
+import java.time.LocalDateTime;
+
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@TableName(value = "paper_correct", schema = "\"paper\"")
+public class PaperCorrect implements Serializable {
+
+    @Serial
+    @TableField(exist = false)
+    private static final long serialVersionUID = 1L;
+
+    @TableId(value = "id")
+    private String id;
+
+    @Size(min = 32, max = 32)
+    @TableField("uuid")
+    private String uuid;
+
+    @Min(1)
+    @Max(100)
+    @TableField("subject_id")
+    private Integer subjectId;
+
+    @TableField("user_id")
+    private Long userId;
+
+    @TableField("correct_text")
+    private String correctText;
+
+    @TableField(value = "create_time", fill = FieldFill.INSERT)
+    private LocalDateTime createTime;
+}
