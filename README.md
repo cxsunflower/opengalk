@@ -32,7 +32,7 @@
 
 ### 开发前的配置要求
 
-1. Intellij idea开发工具
+1. 尽量使用Intellij idea开发工具
 2. jdk17版本及以上jdk
 3. pnpm包管理
 4. 非IE 11版本以下浏览器
