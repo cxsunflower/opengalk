@@ -1,10 +1,9 @@
-# <center> 开源公安联考机考web版系统</center>
-<center>
-<a href='https://gitee.com/xiangrikuicx/opengalk/stargazers'><img src='https://gitee.com/xiangrikuicx/opengalk/badge/star.svg?theme=white' alt='star'></img></a>
-<a href='https://gitee.com/xiangrikuicx/opengalk/members'><img src='https://gitee.com/xiangrikuicx/opengalk/badge/fork.svg?theme=white' alt='fork'></img></a>
-</center>
+# 开源公安联考机考web版系统  
 
-<center><a href='https://gitee.com/xiangrikuicx/opengalk'><img src='https://gitee.com/xiangrikuicx/opengalk/widgets/widget_6.svg' alt='Fork me on Gitee'></img></a></center>
+<a href='https://gitee.com/xiangrikuicx/opengalk/stargazers'><img src='https://gitee.com/xiangrikuicx/opengalk/badge/star.svg?theme=white' alt='star'></img></a>
+<a href='https://gitee.com/xiangrikuicx/opengalk/members'><img src='https://gitee.com/xiangrikuicx/opengalk/badge/fork.svg?theme=white' alt='fork'></img></a>  
+
+<a href='https://gitee.com/xiangrikuicx/opengalk'><img src='https://gitee.com/xiangrikuicx/opengalk/widgets/widget_6.svg' alt='Fork me on Gitee'></img></a>
 
 ### SpringBoot3 + Vue3前后端分离项目
 本篇README.md面向开发者
