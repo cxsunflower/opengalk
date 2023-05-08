@@ -11,6 +11,7 @@
 - [安装和部署](#安装和部署)
 - [使用到的框架](#本项目使用到的框架)
 - [版本控制](#版本控制)
+    - [如何参与开源项目](#如何参与开源项目)
 - [作者](#作者)
 - [鸣谢](#鸣谢)
 ## 概览
@@ -42,6 +43,7 @@
 ### 待实现
 
 - qq和微信登陆
+- 上传带图片的题目和选项
 - 分模块练习
 - 讨论区
 - 个人设置（每日记录）
@@ -65,8 +67,9 @@
 
 ```
 opengalk
-├── LICENSE
-├── README.md
+├── LICENSE 许可
+├── README.md 说明文档
+├── readme_imgs 说明文档图片
 ├── opengalk.iml idea导入模块配置文件
 ├── opengalk-webui.iml idea导入模块配置文件
 ├── opengalk.sql postgres数据库数据
@@ -127,7 +130,16 @@ opengalk
 
 ## 版本控制
 
-该项目使用Git进行版本管理。您可以在repository参看当前可用版本。
+该项目使用Git进行版本管理。
+### 如何参与开源项目
+
+贡献使开源社区成为一个学习、激励和创造的绝佳场所。你所作的任何贡献都是**非常感谢**的。
+
+1. fork develop分支
+2. 创建并切换到新分支(`git checkout -b develop/xxxxx`)
+3. 提交 (`git commit -m "yyyyyy"`)
+4. 推送 (`git push origin develop/xxxxx`)
+5. 打开pull request
 
 ## 作者
 
@@ -137,7 +149,7 @@ cx
 
 ## 版权说明
 
-该项目签署了木兰公共许可证, 第2版授权许可，详情请参阅 [LICENSE](http://license.coscl.org.cn/MulanPubL-2.0)
+该项目签署了木兰宽松许可证， 第2版授权许可，详情请参阅 [LICENSE](http://license.coscl.org.cn/MulanPSL2)
 
 ## 鸣谢
 
