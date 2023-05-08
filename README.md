@@ -1,5 +1,11 @@
-# 开源公安联考机考web版系统
-#### SpringBoot3 + Vue3前后端分离项目
+# 开源公安联考机考web版系统  
+
+<a href='https://gitee.com/xiangrikuicx/opengalk/stargazers'><img src='https://gitee.com/xiangrikuicx/opengalk/badge/star.svg?theme=white' alt='star'></img></a>
+<a href='https://gitee.com/xiangrikuicx/opengalk/members'><img src='https://gitee.com/xiangrikuicx/opengalk/badge/fork.svg?theme=white' alt='fork'></img></a>  
+
+<a href='https://gitee.com/xiangrikuicx/opengalk'><img src='https://gitee.com/xiangrikuicx/opengalk/widgets/widget_6.svg' alt='Fork me on Gitee'></img></a>
+
+### SpringBoot3 + Vue3前后端分离项目
 本篇README.md面向开发者
 
 ## 目录
@@ -135,7 +141,7 @@ opengalk
 
 贡献使开源社区成为一个学习、激励和创造的绝佳场所。你所作的任何贡献都是**非常感谢**的。
 
-1. fork develop分支
+1. fork 该仓库
 2. 创建并切换到新分支(`git checkout -b develop/xxxxx`)
 3. 提交 (`git commit -m "yyyyyy"`)
 4. 推送 (`git push origin develop/xxxxx`)
@@ -152,9 +158,3 @@ cx
 该项目签署了木兰宽松许可证， 第2版授权许可，详情请参阅 [LICENSE](http://license.coscl.org.cn/MulanPSL2)
 
 ## 鸣谢
-
-
-
-
-
-
