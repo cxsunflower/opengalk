@@ -47,6 +47,7 @@
                     v-model="activeName"
                     type="card"
                     class="demo-tabs"
+                    @tab-change="tabChange"
             >
                 <el-tab-pane style="flex-direction: column" name="first">
                     <template #label>
@@ -60,7 +61,7 @@
 
                     <div class="record-title">每日记录</div>
                     <div style="float: left">
-                        <div class="block" v-for="ley in 356"></div>
+                        <div class="block" v-for="i in 356"></div>
                     </div>
                     <div class="today">今日动态</div>
                     <div> 提交了一份</div>
@@ -75,6 +76,37 @@
                             <span class="tab-pane-title">收藏</span>
                         </div>
                     </template>
+
+                    <el-scrollbar>
+                        <div style="width:100%">
+                            <el-row :gutter="10">
+                                <el-col
+                                        style="margin-bottom: 10px"
+                                        v-for="(value,key) in collectList"
+                                        :key="key"
+                                >
+
+                                    <div class="card">
+                                        <div style="display: flex;flex-direction: row;width:800px">
+                                            <div style="padding-left: 20px;width: 20%;display:flex;align-items: center;">
+                                                试卷： {{ value.name }}
+                                            </div>
+                                            <div style="width: 10%;display:flex;align-items: center;">
+                                                题号：{{ value.subjectId }}
+                                            </div>
+                                            <div style="max-width: 55%;height:60px;line-height:62px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">
+                                                题目：{{ value.subject }}
+                                            </div>
+                                            <div style="width: 10%;display:flex;align-items: center;">
+                                                <el-button type="success">查看题目</el-button>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </el-col>
+                            </el-row>
+                        </div>
+                    </el-scrollbar>
                 </el-tab-pane>
             </el-tabs>
         </div>
@@ -242,20 +274,21 @@
 <script lang="ts" setup>
 import {getAccountByToken, getToken, removeToken} from "../../utils/TokenUtil";
 import {
-    Lock,
-    Setting,
-    Postcard,
-    School,
-    Message,
     Calendar,
-    Male,
     Female,
     Iphone,
+    Lock,
+    Male,
+    Message,
+    Postcard,
+    School,
+    Setting,
+    Star,
     User,
-    Star, UserFilled
+    UserFilled
 } from '@element-plus/icons-vue'
 import {onMounted, reactive, ref, watch} from "vue";
-import {ElMessageBox, FormInstance, FormRules, UploadUserFile, UploadProps,ElMessage} from "element-plus";
+import {ElMessage, ElMessageBox, FormInstance, FormRules, UploadProps, UploadUserFile} from "element-plus";
 import {formatBirthday, formatGender} from "../../utils/FormatterUtil";
 import request, {baseURL} from "../../utils/RequestUtil";
 import {showMessage} from "../../utils/MessageUtil";
@@ -282,6 +315,13 @@ const userInfoForm = ref({
     birthday: '',
     collegeId: undefined,
 })
+
+const collectList = ref([{
+    uuid: '',
+    subjectId: '',
+    name: '',
+    subject: '',
+}])
 
 const avatarList = ref<UploadUserFile[]>([])
 
@@ -314,7 +354,6 @@ const clean = () => {
     }
 
     collegeList.value = []
-
 }
 
 onMounted(() => {
@@ -365,7 +404,7 @@ const updatePasswordRules = reactive<FormRules>({
     ]
 })
 
-const avatarUploadSuccess = (response:any) => {
+const avatarUploadSuccess = (response: any) => {
     avatarList.value = []
     ElMessage({
         message: response.响应消息,
@@ -462,6 +501,17 @@ const toLogin = () => {
     router.push('/login')
 }
 
+const tabChange = () => {
+    if(activeName.value === 'second'){
+        getCollectList()
+    }
+}
+const getCollectList = async () => {
+    await request.get(requestUrl + '/getCollectList').then((result: any) => {
+        collectList.value = result.data.响应数据
+    })
+}
+
 </script>
 
 <style lang="scss" scoped>
@@ -504,6 +554,7 @@ const toLogin = () => {
 .right {
   float: left;
 
+
   .demo-tabs > .el-tabs__content {
     padding: 32px;
     color: #6b778c;
@@ -517,6 +568,16 @@ const toLogin = () => {
     align-items: center;
     text-align: center;
     width: 60px;
+  }
+
+  .card {
+    height: 60px;
+    border: 1px solid #f2f2f2;
+    border-radius: 3px 3px 3px 3px;
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .tab-pane-title {

@@ -11,16 +11,20 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 /**
-* @author cx
-* @description 针对表【paper_collect】的数据库操作Service实现
-* @createDate 2023-05-04 20:48:44
-*/
+ * @author cx
+ * @description 针对表【paper_collect】的数据库操作Service实现
+ * @createDate 2023-05-04 20:48:44
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class PaperCollectServiceImpl extends ServiceImpl<PaperCollectMapper, PaperCollect>
-    implements PaperCollectService {
+        implements PaperCollectService {
 
     private final PaperCollectMapper paperCollectMapper;
 
@@ -46,6 +50,17 @@ public class PaperCollectServiceImpl extends ServiceImpl<PaperCollectMapper, Pap
         return paperCollectMapper.insert(newPaperCollect) == 1
                 ? new ResponseResult<>(1, "收藏成功", null)
                 : new ResponseResult<>(0, "收藏失败", null);
+    }
+
+    @Override
+    public ResponseResult<?> getCollectList() {
+        List<PaperCollect> list = new ArrayList<>();
+        Long id = loginUserUtil.getLoginUserID();
+        String[] uuid = paperCollectMapper.getCollectPaperId(id);
+        for (String tmp : uuid) {
+            Collections.addAll(list, paperCollectMapper.getCollectList(tmp, id));
+        }
+        return new ResponseResult<>(1, null, list);
     }
 }
 

@@ -12,4 +12,6 @@ import com.opengalk.server.实体类.PaperCollect;
 public interface PaperCollectService extends IService<PaperCollect> {
 
     ResponseResult<?> collect(PaperCollect paperCollect);
+
+    ResponseResult<?> getCollectList();
 }

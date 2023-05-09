@@ -1,6 +1,7 @@
 package com.opengalk.server.控制层;
 
 import com.opengalk.server.业务逻辑层.CollegeInfoService;
+import com.opengalk.server.业务逻辑层.PaperCollectService;
 import com.opengalk.server.业务逻辑层.UserInfoService;
 import com.opengalk.server.响应类.ResponseResult;
 import com.opengalk.server.实体类.UserInfo;
@@ -25,6 +26,8 @@ public class UserCenterController {
     private final UserInfoService userInfoService;
 
     private final CollegeInfoService collegeInfoService;
+
+    private final PaperCollectService paperCollectService;
 
     @GetMapping
     public ResponseResult<?> getUserInfo() {
@@ -53,8 +56,11 @@ public class UserCenterController {
 
     @PostMapping("/uploadAvatar")
     public ResponseResult<?> uploadAvatar(@RequestParam MultipartFile file) {
-
         return userInfoService.uploadAvatar(file);
     }
 
+    @GetMapping("/getCollectList")
+    public ResponseResult<?> getCollectList() {
+        return paperCollectService.getCollectList();
+    }
 }
