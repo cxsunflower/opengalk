@@ -1,7 +1,10 @@
 package com.opengalk.server.过滤器;
 
 import cn.hutool.jwt.JWTUtil;
-import jakarta.annotation.Resource;
+import com.opengalk.server.响应类.ResponseResult;
+import com.opengalk.server.实体类.UserInfo;
+import com.opengalk.server.工具类.RedisUtil;
+import com.opengalk.server.工具类.ResponseUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -15,10 +18,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
-import com.opengalk.server.响应类.ResponseResult;
-import com.opengalk.server.实体类.UserInfo;
-import com.opengalk.server.工具类.RedisUtil;
-import com.opengalk.server.工具类.ResponseUtil;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
