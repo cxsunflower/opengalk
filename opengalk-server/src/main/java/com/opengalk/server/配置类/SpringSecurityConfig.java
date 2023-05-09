@@ -3,12 +3,14 @@ package com.opengalk.server.配置类;
 import com.opengalk.server.过滤器.JavaWebTokenFilter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.DefaultLoginPageConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,6 +26,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Collections;
 
+@Slf4j
 @EnableMethodSecurity
 @Configuration
 @RequiredArgsConstructor
@@ -62,7 +65,7 @@ public class SpringSecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        return http
+        return (SecurityFilterChain) http
                 .cors()
                 .and()
                 // 不使用csrf防护
@@ -70,7 +73,9 @@ public class SpringSecurityConfig {
                 // 登陆
                 .formLogin(
                         formLoginCustomizer -> formLoginCustomizer
+                                .loginPage("/login")
                                 .loginProcessingUrl("/login")
+                                .failureForwardUrl("/login")
                                 .usernameParameter("account")
                                 .passwordParameter("password")
                                 .failureHandler(authenticationFailureHandler)
@@ -98,5 +103,6 @@ public class SpringSecurityConfig {
                 .addFilterBefore(javaWebTokenFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
+
 
 }

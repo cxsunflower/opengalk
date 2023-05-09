@@ -68,7 +68,7 @@ public class JavaWebTokenFilter extends OncePerRequestFilter {
         }
 
         if (!token.equals(loginUser.getToken())) {
-            responseUtil.renderResponse(response, new ResponseResult<>(0, "可疑行为", null));
+            responseUtil.renderResponse(response, new ResponseResult<>(0, "疑似篡改token", null));
             return;
         }
 
