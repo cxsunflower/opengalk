@@ -24,7 +24,7 @@ import java.util.Date;
 /**
  * @TableName user_info
  */
-@TableName(value = "user_info",schema = "\"user\"")
+@TableName(value = "user_info", schema = "\"user\"")
 @Data
 @Builder
 @NoArgsConstructor

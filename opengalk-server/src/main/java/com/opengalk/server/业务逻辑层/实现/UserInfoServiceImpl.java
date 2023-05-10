@@ -338,7 +338,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
     }
 
     @Override
-    public ResponseResult<?> getAvatar(){
+    public ResponseResult<?> getAvatar() {
         Long id = loginUserUtil.getLoginUserID();
         String filePath = FILE_DIR + id;
         byte[] data = null;
@@ -352,7 +352,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
             e.printStackTrace();
         }
 
-        return new ResponseResult<>(0,null, Base64Encoder.encode(data));
+        return new ResponseResult<>(0, null, Base64Encoder.encode(data));
     }
 
 }

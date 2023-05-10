@@ -2,7 +2,7 @@
     <div id="header">
         <div class="left">
             <div id="avatar">
-                <el-avatar :size="40" :icon="UserFilled as string" v-show="false"/>
+                <el-avatar v-show="false" :icon="UserFilled as string" :size="40"/>
             </div>
             <div id="title">
                 <div style="font-size: 18px;font-weight: bolder;">
@@ -27,7 +27,8 @@
             </div>
 
             <div class="button">
-                <el-button style="width:90px;background-color: coral;border:0;color: white;font-size: 16px" :disabled="true">
+                <el-button :disabled="true"
+                           style="width:90px;background-color: coral;border:0;color: white;font-size: 16px">
                     交卷
                 </el-button>
             </div>

@@ -51,7 +51,7 @@ public class GZSubjectObject {
     @TableField(value = "option_d")
     private String optionD;
 
-    @Size(max=4)
+    @Size(max = 4)
     @TableField(value = "answer")
     private String answer;
 }

@@ -2,13 +2,13 @@
     <div class="user">
         <div class="user-top">
             <div class="top-left">
-                <el-select class="cascader" v-model="condition">
+                <el-select v-model="condition" class="cascader">
                     <el-option label="id" value="id"/>
                     <el-option label="账号" value="account"/>
                     <el-option label="名字" value="name"/>
                 </el-select>
-                <el-input class="search" v-model="keyword" placeholder="请输入关键字词"/>
-                <el-button type="primary" :icon="Search as string" @click="getUserList(1)">查询</el-button>
+                <el-input v-model="keyword" class="search" placeholder="请输入关键字词"/>
+                <el-button :icon="Search as string" type="primary" @click="getUserList(1)">查询</el-button>
                 <el-button :icon="Refresh as string" @click="refresh">重置</el-button>
             </div>
             <div class="top-right">
@@ -17,12 +17,12 @@
         </div>
 
         <!--    添加用户对话框-->
-        <el-dialog title="添加用户页面" v-model="addDialogVisible" width="35%" @close="cancel" center>
+        <el-dialog v-model="addDialogVisible" center title="添加用户页面" width="35%" @close="cancel">
             <el-form
                     ref="userFormRef"
                     :model="addUserForm"
-                    label-width="80px"
                     :rules="addRules"
+                    label-width="80px"
             >
                 <el-form-item label="账号" prop="account">
                     <el-input v-model="addUserForm.account" clearable/>
@@ -47,7 +47,7 @@
         </el-dialog>
 
         <!--个人信息页面-->
-        <el-dialog v-model="userInfoDialogVisible" title="个人信息页面" @close="cancel" width="80%" align-center center>
+        <el-dialog v-model="userInfoDialogVisible" align-center center title="个人信息页面" width="80%" @close="cancel">
             <div style="display: flex;flex-direction: row">
                 <el-form
                         :model="userInfoForm"
@@ -60,23 +60,23 @@
 
                     <el-form-item label="账户状态" prop="isLocked" @click="changeIsLockedValue">
                         <el-switch
-                                :disabled="isDisabled"
                                 v-model="isLockedValue"
-                                style="--el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949"
-                                inline-prompt
+                                :disabled="isDisabled"
                                 active-text="未锁定"
                                 inactive-text="已锁定"
+                                inline-prompt
+                                style="--el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949"
                                 @change="changeIsLockedValue"
                         />
                     </el-form-item>
 
                     <p style="color: red;padding-left: 75px">*修改密码将会直接覆盖该用户旧密码*</p>
                     <el-form-item label="密码">
-                        <el-button type="danger" :disabled="isDisabled" @click="toEditPassword">修改密码</el-button>
+                        <el-button :disabled="isDisabled" type="danger" @click="toEditPassword">修改密码</el-button>
                     </el-form-item>
 
                     <el-form-item label="权限" prop="authority">
-                        <el-select :disabled="isDisabled" v-model="authorityValue" placeholder="请选择你的职位">
+                        <el-select v-model="authorityValue" :disabled="isDisabled" placeholder="请选择你的职位">
                             <el-option label="教师" value="教师"/>
                             <el-option label="学生" value="学生"/>
                         </el-select>
@@ -84,11 +84,11 @@
                 </el-form>
 
                 <el-descriptions
-                        title="个人信息"
-                        column="1"
                         border
+                        column="1"
                         direction="vertical"
                         style="width: 50%"
+                        title="个人信息"
                 >
                     <el-descriptions-item>
                         <template #label>
@@ -99,7 +99,7 @@
                                 姓名
                             </div>
                         </template>
-                        <el-input :disabled="isDisabled" v-model="userInfoForm.name"></el-input>
+                        <el-input v-model="userInfoForm.name" :disabled="isDisabled"></el-input>
                     </el-descriptions-item>
 
                     <el-descriptions-item>
@@ -111,7 +111,7 @@
                                 学校
                             </div>
                         </template>
-                        <el-select :disabled="isDisabled" v-model="userInfoForm.collegeName" @click="getCollegeList">
+                        <el-select v-model="userInfoForm.collegeName" :disabled="isDisabled" @click="getCollegeList">
                             <el-option v-for="college in collegeList" :key="college" :label="college.collegeName"
                                        :value="college.collegeName"></el-option>
                         </el-select>
@@ -129,7 +129,7 @@
                                 性别
                             </div>
                         </template>
-                        <el-radio-group :disabled="isDisabled" v-model="userInfoForm.gender">
+                        <el-radio-group v-model="userInfoForm.gender" :disabled="isDisabled">
                             <el-radio label="男" size="large">男</el-radio>
                             <el-radio label="女" size="large">女</el-radio>
                         </el-radio-group>
@@ -145,7 +145,7 @@
                                 手机号
                             </div>
                         </template>
-                        <el-input :disabled="isDisabled" v-model="userInfoForm.phoneNumber"></el-input>
+                        <el-input v-model="userInfoForm.phoneNumber" :disabled="isDisabled"></el-input>
                     </el-descriptions-item>
 
                     <el-descriptions-item>
@@ -158,8 +158,8 @@
                             </div>
                         </template>
                         <el-date-picker
-                                :disabled="isDisabled"
                                 v-model="userInfoForm.birthday"
+                                :disabled="isDisabled"
                                 type="date"
                         />
                     </el-descriptions-item>
@@ -173,7 +173,7 @@
                                 电子邮箱
                             </div>
                         </template>
-                        <el-input :disabled="isDisabled" v-model="userInfoForm.email"></el-input>
+                        <el-input v-model="userInfoForm.email" :disabled="isDisabled"></el-input>
                     </el-descriptions-item>
                 </el-descriptions>
             </div>
@@ -188,52 +188,52 @@
             </template>
         </el-dialog>
 
-        <el-dialog align-center title="修改用户密码页面" v-model="editPasswordDialogVisible" width="35%" center>
+        <el-dialog v-model="editPasswordDialogVisible" align-center center title="修改用户密码页面" width="35%">
             <p style="color: red;padding-left: 75px">*密码长度必须在6-20位*</p>
             <el-form-item label="新的密码">
-                <el-input v-model="newPassword" type="password" clearable show-password/>
+                <el-input v-model="newPassword" clearable show-password type="password"/>
             </el-form-item>
             <el-button :disabled="isDisabled" style="margin-left: 150px" type="primary" @click="editPassword">设置新的密码
             </el-button>
         </el-dialog>
 
         <!--  用户表格-->
-        <el-table class="user-table" :data="tableData">
+        <el-table :data="tableData" class="user-table">
             <template #empty>
                 没有数据
             </template>
-            <el-table-column width="150" label="id" prop="id"/>
-            <el-table-column width="150" label="账号" prop="account"/>
-            <el-table-column width="150" label="姓名" prop="name"/>
+            <el-table-column label="id" prop="id" width="150"/>
+            <el-table-column label="账号" prop="account" width="150"/>
+            <el-table-column label="姓名" prop="name" width="150"/>
             <el-table-column
-                    width="70"
+                    :formatter="formatAuthorityInRow"
                     label="权限"
                     prop="authority"
-                    :formatter="formatAuthorityInRow"
+                    width="70"
             />
 
             <el-table-column
-                    width="80"
+                    :formatter="formatIsLocked"
                     label="账户状态"
                     prop="isLocked"
-                    :formatter="formatIsLocked"
+                    width="80"
             />
 
             <el-table-column
-                    width="150"
                     label="由谁创建(id)"
                     prop="createBy"
+                    width="150"
             />
 
             <el-table-column
+                    :formatter="formatTimeInRow"
                     align="center"
-                    width="95"
                     label="创建时间"
                     prop="createTime"
-                    :formatter="formatTimeInRow"
+                    width="95"
             />
 
-            <el-table-column label="操作" align="center" width="250px">
+            <el-table-column align="center" label="操作" width="250px">
                 <!--          操作-->
                 <template #default="scope">
                     <el-button size="small" type="primary" @click="showUserInfo(scope)">查看和修改</el-button>
@@ -257,8 +257,8 @@
                     v-model:page-size="pageSize"
                     :background="background"
                     :page-count="totalPage"
-                    style="margin-top: 10px"
                     :total="total"
+                    style="margin-top: 10px"
             />
         </div>
 

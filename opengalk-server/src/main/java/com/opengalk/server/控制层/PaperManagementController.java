@@ -36,7 +36,7 @@ public class PaperManagementController {
 
     @GetMapping("/getPaper/{uuid}")
     public ResponseResult<?> getPaperById(@PathVariable String uuid) {
-        return paperService.getGZPaperById(uuid,1);
+        return paperService.getGZPaperById(uuid, 1);
     }
 
     @PostMapping("/addGZPaper")
@@ -50,7 +50,7 @@ public class PaperManagementController {
     }
 
     @DeleteMapping("/deletePaper/{uuid}")
-    public ResponseResult<?> deletePaper(@PathVariable String uuid){
+    public ResponseResult<?> deletePaper(@PathVariable String uuid) {
         return paperService.deletePaperById(uuid);
     }
 

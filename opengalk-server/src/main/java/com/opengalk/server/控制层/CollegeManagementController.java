@@ -47,7 +47,7 @@ public class CollegeManagementController {
     }
 
     @PutMapping("/updateCollegeInfo")
-    public ResponseResult<?> updateCollegeInfo(@RequestBody @Valid CollegeInfo collegeInfo){
+    public ResponseResult<?> updateCollegeInfo(@RequestBody @Valid CollegeInfo collegeInfo) {
         return collegeInfoService.updateCollegeInfo(collegeInfo);
 
     }

@@ -49,7 +49,7 @@ public class PaperServiceImpl extends ServiceImpl<PaperInfoMapper, PaperInfo>
 
     @Override
     public ResponseResult<?> getPaperList(Integer type) {
-        return new ResponseResult<>(1, null, paperInfoMapper.getPaperList(loginUserUtil.getLoginUserID(),type));
+        return new ResponseResult<>(1, null, paperInfoMapper.getPaperList(loginUserUtil.getLoginUserID(), type));
     }
 
     @Override

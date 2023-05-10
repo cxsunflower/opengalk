@@ -11,9 +11,8 @@ import org.springframework.stereotype.Component;
 public class TokenUtil {
 
     /**
-     *
      * @param request
-     * @param header 头字段
+     * @param header  头字段
      * @return token
      */
     public String getToken(@NonNull HttpServletRequest request, String header) {
@@ -21,16 +20,15 @@ public class TokenUtil {
     }
 
     /**
-     *
      * @param token
-     * @param key payload中id对应的键
+     * @param key   payload中id对应的键
      * @return id
      */
-    public String getIdByToken(String token, String key){
+    public String getIdByToken(String token, String key) {
         String id;
         try {
             id = JWTUtil.parseToken(token).getPayload().getClaim(key).toString();
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }

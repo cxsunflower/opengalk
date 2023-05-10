@@ -1,13 +1,13 @@
 <template>
-  <div>
-    <Header/>
-    <div class="main">
-      <Aside class="aside"/>
-      <div class="right">
-        <router-view class="router"/>
-      </div>
+    <div>
+        <Header/>
+        <div class="main">
+            <Aside class="aside"/>
+            <div class="right">
+                <router-view class="router"/>
+            </div>
+        </div>
     </div>
-  </div>
 </template>
 
 <script lang="ts" setup>

@@ -2,12 +2,12 @@
     <div class="college">
         <div class="college-top">
             <div class="top-left">
-                <el-select class="cascader" v-model="condition">
+                <el-select v-model="condition" class="cascader">
                     <el-option label="id" value="id"/>
                     <el-option label="学校名称" value="college_name"/>
                 </el-select>
-                <el-input class="search" v-model="keyword" placeholder="请输入关键字词"/>
-                <el-button type="primary" :icon="Search as string" @click="getCollegeList(1)">查询</el-button>
+                <el-input v-model="keyword" class="search" placeholder="请输入关键字词"/>
+                <el-button :icon="Search as string" type="primary" @click="getCollegeList(1)">查询</el-button>
                 <el-button :icon="Refresh as string" @click="refresh">重置</el-button>
             </div>
             <div class="top-right">
@@ -15,23 +15,23 @@
             </div>
         </div>
         <!-- 学院表格-->
-        <el-table class="college-table" :data="tableData" :row-style="{height:'100px'}">
+        <el-table :data="tableData" :row-style="{height:'100px'}" class="college-table">
             <template #empty>
                 没有数据
             </template>
-            <el-table-column width="140" label="id" prop="id"/>
-            <el-table-column width="250" label="学校名称" prop="collegeName"/>
-            <el-table-column width="350" label="描述" prop="remark"/>
+            <el-table-column label="id" prop="id" width="140"/>
+            <el-table-column label="学校名称" prop="collegeName" width="250"/>
+            <el-table-column label="描述" prop="remark" width="350"/>
 
             <el-table-column
+                    :formatter="formatTimeInRow"
                     align="center"
-                    width="95"
                     label="创建时间"
                     prop="createTime"
-                    :formatter="formatTimeInRow"
+                    width="95"
             />
 
-            <el-table-column label="操作" align="center" width="270px">
+            <el-table-column align="center" label="操作" width="270px">
                 <!--          操作-->
                 <template #default="scope">
                     <el-button size="small" type="primary" @click="showCollegeInfo(scope)">查看和修改</el-button>
@@ -61,19 +61,19 @@
         </div>
 
         <!--    添加学校对话框-->
-        <el-dialog title="添加学校页面" v-model="addDialogVisible" width="50%" @close="cancel" center align-center>
+        <el-dialog v-model="addDialogVisible" align-center center title="添加学校页面" width="50%" @close="cancel">
             <el-form
                     ref="collegeFormRef"
                     :model="addCollegeForm"
-                    label-width="80px"
                     :rules="addRules"
+                    label-width="80px"
             >
                 <el-form-item label="学校名称" prop="collegeName">
                     <el-input v-model="addCollegeForm.collegeName" clearable/>
                 </el-form-item>
 
                 <el-form-item label="描述" prop="remark">
-                    <el-input :rows="8" type="textarea" v-model="addCollegeForm.remark" clearable/>
+                    <el-input v-model="addCollegeForm.remark" :rows="8" clearable type="textarea"/>
                 </el-form-item>
 
                 <div style="width: 100%;text-align: center">
@@ -84,15 +84,15 @@
         </el-dialog>
 
         <!--    学校信息对话框-->
-        <el-dialog v-model="collegeInfoDialogVisible" title="学校信息页面" @close="cancel" width="50%" align-center
-                   center>
+        <el-dialog v-model="collegeInfoDialogVisible" align-center center title="学校信息页面" width="50%"
+                   @close="cancel">
 
             <el-descriptions
+                    border
+                    column="1"
+                    direction="vertical"
                     style="padding: 0 20px 0 20px"
                     title="学校信息"
-                    column="1"
-                    border
-                    direction="vertical"
             >
                 <el-descriptions-item>
                     <template #label>
@@ -103,7 +103,7 @@
                             学校名称
                         </div>
                     </template>
-                    <el-input :disabled="isDisabled" v-model="collegeInfoForm.collegeName"></el-input>
+                    <el-input v-model="collegeInfoForm.collegeName" :disabled="isDisabled"></el-input>
                 </el-descriptions-item>
 
                 <el-descriptions-item>
@@ -115,8 +115,8 @@
                             学校描述
                         </div>
                     </template>
-                    <el-input :rows="8" type="textarea" :disabled="isDisabled"
-                              v-model="collegeInfoForm.remark"></el-input>
+                    <el-input v-model="collegeInfoForm.remark" :disabled="isDisabled" :rows="8"
+                              type="textarea"></el-input>
                 </el-descriptions-item>
             </el-descriptions>
 
@@ -138,7 +138,7 @@
 import {onMounted, reactive, ref, watch} from "vue";
 import {ElMessageBox, FormInstance, FormRules} from "element-plus";
 import request from "../../utils/RequestUtil";
-import {Refresh, Search, Edit, School} from "@element-plus/icons-vue";
+import {Edit, Refresh, School, Search} from "@element-plus/icons-vue";
 import {formatTime} from "../../utils/FormatterUtil";
 import {showMessage} from "../../utils/MessageUtil";
 

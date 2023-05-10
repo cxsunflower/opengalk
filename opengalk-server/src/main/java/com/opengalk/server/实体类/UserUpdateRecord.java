@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 /**
  * @TableName user_update_record
  */
-@TableName(value = "user_update_record",schema = "\"user\"")
+@TableName(value = "user_update_record", schema = "\"user\"")
 @Data
 public class UserUpdateRecord implements Serializable {
     @Serial
@@ -45,7 +45,7 @@ public class UserUpdateRecord implements Serializable {
     /**
      * 更新时间
      */
-    @TableField(value = "update_time",fill = FieldFill.INSERT)
+    @TableField(value = "update_time", fill = FieldFill.INSERT)
     private LocalDateTime updateTime;
     /**
      * 由谁更新

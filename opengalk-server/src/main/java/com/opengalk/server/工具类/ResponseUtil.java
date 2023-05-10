@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
 import org.springframework.stereotype.Component;
 import com.opengalk.server.响应类.ResponseResult;
+
 import java.io.IOException;
 
 @Component
@@ -13,7 +14,7 @@ public class ResponseUtil {
      * 将字符串渲染到客户端
      *
      * @param response 渲染对象
-     * @param result ResponseResult<?>
+     * @param result   ResponseResult<?>
      */
     public void renderResponse(@NonNull HttpServletResponse response, ResponseResult<?> result) {
         try {

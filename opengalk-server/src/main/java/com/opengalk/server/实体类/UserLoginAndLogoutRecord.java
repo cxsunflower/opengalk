@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 /**
  * @TableName user_login_and_logout_record
  */
-@TableName(value = "user_login_and_logout_record",schema = "\"user\"")
+@TableName(value = "user_login_and_logout_record", schema = "\"user\"")
 @Data
 @Builder
 public class UserLoginAndLogoutRecord implements Serializable {
@@ -23,7 +23,6 @@ public class UserLoginAndLogoutRecord implements Serializable {
     /**
      * 用户id
      */
-
     private Long id;
     /**
      * 0为登陆，1为注销

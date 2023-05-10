@@ -7,9 +7,9 @@
                 <el-form-item prop="account">
                     <el-input
                             v-model="loginForm.account"
-                            type="text"
                             auto-complete="off"
                             placeholder="账号"
+                            type="text"
                     >
                         <template #prefix>
                             <el-icon>
@@ -21,9 +21,9 @@
                 <el-form-item prop="password">
                     <el-input
                             v-model="loginForm.password"
-                            type="password"
                             auto-complete="off"
                             placeholder="密码"
+                            type="password"
                     >
                         <template #prefix>
                             <el-icon>
@@ -32,7 +32,7 @@
                         </template>
                     </el-input>
                 </el-form-item>
-                <el-form-item prop="verificationCode" v-if="verifyEnable">
+                <el-form-item v-if="verifyEnable" prop="verificationCode">
                     <el-input
                             v-model="loginForm.verificationCode"
                             auto-complete="off"
@@ -46,7 +46,7 @@
                         </template>
                     </el-input>
                     <div class="login-code" @click="flushVerificationCode">
-                        <img :src="verificationCodeUrl" class="login-code-img" alt=""/>
+                        <img :src="verificationCodeUrl" alt="" class="login-code-img"/>
                     </div>
                 </el-form-item>
 
@@ -60,14 +60,14 @@
                 <el-form-item style="width:100%;">
                     <el-button
                             :loading="loading"
-                            type="primary"
                             style="width:100%;"
+                            type="primary"
                             @click="login(loginFormRef)"
                     >
                         <span v-if="!loading">登 录</span>
                         <span v-else>登 录 中...</span>
                     </el-button>
-                    <div class="register" v-if="register">
+                    <div v-if="register" class="register">
                         <router-link class="link-type" style="text-align: right;" to="/register">立即注册</router-link>
                     </div>
                     <el-divider>
@@ -75,10 +75,10 @@
                     </el-divider>
                     <div style="display: flex;width: 400px">
                         <div class="logo">
-                            <img class="login-img" src="../assets/logo/wx_logo.png" alt="" @click="login"/>
+                            <img alt="" class="login-img" src="../assets/logo/wx_logo.png" @click="login"/>
                         </div>
                         <div class="logo">
-                            <img class="login-img" src="../assets/logo/qq_logo.png" alt="" @click="login"/>
+                            <img alt="" class="login-img" src="../assets/logo/qq_logo.png" @click="login"/>
                         </div>
                     </div>
                 </el-form-item>

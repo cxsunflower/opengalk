@@ -18,7 +18,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({ConstraintViolationException.class})
     public ResponseResult<?> paramExceptionHandler(@NonNull ConstraintViolationException e) {
         e.printStackTrace();
-        return new ResponseResult<>(0,"请求参数异常已记录",null);
+        return new ResponseResult<>(0, "请求参数异常已记录", null);
     }
 
 }

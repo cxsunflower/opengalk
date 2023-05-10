@@ -2,10 +2,10 @@
     <div>
         <el-tabs
                 v-model="activeName"
-                type="card"
                 class="demo-tabs"
+                type="card"
         >
-            <el-tab-pane style="flex-direction: column" name="公安专业科目">
+            <el-tab-pane name="公安专业科目" style="flex-direction: column">
                 <template #label>
                     <div class="tab-pane">
                         <el-icon size="large">
@@ -17,9 +17,9 @@
 
                 <el-row :gutter="10">
                     <el-col
-                            style="margin-bottom: 10px"
                             v-for="(value,key) in paperList"
                             :key="key"
+                            style="margin-bottom: 10px"
                     >
                         <div class="card">
                             <img
@@ -44,7 +44,7 @@
                     </el-col>
                 </el-row>
             </el-tab-pane>
-            <el-tab-pane style="flex-direction: column" name="行政职业能力测试">
+            <el-tab-pane name="行政职业能力测试" style="flex-direction: column">
                 <template #label>
                     <div class="tab-pane">
                         <el-icon size="large">
@@ -56,7 +56,7 @@
             </el-tab-pane>
 
         </el-tabs>
-        <el-dialog title="提示" v-model="rankDialogVisible" width="30%" center align-center :show-close="false">
+        <el-dialog v-model="rankDialogVisible" :show-close="false" align-center center title="提示" width="30%">
             <div style="width:100%;font-size:19px;text-align: center">别卷了，好吗</div>
             <template #footer>
                 <div class="dialog-footer">

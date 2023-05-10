@@ -2,12 +2,12 @@
     <div class="paper">
         <div class="paper-top">
             <div class="top-left">
-                <el-select class="cascader" v-model="condition">
+                <el-select v-model="condition" class="cascader">
                     <el-option label="试卷名称" value="name"/>
                     <el-option label="教师" value="teacher_name"/>
                 </el-select>
-                <el-input class="search" v-model="keyword" placeholder="请输入关键字词"/>
-                <el-button type="primary" :icon="Search as string" @click="getPaperList(1)">查询</el-button>
+                <el-input v-model="keyword" class="search" placeholder="请输入关键字词"/>
+                <el-button :icon="Search as string" type="primary" @click="getPaperList(1)">查询</el-button>
                 <el-button :icon="Refresh as string" @click="refresh">重置</el-button>
             </div>
             <div class="top-right">
@@ -15,28 +15,28 @@
             </div>
         </div>
         <!--  shijuan表格-->
-        <el-table class="user-table" :data="tableData" :row-style="{height:'100px'}">
+        <el-table :data="tableData" :row-style="{height:'100px'}" class="user-table">
             <template #empty>
                 没有数据
             </template>
-            <el-table-column width="180" label="试卷名称" prop="name"/>
-            <el-table-column width="150" label="试卷类型" prop="type" :formatter="formatPaperTypeInRow"/>
-            <el-table-column width="300" label="试卷描述" prop="remark"/>
+            <el-table-column label="试卷名称" prop="name" width="180"/>
+            <el-table-column :formatter="formatPaperTypeInRow" label="试卷类型" prop="type" width="150"/>
+            <el-table-column label="试卷描述" prop="remark" width="300"/>
             <el-table-column
-                    width="130"
                     label="由谁创建(id)"
                     prop="createBy"
+                    width="130"
             />
 
             <el-table-column
+                    :formatter="formatTimeInRow"
                     align="center"
-                    width="95"
                     label="创建时间"
                     prop="createTime"
-                    :formatter="formatTimeInRow"
+                    width="95"
             />
 
-            <el-table-column label="操作" align="center" width="250px">
+            <el-table-column align="center" label="操作" width="250px">
                 <!--          操作-->
                 <template #default="scope">
                     <el-button size="small" type="primary" @click="showPaperInfo(scope)">查看和修改</el-button>
@@ -60,8 +60,8 @@
                     v-model:page-size="pageSize"
                     :background="background"
                     :page-count="totalPage"
-                    style="margin-top: 10px"
                     :total="total"
+                    style="margin-top: 10px"
             />
         </div>
     </div>

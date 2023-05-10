@@ -8,8 +8,8 @@
 
         <div class="right">
             <div id="avatar">
-                <img v-show="avatarUrl" class="avatar" :src="'data:image/png;base64,'+avatarUrl" alt=""/>
-                <el-avatar v-show="!avatarUrl" :size="37" :icon="UserFilled as string"/>
+                <img v-show="avatarUrl" :src="'data:image/png;base64,'+avatarUrl" alt="" class="avatar"/>
+                <el-avatar v-show="!avatarUrl" :icon="UserFilled as string" :size="37"/>
             </div>
 
             <div id="info">

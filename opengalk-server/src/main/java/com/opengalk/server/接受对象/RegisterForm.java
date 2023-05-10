@@ -10,13 +10,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class RegisterForm {
 
-    @Size(min = 5,max = 20)
+    @Size(min = 5, max = 20)
     private String account;
 
-    @Size(min = 6,max = 20)
+    @Size(min = 6, max = 20)
     private String password;
 
-    @Size(min = 6,max = 20)
+    @Size(min = 6, max = 20)
     private String confirmPassword;
 
     @Size(min = 6, max = 6)

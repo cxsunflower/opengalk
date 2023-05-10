@@ -1,20 +1,20 @@
 <template>
-  <div class="left">
-    <div class="left-top">
-      <div>
-        <img class="left-logo" src="../../assets/logo/vite.svg" alt=""/>
-      </div>
-      <div><span class="left-title">OpenGALK</span></div>
-    </div>
+    <div class="left">
+        <div class="left-top">
+            <div>
+                <img alt="" class="left-logo" src="../../assets/logo/vite.svg"/>
+            </div>
+            <div><span class="left-title">OpenGALK</span></div>
+        </div>
 
-    <div class="left-background">
-      <img class="background" src="../../assets/images/login-box-bg.svg" alt="">
-    </div>
+        <div class="left-background">
+            <img alt="" class="background" src="../../assets/images/login-box-bg.svg">
+        </div>
 
-    <div class="footer">
-      <span class="footer-font">xxxxxxxxxxxxx</span>
+        <div class="footer">
+            <span class="footer-font">xxxxxxxxxxxxx</span>
+        </div>
     </div>
-  </div>
 </template>
 
 <style lang="scss" scoped>
@@ -41,21 +41,21 @@
     }
   }
 
-  .left-background{
+  .left-background {
     text-align: center;
     width: 50vw;
 
-    .background{
+    .background {
       width: 50vw;
       height: 50vh;
     }
   }
 
-  .footer{
+  .footer {
     margin-top: 100px;
     text-align: center;
 
-    .footer-font{
+    .footer-font {
       color: white;
       font-size: 30px;
     }

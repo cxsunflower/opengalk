@@ -41,28 +41,28 @@
                     <div style="display: flex;flex-direction: column;padding: 10px 15px 10px 10px">
                         <div class="单选" style="position: relative;">
                             <div class="题块">单选题</div>
-                            <div class="题号" :class="{changeColor:currentIndex == i || answerArray[i - 1] != ''}"
-                                 v-for="i in 50"
+                            <div v-for="i in 50" :class="{changeColor:currentIndex == i || answerArray[i - 1] != ''}"
+                                 class="题号"
                                  @click="alterSubject(i)">
                                 <div>{{ i }}</div>
-                                <div class="mark_div" v-show="isMark(i)"></div>
+                                <div v-show="isMark(i)" class="mark_div"></div>
                             </div>
                         </div>
 
                         <div class="多选">
                             <div class="题块">多选题</div>
-                            <div class="题号" :class="{changeColor:currentIndex == i || answerArray[i - 1] != ''}"
-                                 v-for="i in 70"
-                                 v-show="i > 50"
+                            <div v-for="i in 70" v-show="i > 50"
+                                 :class="{changeColor:currentIndex == i || answerArray[i - 1] != ''}"
+                                 class="题号"
                                  @click="alterSubject(i)">{{ i }}
                             </div>
                         </div>
 
                         <div class="情景">
                             <div class="题块">情景题</div>
-                            <div class="题号" :class="{changeColor:currentIndex == i || answerArray[i - 1] != ''}"
-                                 v-for="i in 100"
-                                 v-show="i > 70"
+                            <div v-for="i in 100" v-show="i > 70"
+                                 :class="{changeColor:currentIndex == i || answerArray[i - 1] != ''}"
+                                 class="题号"
                                  @click="alterSubject(i)">{{ i }}
                             </div>
                         </div>
@@ -83,8 +83,8 @@
                         <div style="margin-left: 10px;font-size: 18px">({{ currentType }}选)</div>
                     </div>
                     <div class="top-right">
-                        <el-button class="top-right-button" :icon="ZoomIn as string" @click="toCorrect">纠错</el-button>
-                        <el-button class="top-right-button" :icon="Star as string" @click="collect">收藏本题</el-button>
+                        <el-button :icon="ZoomIn as string" class="top-right-button" @click="toCorrect">纠错</el-button>
+                        <el-button :icon="Star as string" class="top-right-button" @click="collect">收藏本题</el-button>
                     </div>
 
                 </div>
@@ -117,22 +117,22 @@
                                 </div>
                             </el-checkbox-group>
 
-                            <el-radio-group v-show="currentType === '单'" style="display: table"
-                                            v-model="radioAnswer"
-                                            @change="radioChange"
+                            <el-radio-group v-show="currentType === '单'" v-model="radioAnswer"
                                             size="large"
+                                            style="display: table"
+                                            @change="radioChange"
                             >
                                 <div class="radio">
-                                    <el-radio :label="'A'" v-show="currentType === '单'">A、{{ optionA }}</el-radio>
+                                    <el-radio v-show="currentType === '单'" :label="'A'">A、{{ optionA }}</el-radio>
                                 </div>
                                 <div class="radio">
-                                    <el-radio :label="'B'" v-show="currentType === '单'">B、{{ optionB }}</el-radio>
+                                    <el-radio v-show="currentType === '单'" :label="'B'">B、{{ optionB }}</el-radio>
                                 </div>
                                 <div class="radio">
-                                    <el-radio :label="'C'" v-show="currentType === '单'">C、{{ optionC }}</el-radio>
+                                    <el-radio v-show="currentType === '单'" :label="'C'">C、{{ optionC }}</el-radio>
                                 </div>
                                 <div class="radio">
-                                    <el-radio :label="'D'" v-show="currentType === '单'">D、{{ optionD }}</el-radio>
+                                    <el-radio v-show="currentType === '单'" :label="'D'">D、{{ optionD }}</el-radio>
                                 </div>
                                 {{ answerArray }}
                             </el-radio-group>
@@ -141,21 +141,21 @@
                 </div>
                 <div class="right-bottom">
                     <div style="width: 50%">
-                        <el-button class="bottom-button" size="large" @click="previous" :disabled="perviousDisable">上一题
+                        <el-button :disabled="perviousDisable" class="bottom-button" size="large" @click="previous">上一题
                         </el-button>
-                        <el-button class="bottom-button" type="primary" size="large" @click="next"
-                                   :disabled="nextDisable">
+                        <el-button :disabled="nextDisable" class="bottom-button" size="large" type="primary"
+                                   @click="next">
                             下一题
                         </el-button>
                     </div>
 
                     <div style="width: 50%;float: right">
-                        <el-button v-show="markArray[currentIndex] === 1" class="mark" :icon="Star as string"
+                        <el-button v-show="markArray[currentIndex] === 1" :icon="Star as string" class="mark"
                                    size="large"
                                    @click="mark">
                             取消标记
                         </el-button>
-                        <el-button v-show="markArray[currentIndex] === 0" class="mark" :icon="Star as string"
+                        <el-button v-show="markArray[currentIndex] === 0" :icon="Star as string" class="mark"
                                    size="large"
                                    @click="mark">
                             标记
@@ -166,7 +166,7 @@
         </div>
     </div>
 
-    <el-dialog title="提交提示" v-model="submitDialogVisible" width="30%" center align-center :show-close="false">
+    <el-dialog v-model="submitDialogVisible" :show-close="false" align-center center title="提交提示" width="30%">
         <div style="width:100%;font-size:19px;text-align: center">确定提交试卷？</div>
         <template #footer>
             <div class="dialog-footer">
@@ -176,9 +176,9 @@
         </template>
     </el-dialog>
 
-    <el-dialog title="纠错对话框" v-model="correctDialogVisible" width="60%" center align-center :show-close="false">
+    <el-dialog v-model="correctDialogVisible" :show-close="false" align-center center title="纠错对话框" width="60%">
         <div>纠错内容</div>
-        <el-input :rows="8" type="textarea" v-model="correctText" clearable/>
+        <el-input v-model="correctText" :rows="8" clearable type="textarea"/>
         <template #footer>
             <div class="dialog-footer">
                 <el-button type="success" @click="correct">提交</el-button>
@@ -188,7 +188,7 @@
     </el-dialog>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import {Star, ZoomIn} from "@element-plus/icons-vue";
 import {onMounted, ref, watch} from "vue";
 import {formatSubjectType} from "../../utils/FormatterUtil";
@@ -312,19 +312,19 @@ const collect = async () => {
     })
 }
 
-const toCorrect = () =>{
+const toCorrect = () => {
     correctDialogVisible.value = true
 }
 const correct = async () => {
     const correctForm = {
         uuid: uuid,
         subjectId: currentIndex.value,
-        correctText:correctText.value,
+        correctText: correctText.value,
     }
 
     await request.post(requestUrl + '/correct', correctForm).then((result: any) => {
         showMessage(result)
-        if(result.data.响应状态 === 1){
+        if (result.data.响应状态 === 1) {
             correctDialogVisible.value = false
         }
     })

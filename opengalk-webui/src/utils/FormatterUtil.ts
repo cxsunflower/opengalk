@@ -119,7 +119,7 @@ export const formatPaperType = (type: number) => {
     }
 }
 
-export const formatSubjectType = (type:number) =>{
+export const formatSubjectType = (type: number) => {
     switch (type) {
         case 0:
             return '单'

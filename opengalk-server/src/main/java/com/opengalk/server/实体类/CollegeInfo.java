@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 /**
  * @TableName college_info
  */
-@TableName(value = "college_info",schema = "\"college\"")
+@TableName(value = "college_info", schema = "\"college\"")
 @Data
 @Builder
 @AllArgsConstructor

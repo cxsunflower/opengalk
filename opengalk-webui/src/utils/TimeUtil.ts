@@ -1,4 +1,5 @@
 import {EventEmitter} from 'eventemitter3'
+
 //设置格式
 export interface RemainTimeData {
     /** 天数 */
@@ -85,7 +86,7 @@ export class Countdown extends EventEmitter<CountdownEventMap> {
         }
     }
 
-    private parseRemainTime = (remainTime: number): RemainTimeData =>{
+    private parseRemainTime = (remainTime: number): RemainTimeData => {
         let time = remainTime
         // 计算出具体的时间格式
         const days = Math.floor(time / Countdown.DAY_IN_MILLISECOND)
@@ -112,4 +113,6 @@ export class Countdown extends EventEmitter<CountdownEventMap> {
     }
 }
 
-export const fillZero = (num: number) => { return `0${num}`.slice(-2) }
+export const fillZero = (num: number) => {
+    return `0${num}`.slice(-2)
+}

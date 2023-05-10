@@ -1,13 +1,13 @@
 <template>
     <div class="main">
         <div class="left">
-            <el-button type="primary" style="margin: 5px 5px 0 5px" @click="toRequirement">查看输入题目要求</el-button>
-            <el-input style="margin: 5px 5px 5px 5px"
+            <el-button style="margin: 5px 5px 0 5px" type="primary" @click="toRequirement">查看输入题目要求</el-button>
+            <el-input v-model="allSubjects"
                       :rows="29"
-                      type="textarea"
-                      resize="none"
-                      v-model="allSubjects"
                       placeholder="请输入题目"
+                      resize="none"
+                      style="margin: 5px 5px 5px 5px"
+                      type="textarea"
             >
 
             </el-input>
@@ -20,12 +20,12 @@
             </div>
 
             <el-scrollbar>
-                <div style="margin: 5px 5px 5px 5px;padding-left: 5px" v-for="subject in uploadForm.subjectArray">
+                <div v-for="subject in uploadForm.subjectArray" style="margin: 5px 5px 5px 5px;padding-left: 5px">
                     {{ subject.subject }}
-                    <el-radio-group style="display: table" v-model="subject.answer[0]"
-                                    size="large" v-show="subject.type !== 1"
+                    <el-radio-group v-show="subject.type !== 1" v-model="subject.answer[0]"
+                                    size="large" style="display: table"
                     >
-                        <div class="radio" v-for="item in subject.items" v-show="subject.type !== 1">
+                        <div v-for="item in subject.items" v-show="subject.type !== 1" class="radio">
                             <el-radio :label="item.value">{{ item.value }}、 {{ item.text }}</el-radio>
                         </div>
                     </el-radio-group>
@@ -34,7 +34,7 @@
                             v-show="subject.type === 1"
                             v-model="subject.answer"
                     >
-                        <div class="radio" v-for="item in subject.items">
+                        <div v-for="item in subject.items" class="radio">
                             <el-checkbox :label="item.value">{{ item.value }}、 {{ item.text }}</el-checkbox>
                         </div>
                     </el-checkbox-group>
@@ -44,12 +44,12 @@
             </el-scrollbar>
         </div>
 
-        <el-dialog align-center title="上传试卷页面" v-model="uploadVisible" width="50%" center>
+        <el-dialog v-model="uploadVisible" align-center center title="上传试卷页面" width="50%">
             <el-form
-                    style="padding: 0 40px 0 40px"
                     ref="uploadFormRef"
-                    :rules="uploadRules"
                     :model="uploadForm"
+                    :rules="uploadRules"
+                    style="padding: 0 40px 0 40px"
             >
 
                 <el-form-item label="试卷名称" prop="name">
@@ -57,7 +57,7 @@
                 </el-form-item>
 
                 <el-form-item label="试卷描述" prop="remark">
-                    <el-input v-model="uploadForm.remark" type="textarea" :rows="4"/>
+                    <el-input v-model="uploadForm.remark" :rows="4" type="textarea"/>
                 </el-form-item>
             </el-form>
 
@@ -73,11 +73,11 @@
             </template>
         </el-dialog>
 
-        <el-dialog align-center title="上传试卷要求页面" v-model="requirementVisible" width="70%" center>
-            <img src="../../assets/images/requirement.png" alt="" height="400" width="800"/>
+        <el-dialog v-model="requirementVisible" align-center center title="上传试卷要求页面" width="70%">
+            <img alt="" height="400" src="../../assets/images/requirement.png" width="800"/>
             <template #footer>
                 <div>
-                    <el-button @click="close" type="primary">
+                    <el-button type="primary" @click="close">
                         确定
                     </el-button>
                 </div>
@@ -86,7 +86,7 @@
 
     </div>
 </template>
-<script setup lang="ts">
+<script lang="ts" setup>
 import {onMounted, reactive, ref, watch} from "vue";
 import {arrayToSubject, subjectToArray} from "../../utils/SubjectUtil";
 import {FormInstance, FormRules} from "element-plus";

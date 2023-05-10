@@ -10,7 +10,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 
-
 @SpringBootTest
 class OpengalkServerApplicationTests {
 
@@ -48,8 +47,8 @@ class OpengalkServerApplicationTests {
     }
 
     @Test
-    void testString(){
-        System.out.println(String.join("",new String[]{"2","2"}));
+    void testString() {
+        System.out.println(String.join("", new String[]{"2", "2"}));
     }
 
 }

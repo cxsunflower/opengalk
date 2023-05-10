@@ -6,7 +6,7 @@
         </div>
     </div>
 </template>
-<script setup lang="ts">
+<script lang="ts" setup>
 import ViewPaperHeaderPage from "./ViewPaperHeaderPage.vue";
 import ViewPaperMainPage from "./ViewPaperMainPage.vue";
 </script>
