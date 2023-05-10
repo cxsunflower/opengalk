@@ -2,7 +2,7 @@
     <div style="display: flex; flex-direction: row">
         <div class="left">
             <div class="left-top">
-                <img class="avatar" :src="'data:image/png;base64,'+avatarUrl" alt=""/>
+                <img :src="'data:image/png;base64,'+avatarUrl" alt="" class="avatar"/>
                 <div class="account">
                     {{ account }}
                 </div>
@@ -12,11 +12,11 @@
                 </div>
 
                 <div class="button">
-                    <el-button size="large" :icon="Setting as string" @click="showUserInfo">个人设置</el-button>
+                    <el-button :icon="Setting as string" size="large" @click="showUserInfo">个人设置</el-button>
                 </div>
 
                 <div class="button">
-                    <el-button size="large" type="danger" :icon="Lock as string" @click="toUpdatePassword">修改密码
+                    <el-button :icon="Lock as string" size="large" type="danger" @click="toUpdatePassword">修改密码
                     </el-button>
                 </div>
 
@@ -24,12 +24,12 @@
                     <el-upload
                             v-model:file-list="avatarList"
                             :action="baseURL+requestUrl+'/uploadAvatar'"
-                            :on-success="avatarUploadSuccess"
                             :before-upload="beforeAvatarUpload"
                             :headers="header"
+                            :on-success="avatarUploadSuccess"
                             limit="1"
                     >
-                        <el-button size="large" :icon="UserFilled as string" type="success">上传头像</el-button>
+                        <el-button :icon="UserFilled as string" size="large" type="success">上传头像</el-button>
                         <template #tip>
                             <div class="el-upload__tip">
                                 图片大小不能超过5MB！
@@ -45,11 +45,11 @@
         <div class="right">
             <el-tabs
                     v-model="activeName"
-                    type="card"
                     class="demo-tabs"
+                    type="card"
                     @tab-change="tabChange"
             >
-                <el-tab-pane style="flex-direction: column" name="first">
+                <el-tab-pane name="first" style="flex-direction: column">
                     <template #label>
                         <div class="tab-pane">
                             <el-icon size="large">
@@ -61,7 +61,7 @@
 
                     <div class="record-title">每日记录</div>
                     <div style="float: left">
-                        <div class="block" v-for="i in 356"></div>
+                        <div v-for="i in 356" class="block"></div>
                     </div>
                     <div class="today">今日动态</div>
                     <div> 提交了一份</div>
@@ -78,16 +78,17 @@
                     </template>
 
                     <el-scrollbar>
-                        <div style="width:100%">
+                        <div style="width:100%;height:560px">
                             <el-row :gutter="10">
                                 <el-col
-                                        style="margin-bottom: 10px"
                                         v-for="(value,key) in collectList"
                                         :key="key"
+                                        style="margin-bottom: 10px"
                                 >
 
                                     <div class="card">
                                         <div style="display: flex;flex-direction: row;width:800px">
+
                                             <div style="padding-left: 20px;width: 20%;display:flex;align-items: center;">
                                                 试卷： {{ value.name }}
                                             </div>
@@ -112,18 +113,18 @@
         </div>
 
         <el-dialog
-                width="50%"
                 v-model="userInfoDialogVisible"
                 align-center
-                @close="userInfoClose"
                 center
+                width="50%"
+                @close="userInfoClose"
         >
             <el-descriptions
                     id="user-info"
-                    title="个人信息"
-                    column="1"
                     border
+                    column="1"
                     direction="vertical"
+                    title="个人信息"
             >
                 <el-descriptions-item>
                     <template #label>
@@ -134,7 +135,7 @@
                             姓名
                         </div>
                     </template>
-                    <el-input :disabled="isDisabled" v-model="userInfoForm.name"></el-input>
+                    <el-input v-model="userInfoForm.name" :disabled="isDisabled"></el-input>
                 </el-descriptions-item>
 
                 <el-descriptions-item>
@@ -146,7 +147,7 @@
                             学校
                         </div>
                     </template>
-                    <el-select :disabled="isDisabled" v-model="userInfoForm.collegeName" @click="getCollegeList">
+                    <el-select v-model="userInfoForm.collegeName" :disabled="isDisabled" @click="getCollegeList">
                         <el-option v-for="college in collegeList" :key="college" :label="college.collegeName"
                                    :value="college.collegeName"></el-option>
                     </el-select>
@@ -165,7 +166,7 @@
                             性别
                         </div>
                     </template>
-                    <el-radio-group :disabled="isDisabled" v-model="userInfoForm.gender">
+                    <el-radio-group v-model="userInfoForm.gender" :disabled="isDisabled">
                         <el-radio label="男" size="large">男</el-radio>
                         <el-radio label="女" size="large">女</el-radio>
                     </el-radio-group>
@@ -181,7 +182,7 @@
                             手机号
                         </div>
                     </template>
-                    <el-input :disabled="isDisabled" v-model="userInfoForm.phoneNumber"></el-input>
+                    <el-input v-model="userInfoForm.phoneNumber" :disabled="isDisabled"></el-input>
                 </el-descriptions-item>
 
                 <el-descriptions-item>
@@ -194,8 +195,8 @@
                         </div>
                     </template>
                     <el-date-picker
-                            :disabled="isDisabled"
                             v-model="userInfoForm.birthday"
+                            :disabled="isDisabled"
                             type="date"
                     />
                 </el-descriptions-item>
@@ -209,7 +210,7 @@
                             电子邮箱
                         </div>
                     </template>
-                    <el-input :disabled="isDisabled" v-model="userInfoForm.email"></el-input>
+                    <el-input v-model="userInfoForm.email" :disabled="isDisabled"></el-input>
                 </el-descriptions-item>
             </el-descriptions>
 
@@ -224,24 +225,24 @@
         </el-dialog>
 
         <!--    修改密码-->
-        <el-dialog title="修改密码页面" v-model="updatePasswordDialogVisible" width="50%" center align-center>
+        <el-dialog v-model="updatePasswordDialogVisible" align-center center title="修改密码页面" width="50%">
             <el-form
-                    class="password"
                     ref="updatePasswordFormRef"
                     :model="updatePasswordForm"
-                    label-width="150px"
                     :rules="updatePasswordRules"
+                    class="password"
+                    label-width="150px"
             >
                 <el-form-item label="旧的密码" prop="oldPassword">
-                    <el-input v-model="updatePasswordForm.oldPassword" type="password" clearable show-password/>
+                    <el-input v-model="updatePasswordForm.oldPassword" clearable show-password type="password"/>
                 </el-form-item>
 
                 <el-form-item label="新的密码" prop="newPassword">
-                    <el-input v-model="updatePasswordForm.newPassword" type="password" clearable show-password/>
+                    <el-input v-model="updatePasswordForm.newPassword" clearable show-password type="password"/>
                 </el-form-item>
 
                 <el-form-item label="再次确认新的密码" prop="reNewPassword">
-                    <el-input v-model="updatePasswordForm.reNewPassword" type="password" clearable show-password/>
+                    <el-input v-model="updatePasswordForm.reNewPassword" clearable show-password type="password"/>
                 </el-form-item>
 
                 <div style="width: 100%;text-align: center">
@@ -253,16 +254,16 @@
 
         <el-dialog
                 v-model="toLoginDialogVisible"
-                title="跳转提示"
-                width="30%"
+                :show-close="false"
                 align-center
                 center
-                :show-close="false"
+                title="跳转提示"
+                width="30%"
         >
             <div style="display: flex;flex-direction: column;width: 100%;text-align: center">
                 <div style="width: 100%;margin-bottom: 30px;font-size: 16px">更新密码成功，请重新登陆</div>
                 <div>
-                    <el-button style="width: 30%;" size="large" type="success" @click="toLogin">确定</el-button>
+                    <el-button size="large" style="width: 30%;" type="success" @click="toLogin">确定</el-button>
                 </div>
             </div>
         </el-dialog>
@@ -502,7 +503,7 @@ const toLogin = () => {
 }
 
 const tabChange = () => {
-    if(activeName.value === 'second'){
+    if (activeName.value === 'second') {
         getCollectList()
     }
 }
