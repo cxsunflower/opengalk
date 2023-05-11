@@ -1,5 +1,6 @@
 package com.opengalk.server.过滤器;
 
+import cn.hutool.core.exceptions.ExceptionUtil;
 import cn.hutool.jwt.JWTUtil;
 import com.opengalk.server.响应类.ResponseResult;
 import com.opengalk.server.实体类.UserInfo;
@@ -53,6 +54,7 @@ public class JavaWebTokenFilter extends OncePerRequestFilter {
         try {
             id = JWTUtil.parseToken(token).getPayload().getClaim("id").toString();
         } catch (Exception e) {
+            log.error(ExceptionUtil.stacktraceToString(e));
             responseUtil.renderResponse(response, new ResponseResult<>(0, "非法token", null));
             return;
         }

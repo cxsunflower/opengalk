@@ -2,14 +2,13 @@ package com.opengalk.server.业务逻辑层.实现;
 
 import cn.hutool.core.codec.Base64Encoder;
 import cn.hutool.core.lang.UUID;
-import jakarta.annotation.Resource;
+import com.opengalk.server.响应类.ResponseResult;
+import com.opengalk.server.工具类.VerifyCodeUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-import com.opengalk.server.响应类.ResponseResult;
-import com.opengalk.server.工具类.VerifyCodeUtil;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -26,7 +25,7 @@ public class VerifyCodeServiceImpl {
 
     public final StringRedisTemplate stringRedisTemplate;
 
-    public ResponseResult<?> getVerificationCode() {
+    public ResponseResult<?> getVerificationCode(){
         String uuid = UUID.fastUUID().toString();
 
         // 利用图片工具生成图片
@@ -67,8 +66,8 @@ public class VerifyCodeServiceImpl {
     /**
      * 校验验证码
      *
-     * @param uuid
-     * @param verificationCode
+     * @param uuid uuid
+     * @param verificationCode 验证码
      * @return 0验证码正确，1验证码错误，2验证码失效
      */
     public int verifyVerificationCode(String uuid, String verificationCode) {
@@ -103,8 +102,8 @@ public class VerifyCodeServiceImpl {
     /**
      * 返回校验验证码结果
      *
-     * @param uuid
-     * @param verificationCode
+     * @param uuid uuid
+     * @param verificationCode 验证码
      * @return ResponseResult
      */
     public ResponseResult<?> verifiedResponse(String uuid, String verificationCode) {

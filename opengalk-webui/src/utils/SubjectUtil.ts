@@ -36,7 +36,7 @@ export const subjectToArray = (allSubjects: string): any[] => {
         }
 
         let valArr: string[] = [];
-        sourceTimuArr.map((item: string, i: number) => {
+        sourceTimuArr.forEach((item: string, i: number) => {
             sourceTimuArr[i] = item.trim().replace(/\s+/g, ' ')
 
             if (i === 0) {

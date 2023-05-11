@@ -85,17 +85,6 @@ export const formatBirthday = (birthday: string, isAdd: number): string => {
     }
 }
 
-export const formatIsScored = (row: any) => {
-    switch (row.isScored) {
-        case 0:
-            return '未评分';
-        case 1:
-            return '已评分';
-        default:
-            return ''
-    }
-};
-
 export const formatIsLocked = (row: any) => {
     switch (row.isLocked) {
         case 0:
@@ -105,12 +94,11 @@ export const formatIsLocked = (row: any) => {
         default:
             return ''
     }
-
 }
 
 export const formatPaperType = (type: number) => {
     switch (type) {
-        case 0:
+        case 0 :
             return '公安专业科目'
         case 1:
             return '行政职业能力测试'

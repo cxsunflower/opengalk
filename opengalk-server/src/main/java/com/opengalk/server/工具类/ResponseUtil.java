@@ -1,13 +1,16 @@
 package com.opengalk.server.工具类;
 
+import cn.hutool.core.exceptions.ExceptionUtil;
 import cn.hutool.json.JSONUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import com.opengalk.server.响应类.ResponseResult;
 
 import java.io.IOException;
 
+@Slf4j
 @Component
 public class ResponseUtil {
     /**
@@ -23,7 +26,7 @@ public class ResponseUtil {
             response.setCharacterEncoding("utf-8");
             response.getWriter().print(JSONUtil.toJsonStr(result));
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error(ExceptionUtil.stacktraceToString(e));
         }
     }
 }

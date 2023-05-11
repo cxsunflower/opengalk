@@ -68,13 +68,10 @@ public class PaperServiceImpl extends ServiceImpl<PaperInfoMapper, PaperInfo>
             GZSubjectObjects = paperInfoMapper.getGZPaperById(uuid);
         }
 
-        Map<String, Object> map = new HashMap<>() {
-            {
-                put("name", paperInfo.getName());
-                put("remark", paperInfo.getRemark());
-                put("subjectArray", GZSubjectObjects);
-            }
-        };
+        Map<String, Object> map = new HashMap<>();
+        map.put("name", paperInfo.getName());
+        map.put("remark", paperInfo.getRemark());
+        map.put("subjectArray", GZSubjectObjects);
 
         log.info(Arrays.toString(GZSubjectObjects));
         return new ResponseResult<>(1, null, map);

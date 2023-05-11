@@ -1,15 +1,20 @@
 package com.opengalk.server.工具类;
 
+import cn.hutool.core.exceptions.ExceptionUtil;
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.util.Random;
 
 /**
  * 图形验证码生成
  */
+@Slf4j
 public class VerifyCodeUtil {
     // 默认验证码字符集
     private static final char[] chars = {
@@ -31,12 +36,12 @@ public class VerifyCodeUtil {
 
     private final Color BACKGROUND_COLOR;
 
+    private Random RAN;
+
     /**
      * 初始化基础参数
-     *
-     * @param builder
      */
-    private VerifyCodeUtil(Builder builder) {
+    private VerifyCodeUtil(@NonNull Builder builder){
         SIZE = builder.size;
         LINES = builder.lines;
         WIDTH = builder.width;
@@ -44,14 +49,20 @@ public class VerifyCodeUtil {
         FONT_SIZE = builder.fontSize;
         TILT = builder.tilt;
         BACKGROUND_COLOR = builder.backgroundColor;
+        try {
+            RAN = SecureRandom.getInstanceStrong();
+        } catch (NoSuchAlgorithmException e) {
+            log.error(ExceptionUtil.stacktraceToString(e));
+        }
     }
 
 
     /**
      * 实例化构造器对象
      *
-     * @return
+     * @return Builder()
      */
+    @NonNull
     public static Builder newBuilder() {
         return new Builder();
     }
@@ -74,9 +85,7 @@ public class VerifyCodeUtil {
         // 绘制矩形背景
         graphic.fillRect(0, 0, WIDTH, HEIGHT);
         // 画随机字符
-        Random ran = new Random();
-
-        //graphic.setBackground(Color.WHITE);
+        // graphic.setBackground(Color.WHITE);
 
         // 计算每个字符占的宽度，这里预留一个字符的位置用于左右边距
         int codeWidth = WIDTH / (SIZE + 1);
@@ -91,9 +100,9 @@ public class VerifyCodeUtil {
 
             if (TILT) {
                 // 随机一个倾斜的角度 -45到45度之间
-                int theta = ran.nextInt(45);
+                int theta = RAN.nextInt(45);
                 // 随机一个倾斜方向 左或者右
-                theta = ran.nextBoolean() ? theta : -theta;
+                theta = RAN.nextBoolean() ? theta : -theta;
                 AffineTransform affineTransform = new AffineTransform();
                 affineTransform.rotate(Math.toRadians(theta), 0, 0);
                 font = font.deriveFont(affineTransform);
@@ -105,7 +114,7 @@ public class VerifyCodeUtil {
             int x = (i * codeWidth) + (codeWidth / 2);
 
             // 取随机字符索引
-            int n = ran.nextInt(chars.length);
+            int n = RAN.nextInt(chars.length);
             // 得到字符文本
             String code = String.valueOf(chars[n]);
             // 画字符
@@ -119,7 +128,7 @@ public class VerifyCodeUtil {
             // 设置随机颜色
             graphic.setColor(getRandomColor());
             // 随机画线
-            graphic.drawLine(ran.nextInt(WIDTH), ran.nextInt(HEIGHT), ran.nextInt(WIDTH), ran.nextInt(HEIGHT));
+            graphic.drawLine(RAN.nextInt(WIDTH), RAN.nextInt(HEIGHT), RAN.nextInt(WIDTH), RAN.nextInt(HEIGHT));
         }
         // 返回验证码和图片
         return new Object[]{sb.toString(), image};
@@ -130,8 +139,7 @@ public class VerifyCodeUtil {
      */
     @NonNull
     private Color getRandomColor() {
-        Random ran = new Random();
-        return new Color(ran.nextInt(256), ran.nextInt(256), ran.nextInt(256));
+        return new Color(RAN.nextInt(256), RAN.nextInt(256), RAN.nextInt(256));
     }
 
     /**
@@ -188,7 +196,7 @@ public class VerifyCodeUtil {
             return this;
         }
 
-        public VerifyCodeUtil build() {
+        public VerifyCodeUtil build(){
             return new VerifyCodeUtil(this);
         }
     }

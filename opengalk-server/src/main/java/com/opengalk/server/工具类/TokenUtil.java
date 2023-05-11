@@ -1,5 +1,6 @@
 package com.opengalk.server.工具类;
 
+import cn.hutool.core.exceptions.ExceptionUtil;
 import cn.hutool.jwt.JWTUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.NonNull;
@@ -11,7 +12,7 @@ import org.springframework.stereotype.Component;
 public class TokenUtil {
 
     /**
-     * @param request
+     * @param request 请求
      * @param header  头字段
      * @return token
      */
@@ -20,7 +21,7 @@ public class TokenUtil {
     }
 
     /**
-     * @param token
+     * @param token token
      * @param key   payload中id对应的键
      * @return id
      */
@@ -29,7 +30,7 @@ public class TokenUtil {
         try {
             id = JWTUtil.parseToken(token).getPayload().getClaim(key).toString();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(ExceptionUtil.stacktraceToString(e));
             return null;
         }
         return id;

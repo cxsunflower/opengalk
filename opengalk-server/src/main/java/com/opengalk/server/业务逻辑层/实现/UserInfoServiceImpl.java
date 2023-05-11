@@ -1,6 +1,7 @@
 package com.opengalk.server.业务逻辑层.实现;
 
 import cn.hutool.core.codec.Base64Encoder;
+import cn.hutool.core.exceptions.ExceptionUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -321,16 +322,17 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
         System.out.println(filePath);
 
         File fileDir = new File(filePath);
-        // 如果没有file文件夹则建一个
-        if (!fileDir.getParentFile().exists()) {
-            fileDir.getParentFile().mkdirs();
+
+        // 如果没有文件夹则建一个
+        if (!fileDir.getParentFile().exists() && fileDir.getParentFile().mkdirs()) {
+            log.info("创建文件夹成功：" + fileDir.getAbsolutePath());
         }
 
         try {
             // 把文件写入到上传的路径
             FileUtil.writeBytes(file.getBytes(), filePath);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(ExceptionUtil.stacktraceToString(e));
             return new ResponseResult<>(0, "头像上传失败", null);
         }
 
@@ -342,14 +344,14 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
         Long id = loginUserUtil.getLoginUserID();
         String filePath = FILE_DIR + id;
         byte[] data = null;
+
         // 读取图片字节数组
-        try {
-            InputStream in = new FileInputStream(filePath);
+        try (InputStream in = new FileInputStream(filePath)) {
             data = new byte[in.available()];
-            in.read(data);
-            in.close();
+            int counts = in.read(data);
+            log.info("输入字节：" + counts);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error(ExceptionUtil.stacktraceToString(e));
         }
 
         return new ResponseResult<>(0, null, Base64Encoder.encode(data));
