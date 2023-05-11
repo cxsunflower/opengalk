@@ -78,6 +78,12 @@ router.beforeEach(async (to, from, next) => {
                 component: () => import('../views/paper/GZPaperPage.vue'),
             })
 
+            router.addRoute({
+                path: '/XCPaper',
+                name: 'XCPaper',
+                component: () => import('../views/paper/XCPaperPage.vue'),
+            })
+
             const authority = getAuthorityByToken()
 
             if (authority <= 1) {
