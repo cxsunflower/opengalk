@@ -42,7 +42,7 @@
                     <el-button size="small" type="primary" @click="showPaperInfo(scope)">查看和修改</el-button>
 
                     <el-popconfirm
-                            title="确定删除该shijuan吗？"
+                            title="确定删除该试卷吗？"
                             @confirm="deletePaper(scope.row.id)"
                     >
                         <template #reference>
@@ -64,6 +64,28 @@
                     style="margin-top: 10px"
             />
         </div>
+
+        <el-dialog
+                v-model="toAddPaperDialogVisible"
+                align-center
+                center
+                title="前往添加试卷页面"
+                width="40%"
+        >
+            <div style="display: flex;flex-direction: column;width:100%;align-items: center">
+                <div style="margin-bottom: 20px">
+                    试卷类型
+                    <el-select v-model="selectedValue" placeholder="请选择试卷类型">
+                        <el-option label="行政职业能力测试" value="0">行政职业能力测试</el-option>
+                        <el-option label="公安专业科目" value="1">公安专业科目</el-option>
+                    </el-select>
+                </div>
+
+                <el-button size="large" style="width: 100px" type="primary" @click="addPaper">
+                    前往添加试卷
+                </el-button>
+            </div>
+        </el-dialog>
     </div>
 </template>
 <script lang="ts" setup>
@@ -73,6 +95,7 @@ import request from "../../utils/RequestUtil";
 import {formatPaperType, formatTime} from "../../utils/FormatterUtil";
 import {showMessage} from "../../utils/MessageUtil";
 import router from "../../router";
+import {ElMessage} from "element-plus";
 
 onMounted(() => {
     getPaperList(1)
@@ -82,12 +105,13 @@ const requestUrl = "/paperManagement"
 const condition = ref('name')
 const keyword = ref('')
 const tableData = ref<any[]>([])
-
 const pageSize = ref(4)
 const totalPage = ref(0)
 const currentPage = ref(1)
 const background = ref(true)
 const total = ref(0)
+const toAddPaperDialogVisible = ref(false)
+const selectedValue = ref('')
 
 const getPaperList = async (currentPage: number) => {
     await request
@@ -117,7 +141,26 @@ const showPaperInfo = async (scope: any) => {
 }
 
 const toAddPaper = () => {
-    window.open('/addGZpaper')
+    toAddPaperDialogVisible.value = true
+}
+
+const addPaper = () => {
+    switch (selectedValue.value) {
+        case '0':
+            window.open('/addXCpaper')
+            break
+        case '1':
+            window.open('/addGZpaper')
+            break
+        default:
+            ElMessage({
+                message: "请选择试卷类型",
+                grouping: true,
+                type: 'error',
+                center: true,
+            })
+            break
+    }
 }
 
 const deletePaper = async (id: number) => {
@@ -140,7 +183,6 @@ const formatTimeInRow = (row: any, column: any) => {
 const formatPaperTypeInRow = (row: any) => {
     return formatPaperType(row.type)
 }
-
 
 </script>
 <style lang="scss" scoped>
