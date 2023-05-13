@@ -1,17 +1,29 @@
 <template>
     <div class="main">
         <div class="left">
-            <el-button style="margin: 5px 5px 0 5px" type="primary" @click="toRequirement">查看输入题目要求</el-button>
-
+            <div style="display: flex;flex-direction: row">
+                <el-button style="margin: 5px 5px 0 5px" type="primary" @click="toRequirement">查看输入题目要求
+                </el-button>
+                <el-upload
+                        action="#"
+                        v-model:file-list="currentImage as UploadUserFile[]"
+                        :http-request="uploadImage"
+                        :on-change="onChange"
+                        :show-file-list="false"
+                        :limit="1"
+                        accept='image/jpeg,image/gif,image/png'
+                >
+                    <el-button style="margin: 5px 5px 0 5px">
+                        <el-icon :size="25">
+                            <Upload/>
+                        </el-icon>
+                        <div>插入图片</div>
+                    </el-button>
+                </el-upload>
+            </div>
             <div style="border: 1px solid #ccc;margin: 5px 5px 0 5px">
-                <Toolbar
-                        style="border-bottom: 1px solid #ccc"
-                        :editor="editorRef"
-                        :defaultConfig="toolbarConfig"
-                        :mode="mode"
-                />
                 <Editor
-                        style="height: 525px; overflow-y: hidden;"
+                        style="height: 605px; overflow-y: hidden;"
                         v-model="allSubjects"
                         :defaultConfig="editorConfig"
                         :mode="mode"
@@ -96,27 +108,31 @@
 <script lang="ts" setup>
 import {onBeforeUnmount, onMounted, reactive, ref, shallowRef, watch} from "vue";
 import {arrayToSubject, subjectToArray} from "../../utils/SubjectUtil";
-import {FormInstance, FormRules} from "element-plus";
+import {FormInstance, FormRules, UploadProps, UploadUserFile} from "element-plus";
 import request from "../../utils/RequestUtil";
 import {showMessage} from "../../utils/MessageUtil";
 import {useRoute} from "vue-router";
-import {Editor, Toolbar} from "@wangeditor/editor-for-vue";
-import {IToolbarConfig} from "@wangeditor/editor"
+import {Editor} from "@wangeditor/editor-for-vue";
 
 import "@wangeditor/editor/dist/css/style.css"
+import {Upload} from "@element-plus/icons-vue";
 
 const requestUrl = '/paperManagement'
 const uploadFormRef = ref<FormInstance>();
 const allSubjects = ref('')
 const uploadVisible = ref(false)
 const requirementVisible = ref(false)
+const buttonName = ref('上传试卷')
+const mode = ref('simple')
+const editorConfig = {placeholder: '请输入内容...'}
+const editorRef = shallowRef()
+const currentImage = ref<UploadUserFile[]>()
 const uploadForm = ref({
     name: '',
     type: 0,
     remark: '',
     subjectArray: <any[]>[],
 })
-const buttonName = ref('上传试卷')
 const uploadRules = reactive<FormRules>({
     name: [
         {required: true, message: '不能为空', trigger: 'blur'},
@@ -127,13 +143,9 @@ const uploadRules = reactive<FormRules>({
         {min: 3, max: 200, message: '长度必须3-200', trigger: 'blur'},
     ],
 })
+
 let addOrUpdate = 0
 let uuid = <any>''
-
-const mode=ref('simple')
-const editorRef = shallowRef()
-// 内容 HTML
-const valueHtml = ref('<p>hello</p>')
 
 onMounted(async () => {
     const route = useRoute()
@@ -157,18 +169,26 @@ onBeforeUnmount(() => {
 })
 
 watch(allSubjects, () => {
-    uploadForm.value.subjectArray = subjectToArray(allSubjects.value);
+    uploadForm.value.subjectArray = subjectToArray(allSubjects.value.replace(/<[^>]+>/g, '').replace(/&nbsp;/ig, ''));
 })
-
-const toolbarConfig: Partial<IToolbarConfig> = {
-    toolbarKeys: ["uploadImage"]
-}
-
-const editorConfig = {placeholder: '请输入内容...'}
 
 const handleCreated = (editor: any) => {
     // 记录 editor 实例，重要！
     editorRef.value = editor
+}
+
+const uploadImage = () => {
+
+}
+
+const onChange: UploadProps['onChange'] = (uploadFile) :void=> {
+    let reader = new FileReader()
+    reader.readAsDataURL(uploadFile.raw as Blob)
+    reader.onload = function () {
+        let img_base64 = this.result
+        allSubjects.value += `<img src="`+img_base64+`" alt="">`
+    }
+    currentImage.value = []
 }
 
 const toUploadPaper = () => {
@@ -219,6 +239,7 @@ const close = () => {
     width: 50%;
     padding-right: 5px;
     height: calc(100vh - 102px);
+
   }
 
   .right {
