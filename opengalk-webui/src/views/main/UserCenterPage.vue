@@ -27,6 +27,7 @@
                             :before-upload="beforeAvatarUpload"
                             :headers="header"
                             :on-success="avatarUploadSuccess"
+                            :show-file-list="false"
                             limit="1"
                     >
                         <el-button :icon="UserFilled as string" size="large" type="success">上传头像</el-button>
@@ -152,7 +153,6 @@
                                    :value="college.collegeName"></el-option>
                     </el-select>
                 </el-descriptions-item>
-
 
                 <el-descriptions-item>
                     <template #label>
