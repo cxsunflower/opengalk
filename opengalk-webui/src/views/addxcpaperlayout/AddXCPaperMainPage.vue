@@ -8,9 +8,7 @@
                       resize="none"
                       style="margin: 5px 5px 5px 5px"
                       type="textarea"
-            >
-
-            </el-input>
+            />
         </div>
 
         <div class="right">
@@ -74,7 +72,7 @@
         </el-dialog>
 
         <el-dialog v-model="requirementVisible" align-center center title="上传试卷要求页面" width="70%">
-            <img alt="" height="400" src="../../assets/images/requirement.png" width="800"/>
+            <img alt="" height="400" src="../../assets/images/gz-requirement.png" width="800"/>
             <template #footer>
                 <div>
                     <el-button type="primary" @click="close">
@@ -93,6 +91,7 @@ import {FormInstance, FormRules} from "element-plus";
 import request from "../../utils/RequestUtil";
 import {showMessage} from "../../utils/MessageUtil";
 import {useRoute} from "vue-router";
+import {Editor} from "@wangeditor/editor-for-vue";
 
 const requestUrl = '/paperManagement'
 const uploadFormRef = ref<FormInstance>();

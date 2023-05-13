@@ -2,15 +2,22 @@
     <div class="main">
         <div class="left">
             <el-button style="margin: 5px 5px 0 5px" type="primary" @click="toRequirement">查看输入题目要求</el-button>
-            <el-input v-model="allSubjects"
-                      :rows="29"
-                      placeholder="请输入题目"
-                      resize="none"
-                      style="margin: 5px 5px 5px 5px"
-                      type="textarea"
-            >
 
-            </el-input>
+            <div style="border: 1px solid #ccc;margin: 5px 5px 0 5px">
+                <Toolbar
+                        style="border-bottom: 1px solid #ccc"
+                        :editor="editorRef"
+                        :defaultConfig="toolbarConfig"
+                        :mode="mode"
+                />
+                <Editor
+                        style="height: 525px; overflow-y: hidden;"
+                        v-model="allSubjects"
+                        :defaultConfig="editorConfig"
+                        :mode="mode"
+                        @onCreated="handleCreated"
+                />
+            </div>
         </div>
 
         <div class="right">
@@ -74,7 +81,7 @@
         </el-dialog>
 
         <el-dialog v-model="requirementVisible" align-center center title="上传试卷要求页面" width="70%">
-            <img alt="" height="400" src="../../assets/images/requirement.png" width="800"/>
+            <img alt="" src="../../assets/images/gz-requirement.png"/>
             <template #footer>
                 <div>
                     <el-button type="primary" @click="close">
@@ -87,12 +94,16 @@
     </div>
 </template>
 <script lang="ts" setup>
-import {onMounted, reactive, ref, watch} from "vue";
+import {onBeforeUnmount, onMounted, reactive, ref, shallowRef, watch} from "vue";
 import {arrayToSubject, subjectToArray} from "../../utils/SubjectUtil";
 import {FormInstance, FormRules} from "element-plus";
 import request from "../../utils/RequestUtil";
 import {showMessage} from "../../utils/MessageUtil";
 import {useRoute} from "vue-router";
+import {Editor, Toolbar} from "@wangeditor/editor-for-vue";
+import {IToolbarConfig} from "@wangeditor/editor"
+
+import "@wangeditor/editor/dist/css/style.css"
 
 const requestUrl = '/paperManagement'
 const uploadFormRef = ref<FormInstance>();
@@ -117,11 +128,12 @@ const uploadRules = reactive<FormRules>({
     ],
 })
 let addOrUpdate = 0
-let uuid = <any>
+let uuid = <any>''
 
-    watch(allSubjects, () => {
-        uploadForm.value.subjectArray = subjectToArray(allSubjects.value);
-    })
+const mode=ref('simple')
+const editorRef = shallowRef()
+// 内容 HTML
+const valueHtml = ref('<p>hello</p>')
 
 onMounted(async () => {
     const route = useRoute()
@@ -136,6 +148,28 @@ onMounted(async () => {
         })
     }
 })
+
+// 组件销毁时，也及时销毁编辑器
+onBeforeUnmount(() => {
+    const editor = editorRef.value
+    if (editor == null) return
+    editor.destroy()
+})
+
+watch(allSubjects, () => {
+    uploadForm.value.subjectArray = subjectToArray(allSubjects.value);
+})
+
+const toolbarConfig: Partial<IToolbarConfig> = {
+    toolbarKeys: ["uploadImage"]
+}
+
+const editorConfig = {placeholder: '请输入内容...'}
+
+const handleCreated = (editor: any) => {
+    // 记录 editor 实例，重要！
+    editorRef.value = editor
+}
 
 const toUploadPaper = () => {
     uploadVisible.value = true

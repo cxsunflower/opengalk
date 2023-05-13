@@ -8,5 +8,5 @@
 </template>
 <script lang="ts" setup>
 import Header from '../mainlayout/HeaderPage.vue'
-import AddPaperMainPage from ".//AddPaperMainPage.vue";
+import AddPaperMainPage from "./AddXCPaperMainPage.vue";
 </script>

@@ -7,8 +7,8 @@
     </div>
 </template>
 <script lang="ts" setup>
-import ViewPaperHeaderPage from "./ViewPaperHeaderPage.vue";
-import ViewPaperMainPage from "./ViewPaperMainPage.vue";
+import ViewPaperHeaderPage from "./ViewGZPaperHeaderPage.vue";
+import ViewPaperMainPage from "./ViewGZPaperMainPage.vue";
 </script>
 
 <style lang="scss" scoped>

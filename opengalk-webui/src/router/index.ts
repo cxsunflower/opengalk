@@ -99,14 +99,14 @@ router.beforeEach(async (to, from, next) => {
                     {
                         path: '/addGZPaper',
                         name: 'AddGZPaper',
-                        component: () => import('../views/addgzpaperlayout/AddPaperLayoutPage.vue')
+                        component: () => import('../views/addgzpaperlayout/AddGZPaperLayoutPage.vue')
                     }
                 )
                 router.addRoute(
                     {
                         path: '/viewGZpaper',
                         name: 'ViewGZPaper',
-                        component: () => import('../views/viewgzpaperlayout/ViewPaperLayoutPage.vue')
+                        component: () => import('../views/viewgzpaperlayout/ViewGZPaperLayoutPage.vue')
                     }
                 )
             }
