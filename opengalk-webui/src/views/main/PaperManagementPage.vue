@@ -14,7 +14,7 @@
                 <el-button class="add" type="success" @click="toAddPaper">添加试卷</el-button>
             </div>
         </div>
-        <!--  shijuan表格-->
+        <!--  试卷表格-->
         <el-table :data="tableData" :row-style="{height:'100px'}" class="user-table">
             <template #empty>
                 没有数据
@@ -98,20 +98,20 @@ import router from "../../router";
 import {ElMessage} from "element-plus";
 
 onMounted(() => {
-    getPaperList(1)
-})
+    getPaperList(1);
+});
 
-const requestUrl = "/paperManagement"
-const condition = ref('name')
-const keyword = ref('')
-const tableData = ref<any[]>([])
-const pageSize = ref(4)
-const totalPage = ref(0)
-const currentPage = ref(1)
-const background = ref(true)
-const total = ref(0)
-const toAddPaperDialogVisible = ref(false)
-const selectedValue = ref('')
+const requestUrl = "/paperManagement";
+const condition = ref('name');
+const keyword = ref('');
+const tableData = ref<any[]>([]);
+const pageSize = ref(4);
+const totalPage = ref(0);
+const currentPage = ref(1);
+const background = ref(true);
+const total = ref(0);
+const toAddPaperDialogVisible = ref(false);
+const selectedValue = ref('');
 
 const getPaperList = async (currentPage: number) => {
     await request
@@ -124,11 +124,11 @@ const getPaperList = async (currentPage: number) => {
             }
         })
         .then((result: any) => {
-            tableData.value = result.data.响应数据.records
-            totalPage.value = result.data.响应数据.pages
-            total.value = result.data.响应数据.total
-        })
-}
+            tableData.value = result.data.响应数据.records;
+            totalPage.value = result.data.响应数据.pages;
+            total.value = result.data.响应数据.total;
+        });
+};
 
 const showPaperInfo = async (scope: any) => {
     const routeData = router.resolve({
@@ -136,53 +136,53 @@ const showPaperInfo = async (scope: any) => {
         query: {
             uuid: scope.row.id
         }
-    })
-    window.open(routeData.href)
-}
+    });
+    window.open(routeData.href);
+};
 
 const toAddPaper = () => {
-    toAddPaperDialogVisible.value = true
-}
+    toAddPaperDialogVisible.value = true;
+};
 
 const addPaper = () => {
     switch (selectedValue.value) {
         case '0':
-            window.open('/addXCpaper')
-            break
+            window.open('/addXCpaper');
+            break;
         case '1':
-            window.open('/addGZpaper')
-            break
+            window.open('/addGZpaper');
+            break;
         default:
             ElMessage({
                 message: "请选择试卷类型",
                 grouping: true,
                 type: 'error',
                 center: true,
-            })
-            break
+            });
+            break;
     }
-}
+};
 
 const deletePaper = async (id: number) => {
     await request.delete(requestUrl + '/deletePaper/' + id).then((result: any) => {
-        showMessage(result)
+        showMessage(result);
         if (result.data.响应状态 === 1) {
-            getPaperList(currentPage.value)
+            getPaperList(currentPage.value);
         }
-    })
-}
+    });
+};
 
 const refresh = () => {
-    keyword.value = ''
-    getPaperList(currentPage.value)
-}
+    keyword.value = '';
+    getPaperList(currentPage.value);
+};
 const formatTimeInRow = (row: any, column: any) => {
-    return formatTime(row[column.property])
-}
+    return formatTime(row[column.property]);
+};
 
 const formatPaperTypeInRow = (row: any) => {
-    return formatPaperType(row.type)
-}
+    return formatPaperType(row.type);
+};
 
 </script>
 <style lang="scss" scoped>

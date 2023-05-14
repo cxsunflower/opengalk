@@ -287,7 +287,7 @@ import {
     Star,
     User,
     UserFilled
-} from '@element-plus/icons-vue'
+} from '@element-plus/icons-vue';
 import {onMounted, reactive, ref, watch} from "vue";
 import {ElMessage, ElMessageBox, FormInstance, FormRules, UploadProps, UploadUserFile} from "element-plus";
 import {formatBirthday, formatGender} from "../../utils/FormatterUtil";
@@ -295,17 +295,17 @@ import request, {baseURL} from "../../utils/RequestUtil";
 import {showMessage} from "../../utils/MessageUtil";
 import router from "../../router";
 
-const requestUrl = '/userCenter'
-const account = getAccountByToken()
-const activeName = ref('first')
-const userInfoDialogVisible = ref(false)
-const updatePasswordDialogVisible = ref(false)
-const toLoginDialogVisible = ref(false)
-const isDisabled = ref(true)
-const editButtonName = ref('编辑个人信息')
+const requestUrl = '/userCenter';
+const account = getAccountByToken();
+const activeName = ref('first');
+const userInfoDialogVisible = ref(false);
+const updatePasswordDialogVisible = ref(false);
+const toLoginDialogVisible = ref(false);
+const isDisabled = ref(true);
+const editButtonName = ref('编辑个人信息');
 const updatePasswordFormRef = ref<FormInstance>();
-const avatarUrl = ref('')
-const header = {token: getToken()}
+const avatarUrl = ref('');
+const header = {token: getToken()};
 
 const userInfoForm = ref({
     name: '',
@@ -315,27 +315,27 @@ const userInfoForm = ref({
     gender: -1,
     birthday: '',
     collegeId: undefined,
-})
+});
 
 const collectList = ref([{
     uuid: '',
     subjectId: '',
     name: '',
     subject: '',
-}])
+}]);
 
-const avatarList = ref<UploadUserFile[]>([])
+const avatarList = ref<UploadUserFile[]>([]);
 
 const updatePasswordForm = ref({
     oldPassword: '',
     newPassword: '',
     reNewPassword: '',
-})
+});
 
 const collegeList = ref([{
     id: undefined,
     collegeName: ''
-}])
+}]);
 
 const clean = () => {
     userInfoForm.value = {
@@ -346,47 +346,47 @@ const clean = () => {
         gender: -1,
         birthday: '',
         collegeId: undefined,
-    }
+    };
 
     updatePasswordForm.value = {
         oldPassword: '',
         newPassword: '',
         reNewPassword: '',
-    }
+    };
 
-    collegeList.value = []
-}
+    collegeList.value = [];
+};
 
 onMounted(() => {
     request.get(requestUrl + '/getAvatar').then((result: any) => {
-        avatarUrl.value = result.data.响应数据
-    })
-})
+        avatarUrl.value = result.data.响应数据;
+    });
+});
 
 watch(isDisabled, () => {
     if (isDisabled.value === true) {
-        editButtonName.value = '编辑个人信息'
+        editButtonName.value = '编辑个人信息';
     } else {
-        editButtonName.value = '取消编辑'
+        editButtonName.value = '取消编辑';
     }
-})
+});
 
 const validateNewPassword = (rule: any, value: any, callback: any) => {
     if (value === updatePasswordForm.value.oldPassword) {
-        return callback(new Error('不能与原密码相同'))
+        return callback(new Error('不能与原密码相同'));
     } else {
-        callback()
+        callback();
     }
-}
+};
 
 const validateReNewPassword = (rule: any, value: any, callback: any) => {
-    console.log(value)
+    console.log(value);
     if (value !== updatePasswordForm.value.newPassword) {
-        return callback(new Error('两次密码输入不一致'))
+        return callback(new Error('两次密码输入不一致'));
     } else {
-        callback()
+        callback();
     }
-}
+};
 
 const updatePasswordRules = reactive<FormRules>({
     oldPassword: [
@@ -403,58 +403,58 @@ const updatePasswordRules = reactive<FormRules>({
         {min: 6, max: 20, message: '长度必须6-20', trigger: 'blur'},
         {validator: validateReNewPassword, trigger: 'blur'},
     ]
-})
+});
 
 const avatarUploadSuccess = (response: any) => {
-    avatarList.value = []
+    avatarList.value = [];
     ElMessage({
         message: response.响应消息,
         grouping: true,
         type: response.响应状态 === 1 ? 'success' : 'error',
         center: true,
-    })
+    });
 
     if (response.响应状态 === 1) {
-        location.reload()
+        location.reload();
     }
-}
+};
 
 const beforeAvatarUpload: UploadProps['beforeUpload'] = (rawFile: any) => {
-    console.log(rawFile.type)
+    console.log(rawFile.type);
     if (rawFile.type !== 'image/jpeg' && rawFile.type !== 'image/png') {
-        ElMessage.error('图片格式必须为jpg或png格式！')
-        return false
+        ElMessage.error('图片格式必须为jpg或png格式！');
+        return false;
     } else if (rawFile.size / 1024 / 1024 > 5) {
-        ElMessage.error('图片大小不能超过5MB！')
-        return false
+        ElMessage.error('图片大小不能超过5MB！');
+        return false;
     }
-    return true
-}
+    return true;
+};
 
 const showUserInfo = async () => {
     await request.get(requestUrl).then(result => {
         if (result.data.响应数据 != null) {
-            userInfoForm.value = result.data.响应数据
-            userInfoForm.value.gender = formatGender(userInfoForm.value.gender)
-            userInfoForm.value.birthday = formatBirthday(userInfoForm.value.birthday, 0)
+            userInfoForm.value = result.data.响应数据;
+            userInfoForm.value.gender = formatGender(userInfoForm.value.gender);
+            userInfoForm.value.birthday = formatBirthday(userInfoForm.value.birthday, 0);
         }
-    })
+    });
 
-    userInfoDialogVisible.value = true
-}
+    userInfoDialogVisible.value = true;
+};
 
 const userInfoClose = () => {
-    isDisabled.value = true
-    clean()
-}
+    isDisabled.value = true;
+    clean();
+};
 
 const toEditUserInfo = () => {
-    isDisabled.value = !isDisabled.value
-}
+    isDisabled.value = !isDisabled.value;
+};
 
 const editUserInfo = async () => {
-    userInfoForm.value.birthday = formatBirthday(userInfoForm.value.birthday, 0)
-    userInfoForm.value.gender = formatGender(userInfoForm.value.gender)
+    userInfoForm.value.birthday = formatBirthday(userInfoForm.value.birthday, 0);
+    userInfoForm.value.gender = formatGender(userInfoForm.value.gender);
     for (let i = 0; i < collegeList.value.length; i++) {
         if (collegeList.value[i].collegeName === userInfoForm.value.collegeName) {
             userInfoForm.value.collegeId = collegeList.value[i].id;
@@ -462,14 +462,14 @@ const editUserInfo = async () => {
     }
 
     await request.put(requestUrl + "/updateUserInfo", userInfoForm.value).then(result => {
-        userInfoDialogVisible.value = false
-        showMessage(result)
-    })
-}
+        userInfoDialogVisible.value = false;
+        showMessage(result);
+    });
+};
 
 const toUpdatePassword = () => {
-    updatePasswordDialogVisible.value = true
-}
+    updatePasswordDialogVisible.value = true;
+};
 
 const updatePassword = async (updatePasswordFormRef: FormInstance | undefined) => {
     if (!updatePasswordFormRef) {
@@ -479,39 +479,39 @@ const updatePassword = async (updatePasswordFormRef: FormInstance | undefined) =
         if (valid) {
             request.put(requestUrl + '/updatePersonalPassword', updatePasswordForm.value).then(result => {
                 if (result.data.响应状态 === 1) {
-                    removeToken()
-                    updatePasswordDialogVisible.value = false
-                    toLoginDialogVisible.value = true
-                    clean()
+                    removeToken();
+                    updatePasswordDialogVisible.value = false;
+                    toLoginDialogVisible.value = true;
+                    clean();
                 }
-                showMessage(result)
-            })
+                showMessage(result);
+            });
         } else {
-            ElMessageBox.alert('请检查表单内容是否符合规范')
+            ElMessageBox.alert('请检查表单内容是否符合规范');
         }
-    })
-}
+    });
+};
 
 const getCollegeList = async () => {
     await request.get(requestUrl + "/getCollegeList").then(result => {
-        collegeList.value = result.data.响应数据
-    })
-}
+        collegeList.value = result.data.响应数据;
+    });
+};
 
 const toLogin = () => {
-    router.push('/login')
-}
+    router.push('/login');
+};
 
 const tabChange = () => {
     if (activeName.value === 'second') {
-        getCollectList()
+        getCollectList();
     }
-}
+};
 const getCollectList = async () => {
     await request.get(requestUrl + '/getCollectList').then((result: any) => {
-        collectList.value = result.data.响应数据
-    })
-}
+        collectList.value = result.data.响应数据;
+    });
+};
 
 </script>
 

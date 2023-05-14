@@ -35,32 +35,32 @@ import {onMounted, ref} from "vue";
 import router from "../../router";
 import request from "../../utils/RequestUtil";
 
-const account = getAccountByToken()
-const screenValue = ref('进入全屏')
-const requestUrl = '/header'
-const avatarUrl = ref('')
+const account = getAccountByToken();
+const screenValue = ref('进入全屏');
+const requestUrl = '/header';
+const avatarUrl = ref('');
 
 onMounted(() => {
     request.get(requestUrl + '/getAvatar').then((result: any) => {
-        avatarUrl.value = result.data.响应数据
-    })
-})
+        avatarUrl.value = result.data.响应数据;
+    });
+});
 
 const toIndex = () => {
-    router.push('/index')
-}
+    router.push('/index');
+};
 const fullScreen = () => {
     if (!screenfull.isEnabled) {
-        ElMessageBox.alert("当前浏览器不支持全屏")
+        ElMessageBox.alert("当前浏览器不支持全屏");
     } else {
         if (!screenfull.isFullscreen) {
-            screenValue.value = '退出全屏'
+            screenValue.value = '退出全屏';
         } else {
-            screenValue.value = '进入全屏'
+            screenValue.value = '进入全屏';
         }
-        screenfull.toggle()
+        screenfull.toggle();
     }
-}
+};
 
 </script>
 

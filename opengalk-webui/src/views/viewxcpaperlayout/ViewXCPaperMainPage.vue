@@ -141,69 +141,69 @@ import {Star, ZoomIn} from "@element-plus/icons-vue";
 import {onMounted, ref, watch} from "vue";
 import {formatSubjectType} from "../../utils/FormatterUtil";
 
-const answer = ref('')
-const answerArray = ref([])
-let paperSubjects = <any>[]
-const subject = ref('')
-const currentIndex = ref(0)
-const currentType = ref('')
-const optionA = ref('')
-const optionB = ref('')
-const optionC = ref('')
-const optionD = ref('')
-const perviousDisable = ref(false)
-const nextDisable = ref(false)
+const answer = ref('');
+const answerArray = ref([]);
+let paperSubjects = <any>[];
+const subject = ref('');
+const currentIndex = ref(0);
+const currentType = ref('');
+const optionA = ref('');
+const optionB = ref('');
+const optionC = ref('');
+const optionD = ref('');
+const perviousDisable = ref(false);
+const nextDisable = ref(false);
 
 watch(currentIndex, () => {
     if (currentIndex.value == 1) {
-        perviousDisable.value = true
+        perviousDisable.value = true;
     } else if (currentIndex.value == 100) {
-        nextDisable.value = true
+        nextDisable.value = true;
     } else {
-        nextDisable.value = false
-        perviousDisable.value = false
+        nextDisable.value = false;
+        perviousDisable.value = false;
     }
-    alterSubject(currentIndex.value)
-})
+    alterSubject(currentIndex.value);
+});
 
 onMounted(() => {
-    paperSubjects = JSON.parse(localStorage.getItem('viewGZPaperData') as string)._value.subjectArray
-    console.log(paperSubjects.value)
-    alterSubject(1)
-})
+    paperSubjects = JSON.parse(localStorage.getItem('viewGZPaperData') as string)._value.subjectArray;
+    console.log(paperSubjects.value);
+    alterSubject(1);
+});
 
 const alterSubject = (i: number) => {
-    currentIndex.value = i
-    const currentSubject = paperSubjects[i - 1]
-    console.log(paperSubjects[i - 1])
+    currentIndex.value = i;
+    const currentSubject = paperSubjects[i - 1];
+    console.log(paperSubjects[i - 1]);
     if (currentSubject != undefined) {
-        subject.value = currentSubject.subject
-        currentType.value = formatSubjectType(currentSubject.type)
-        optionA.value = currentSubject.items[0].text
-        optionB.value = currentSubject.items[1].text
-        optionC.value = currentSubject.items[2].text
-        optionD.value = currentSubject.items[3].text
+        subject.value = currentSubject.subject;
+        currentType.value = formatSubjectType(currentSubject.type);
+        optionA.value = currentSubject.items[0].text;
+        optionB.value = currentSubject.items[1].text;
+        optionC.value = currentSubject.items[2].text;
+        optionD.value = currentSubject.items[3].text;
     } else {
-        clean()
+        clean();
     }
-}
+};
 
 const previous = () => {
-    currentIndex.value -= 1
-}
+    currentIndex.value -= 1;
+};
 
 const next = () => {
-    currentIndex.value += 1
-}
+    currentIndex.value += 1;
+};
 
 const clean = () => {
-    subject.value = ''
-    currentType.value = ''
-    optionA.value = ''
-    optionB.value = ''
-    optionC.value = ''
-    optionD.value = ''
-}
+    subject.value = '';
+    currentType.value = '';
+    optionA.value = '';
+    optionB.value = '';
+    optionC.value = '';
+    optionD.value = '';
+};
 
 </script>
 <style lang="scss" scoped>

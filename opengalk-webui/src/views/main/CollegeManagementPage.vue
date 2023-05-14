@@ -143,36 +143,36 @@ import {formatTime} from "../../utils/FormatterUtil";
 import {showMessage} from "../../utils/MessageUtil";
 
 onMounted(() => {
-    getCollegeList(1)
-})
+    getCollegeList(1);
+});
 
-const requestUrl = "/collegeManagement"
-const condition = ref('college_name')
-const keyword = ref('')
+const requestUrl = "/collegeManagement";
+const condition = ref('college_name');
+const keyword = ref('');
 const collegeFormRef = ref<FormInstance>();
 
 //获取第一页学校
-const tableData = ref<any>([])
-const pageSize = ref(4)
-const totalPage = ref(0)
-const currentPage = ref(1)
-const background = ref(true)
-const total = ref(0)
+const tableData = ref<any>([]);
+const pageSize = ref(4);
+const totalPage = ref(0);
+const currentPage = ref(1);
+const background = ref(true);
+const total = ref(0);
 
-const addDialogVisible = ref(false)
-const collegeInfoDialogVisible = ref(false)
-const isDisabled = ref(true)
-const editButtonName = ref('编辑学校信息')
+const addDialogVisible = ref(false);
+const collegeInfoDialogVisible = ref(false);
+const isDisabled = ref(true);
+const editButtonName = ref('编辑学校信息');
 
 const addCollegeForm = ref({
     collegeName: '',
     remark: '',
-})
+});
 
 const collegeInfoForm = ref({
     collegeName: '',
     remark: '',
-})
+});
 
 const addRules = reactive<FormRules>({
     collegeName: [
@@ -182,15 +182,15 @@ const addRules = reactive<FormRules>({
     remark: [
         {min: 0, max: 100, message: '描述字数必须小于100', trigger: 'blur'},
     ],
-})
+});
 
 watch(isDisabled, () => {
     if (isDisabled.value === true) {
-        editButtonName.value = '编辑学校信息'
+        editButtonName.value = '编辑学校信息';
     } else {
-        editButtonName.value = '取消编辑'
+        editButtonName.value = '取消编辑';
     }
-})
+});
 
 const getCollegeList = async (currentPage: number) => {
     await request
@@ -203,26 +203,26 @@ const getCollegeList = async (currentPage: number) => {
             }
         })
         .then((result: any) => {
-            tableData.value = result.data.响应数据.records
-            totalPage.value = result.data.响应数据.pages
-            total.value = result.data.响应数据.total
-        })
-}
+            tableData.value = result.data.响应数据.records;
+            totalPage.value = result.data.响应数据.pages;
+            total.value = result.data.响应数据.total;
+        });
+};
 
 const showCollegeInfo = async (scope: any) => {
     collegeInfoDialogVisible.value = true;
-    const id = tableData.value[scope.$index].id
+    const id = tableData.value[scope.$index].id;
     await request.get(requestUrl + '/getCollegeInfo/' + id).then(result => {
         if (result.data.响应数据 != null) {
-            collegeInfoForm.value = result.data.响应数据
+            collegeInfoForm.value = result.data.响应数据;
         }
-    })
-}
+    });
+};
 
 const toAddCollege = () => {
-    addDialogVisible.value = true
-    clean()
-}
+    addDialogVisible.value = true;
+    clean();
+};
 
 const addCollege = async (collegeFormRef: FormInstance | undefined) => {
     if (!collegeFormRef) {
@@ -232,70 +232,70 @@ const addCollege = async (collegeFormRef: FormInstance | undefined) => {
     await collegeFormRef.validate((valid) => {
         if (valid) {
             request.post(requestUrl + '/addCollege', addCollegeForm.value).then((result: any) => {
-                showMessage(result)
+                showMessage(result);
                 if (result.data.响应状态 === 1) {
-                    addDialogVisible.value = false
+                    addDialogVisible.value = false;
                 }
-            })
+            });
         } else {
-            ElMessageBox.alert('请检查表单内容是否符合规范')
+            ElMessageBox.alert('请检查表单内容是否符合规范');
         }
-        clean()
-        getCollegeList(currentPage.value)
-    })
-}
+        clean();
+        getCollegeList(currentPage.value);
+    });
+};
 
 const toEditCollege = () => {
-    isDisabled.value = !isDisabled.value
-}
+    isDisabled.value = !isDisabled.value;
+};
 
 const editCollege = async () => {
     await request.put(requestUrl + '/updateCollegeInfo', collegeInfoForm.value).then((result: any) => {
         if (result.data.响应状态 === 1) {
-            collegeInfoDialogVisible.value = false
-            clean()
+            collegeInfoDialogVisible.value = false;
+            clean();
         }
-        showMessage(result)
-    })
-}
+        showMessage(result);
+    });
+};
 
 const clean = () => {
     addCollegeForm.value = {
         collegeName: '',
         remark: '',
-    }
+    };
 
     collegeInfoForm.value = {
         collegeName: '',
         remark: '',
-    }
-}
+    };
+};
 
 const cancel = () => {
-    addDialogVisible.value = false
-    collegeInfoDialogVisible.value = false
-    isDisabled.value = true
-    clean()
-    getCollegeList(currentPage.value)
-}
+    addDialogVisible.value = false;
+    collegeInfoDialogVisible.value = false;
+    isDisabled.value = true;
+    clean();
+    getCollegeList(currentPage.value);
+};
 
 const refresh = () => {
-    keyword.value = ''
-    getCollegeList(currentPage.value)
-}
+    keyword.value = '';
+    getCollegeList(currentPage.value);
+};
 
 const deleteCollege = (id: number) => {
     request.delete(requestUrl + '/deleteCollege/' + id).then((result: any) => {
-        showMessage(result)
+        showMessage(result);
         if (result.data.响应状态 === 1) {
-            getCollegeList(currentPage.value)
+            getCollegeList(currentPage.value);
         }
-    })
-}
+    });
+};
 
 const formatTimeInRow = (row: any, column: any) => {
-    return formatTime(row[column.property])
-}
+    return formatTime(row[column.property]);
+};
 
 </script>
 

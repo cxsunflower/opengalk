@@ -11,8 +11,8 @@
 </template>
 
 <script lang="ts" setup>
-import Header from './/HeaderPage.vue'
-import Aside from './/AsidePage.vue'</script>
+import Header from './/HeaderPage.vue';
+import Aside from './/AsidePage.vue';</script>
 
 <style lang="scss" scoped>
 .main {

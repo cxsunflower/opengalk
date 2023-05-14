@@ -199,92 +199,92 @@ import {ElMessageBox} from "element-plus";
 import {showMessage} from "../../utils/MessageUtil";
 import {Countdown, CountdownEventName, fillZero} from "../../utils/TimeUtil";
 
-const screenValue = ref('进入全屏')
-const name = ref('')
-const number = ref(0)
-const requestUrl = '/paper'
-const radioAnswer = ref('')
-const checkboxAnswer = ref([])
-const subject = ref('')
-const subjectType = ref('单选题（共50题）')
-const currentIndex = ref(0)
-const currentType = ref('')
-const optionA = ref('')
-const optionB = ref('')
-const optionC = ref('')
-const optionD = ref('')
-const perviousDisable = ref(false)
-const nextDisable = ref(false)
-const answerArray = ref(new Array(100).fill(''))
-const submitDialogVisible = ref(false)
-const correctDialogVisible = ref(false)
-const correctText = ref('')
-const time = ref('')
-let markArray = ref(new Array(100).fill(0))
-let uuid = ''
-let paperSubjects = <any>[]
+const screenValue = ref('进入全屏');
+const name = ref('');
+const number = ref(0);
+const requestUrl = '/paper';
+const radioAnswer = ref('');
+const checkboxAnswer = ref([]);
+const subject = ref('');
+const subjectType = ref('单选题（共50题）');
+const currentIndex = ref(0);
+const currentType = ref('');
+const optionA = ref('');
+const optionB = ref('');
+const optionC = ref('');
+const optionD = ref('');
+const perviousDisable = ref(false);
+const nextDisable = ref(false);
+const answerArray = ref(new Array(100).fill(''));
+const submitDialogVisible = ref(false);
+const correctDialogVisible = ref(false);
+const correctText = ref('');
+const time = ref('');
+let markArray = ref(new Array(100).fill(0));
+let uuid = '';
+let paperSubjects = <any>[];
 
 watch(currentIndex, () => {
     if (currentIndex.value == 1) {
-        perviousDisable.value = true
+        perviousDisable.value = true;
     } else if (currentIndex.value == 100) {
-        nextDisable.value = true
+        nextDisable.value = true;
     } else {
-        nextDisable.value = false
-        perviousDisable.value = false
+        nextDisable.value = false;
+        perviousDisable.value = false;
     }
 
     if (currentIndex.value > 50 && currentIndex.value < 70) {
-        subjectType.value = '多选题（共20题）'
+        subjectType.value = '多选题（共20题）';
     } else if (currentIndex.value > 70) {
-        subjectType.value = '情景题（共30题）'
+        subjectType.value = '情景题（共30题）';
     } else {
-        subjectType.value = '单选题（共50题）'
+        subjectType.value = '单选题（共50题）';
     }
-    alterSubject(currentIndex.value)
-})
+    alterSubject(currentIndex.value);
+});
 
 watch(time, () => {
     if (time.value === '0') {
-        submit()
+        submit();
     }
-})
+});
 
 onMounted(async () => {
-    await getPaper()
-    alterSubject(1)
-    number.value = Math.floor(Math.random() * 101)
+    await getPaper();
+    alterSubject(1);
+    number.value = Math.floor(Math.random() * 101);
 
-    const countdown = new Countdown(Date.now() + 2 * 60 * 60 * 1000, 1)
+    const countdown = new Countdown(Date.now() + 2 * 60 * 60 * 1000, 1);
     countdown.on(CountdownEventName.RUNNING, (remainTimeData) => {
         const {hours, minutes, seconds} = remainTimeData;
         time.value = [hours, minutes, seconds].map(fillZero).join(':');
-    })
-})
+    });
+});
 
 const mark = () => {
     if (markArray.value[currentIndex.value] === 1) {
-        markArray.value[currentIndex.value] = 0
+        markArray.value[currentIndex.value] = 0;
     } else {
-        markArray.value[currentIndex.value] = 1
+        markArray.value[currentIndex.value] = 1;
     }
-}
+};
 const fullScreen = () => {
     if (!screenfull.isEnabled) {
-        ElMessageBox.alert("当前浏览器不支持全屏")
+        ElMessageBox.alert("当前浏览器不支持全屏");
     } else {
         if (!screenfull.isFullscreen) {
-            screenValue.value = '退出全屏'
+            screenValue.value = '退出全屏';
         } else {
-            screenValue.value = '进入全屏'
+            screenValue.value = '进入全屏';
         }
-        screenfull.toggle()
+        screenfull.toggle();
     }
-}
+};
 
 const getPaper = async () => {
-    const route = useRoute()
-    uuid = route.query.uuid as string
+    const route = useRoute();
+    uuid = route.query.uuid as string;
     if (uuid != null) {
         await request.get(requestUrl + '/getPaper', {
             params: {
@@ -292,115 +292,115 @@ const getPaper = async () => {
                 type: 0
             }
         }).then((result: any) => {
-            paperSubjects = result.data.响应数据.subjectArray
-            name.value = result.data.响应数据.name
-        })
+            paperSubjects = result.data.响应数据.subjectArray;
+            name.value = result.data.响应数据.name;
+        });
     }
-}
+};
 
 const toSubmit = () => {
-    submitDialogVisible.value = true
-}
+    submitDialogVisible.value = true;
+};
 
 const collect = async () => {
     const collectForm = {
         uuid: uuid,
         subjectId: currentIndex.value
-    }
+    };
     await request.post(requestUrl + '/collect', collectForm).then((result: any) => {
-        showMessage(result)
-    })
-}
+        showMessage(result);
+    });
+};
 
 const toCorrect = () => {
-    correctDialogVisible.value = true
-}
+    correctDialogVisible.value = true;
+};
 const correct = async () => {
     const correctForm = {
         uuid: uuid,
         subjectId: currentIndex.value,
         correctText: correctText.value,
-    }
+    };
 
     await request.post(requestUrl + '/correct', correctForm).then((result: any) => {
-        showMessage(result)
+        showMessage(result);
         if (result.data.响应状态 === 1) {
-            correctDialogVisible.value = false
+            correctDialogVisible.value = false;
         }
-    })
-}
+    });
+};
 
 const submit = async () => {
     const submitForm = {
         id: uuid,
         answer: answerArray.value.join(',')
-    }
+    };
     await request.post(requestUrl + '/submitGZPaper', submitForm).then((result: any) => {
-        showMessage(result)
+        showMessage(result);
         if (result.data.响应状态 === 1) {
-            submitDialogVisible.value = false
+            submitDialogVisible.value = false;
         }
-    })
-}
+    });
+};
 
 const cancel = () => {
-    submitDialogVisible.value = false
-    correctDialogVisible.value = false
-}
+    submitDialogVisible.value = false;
+    correctDialogVisible.value = false;
+};
 
 const alterSubject = (i: number) => {
     if (currentType.value === '单') {
-        radioAnswer.value = answerArray.value[i - 1]
+        radioAnswer.value = answerArray.value[i - 1];
     } else if (currentType.value === '多') {
-        checkboxAnswer.value = answerArray.value[i - 1].split('')
+        checkboxAnswer.value = answerArray.value[i - 1].split('');
     }
-    currentIndex.value = i
-    const currentSubject = paperSubjects[i - 1]
+    currentIndex.value = i;
+    const currentSubject = paperSubjects[i - 1];
 
     if (currentSubject != undefined) {
-        subject.value = currentSubject.subject
-        currentType.value = formatSubjectType(currentSubject.type)
-        optionA.value = currentSubject.optionA
-        optionB.value = currentSubject.optionB
-        optionC.value = currentSubject.optionC
-        optionD.value = currentSubject.optionD
+        subject.value = currentSubject.subject;
+        currentType.value = formatSubjectType(currentSubject.type);
+        optionA.value = currentSubject.optionA;
+        optionB.value = currentSubject.optionB;
+        optionC.value = currentSubject.optionC;
+        optionD.value = currentSubject.optionD;
     } else {
-        clean()
+        clean();
     }
-}
+};
 
 const radioChange = () => {
     if (answerArray.value[currentIndex.value - 1] === radioAnswer.value) {
-        answerArray.value[currentIndex.value - 1] = ''
+        answerArray.value[currentIndex.value - 1] = '';
     } else {
-        answerArray.value[currentIndex.value - 1] = radioAnswer.value
+        answerArray.value[currentIndex.value - 1] = radioAnswer.value;
     }
-}
+};
 
 const checkboxChange = () => {
-    answerArray.value[currentIndex.value - 1] = checkboxAnswer.value.join('')
-}
+    answerArray.value[currentIndex.value - 1] = checkboxAnswer.value.join('');
+};
 
 const isMark = (i: number) => {
     return markArray.value[i] === 1;
-}
+};
 
 const previous = () => {
-    currentIndex.value -= 1
-}
+    currentIndex.value -= 1;
+};
 
 const next = () => {
-    currentIndex.value += 1
-}
+    currentIndex.value += 1;
+};
 
 const clean = () => {
-    subject.value = ''
-    currentType.value = ''
-    optionA.value = ''
-    optionB.value = ''
-    optionC.value = ''
-    optionD.value = ''
-}
+    subject.value = '';
+    currentType.value = '';
+    optionA.value = '';
+    optionB.value = '';
+    optionC.value = '';
+    optionD.value = '';
+};
 
 </script>
 <style lang="scss" scoped>

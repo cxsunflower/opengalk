@@ -91,25 +91,25 @@ const registerForm = ref({
     confirmPassword: ref(),
     verificationCode: ref(),
     uuid: ref()
-})
+});
 
 const registerFormRef = ref<FormInstance>();
 
-const verificationCodeUrl = ref('')
-const verifyEnabled = ref(true)
-const loading = ref(false)
+const verificationCodeUrl = ref('');
+const verifyEnabled = ref(true);
+const loading = ref(false);
 
 onMounted(() => {
-    flushVerificationCode()
-})
+    flushVerificationCode();
+});
 
 const flushVerificationCode = () => {
-    registerForm.value.verificationCode = ref()
+    registerForm.value.verificationCode = ref();
     getVerificationCode().then(result => {
-        verificationCodeUrl.value = result[0]
-        registerForm.value.uuid = result[1]
-    })
-}
+        verificationCodeUrl.value = result[0];
+        registerForm.value.uuid = result[1];
+    });
+};
 
 const clean = () => {
     registerForm.value = {
@@ -118,17 +118,17 @@ const clean = () => {
         confirmPassword: ref(),
         verificationCode: ref(),
         uuid: ref()
-    }
-}
+    };
+};
 //自定义验证
 const validator = (rule: any, value: any, callback: any) => {
-    console.log(value + "," + registerForm.value.password)
+    console.log(value + "," + registerForm.value.password);
     if (value !== registerForm.value.password) {
-        callback(new Error())
+        callback(new Error());
     } else {
-        callback()
+        callback();
     }
-}
+};
 
 const registerRules = reactive<FormRules>({
     account: [
@@ -144,29 +144,29 @@ const registerRules = reactive<FormRules>({
         {validator: validator, message: "两次密码输入不一致"},
     ],
     verificationCode: [{required: true, message: "请输入验证码", trigger: "blur"}],
-})
+});
 
 const handleRegister = async (registerFormRef: FormInstance | undefined) => {
     if (!registerFormRef) {
-        return
+        return;
     }
 
     await registerFormRef.validate((valid) => {
         if (valid) {
             request.post("/register", registerForm.value).then(result => {
-                showMessage(result)
+                showMessage(result);
                 if (result.data.响应状态 === 1) {
-                    router.push("/login")
+                    router.push("/login");
                 } else if (result.data.响应状态 === 2) {
-                    flushVerificationCode()
+                    flushVerificationCode();
                 } else {
-                    clean()
-                    flushVerificationCode()
+                    clean();
+                    flushVerificationCode();
                 }
-            })
+            });
         }
-    })
-}
+    });
+};
 
 </script>
 

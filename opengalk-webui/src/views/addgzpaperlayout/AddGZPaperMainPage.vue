@@ -2,16 +2,16 @@
     <div class="main">
         <div class="left">
             <div style="display: flex;flex-direction: row">
-                <el-button style="margin: 5px 5px 0 5px" type="primary" @click="toRequirement">查看输入题目要求
+                <el-button style="margin: 5px 5px 0 5px" type="success" @click="toRequirement">查看输入题目要求
                 </el-button>
                 <el-upload
-                        action="#"
                         v-model:file-list="currentImage as UploadUserFile[]"
                         :http-request="uploadImage"
+                        :limit="1"
                         :on-change="onChange"
                         :show-file-list="false"
-                        :limit="1"
                         accept='image/jpeg,image/gif,image/png'
+                        action="#"
                 >
                     <el-button style="margin: 5px 5px 0 5px">
                         <el-icon :size="25">
@@ -19,14 +19,21 @@
                         </el-icon>
                         <div>插入图片</div>
                     </el-button>
+
+                    <el-button style="margin: 5px 5px 0 5px" type="primary">
+                        <el-icon :size="25">
+                            <Document/>
+                        </el-icon>
+                        <div>从word中导入</div>
+                    </el-button>
                 </el-upload>
             </div>
             <div style="border: 1px solid #ccc;margin: 5px 5px 0 5px">
                 <Editor
-                        style="height: 605px; overflow-y: hidden;"
                         v-model="allSubjects"
                         :defaultConfig="editorConfig"
                         :mode="mode"
+                        style="height: 605px; overflow-y: hidden;"
                         @onCreated="handleCreated"
                 />
             </div>
@@ -34,8 +41,14 @@
 
         <div class="right">
             <div style="margin: 5px 5px 0 5px">
-                <el-button type="primary" @click="viewPaper">整卷预览</el-button>
+                <el-button @click="viewPaper">整卷预览</el-button>
                 <el-button type="success" @click="toUploadPaper">{{ buttonName }}</el-button>
+                <el-button type="primary">
+                    <el-icon :size="25">
+                        <Document/>
+                    </el-icon>
+                    导出为word
+                </el-button>
             </div>
 
             <el-scrollbar>
@@ -113,26 +126,26 @@ import request from "../../utils/RequestUtil";
 import {showMessage} from "../../utils/MessageUtil";
 import {useRoute} from "vue-router";
 import {Editor} from "@wangeditor/editor-for-vue";
-
-import "@wangeditor/editor/dist/css/style.css"
 import {Upload} from "@element-plus/icons-vue";
+import * as cheerio from 'cheerio';
+import "@wangeditor/editor/dist/css/style.css";
 
-const requestUrl = '/paperManagement'
+const requestUrl = '/paperManagement';
 const uploadFormRef = ref<FormInstance>();
-const allSubjects = ref('')
-const uploadVisible = ref(false)
-const requirementVisible = ref(false)
-const buttonName = ref('上传试卷')
-const mode = ref('simple')
-const editorConfig = {placeholder: '请输入内容...'}
-const editorRef = shallowRef()
-const currentImage = ref<UploadUserFile[]>()
+const allSubjects = ref('');
+const uploadVisible = ref(false);
+const requirementVisible = ref(false);
+const buttonName = ref('上传试卷');
+const mode = ref('simple');
+const editorConfig = {placeholder: '请输入题目...'};
+const editorRef = shallowRef();
+const currentImage = ref<UploadUserFile[]>();
 const uploadForm = ref({
     name: '',
     type: 0,
     remark: '',
     subjectArray: <any[]>[],
-})
+});
 const uploadRules = reactive<FormRules>({
     name: [
         {required: true, message: '不能为空', trigger: 'blur'},
@@ -142,93 +155,117 @@ const uploadRules = reactive<FormRules>({
         {required: true, message: '不能为空', trigger: 'blur'},
         {min: 3, max: 200, message: '长度必须3-200', trigger: 'blur'},
     ],
-})
+});
 
-let addOrUpdate = 0
-let uuid = <any>''
+let addOrUpdate = 0;
+let uuid = <any>'';
 
 onMounted(async () => {
-    const route = useRoute()
-    uuid = route.query.uuid
+    const route = useRoute();
+    uuid = route.query.uuid;
     if (uuid != null) {
-        addOrUpdate = 1
-        buttonName.value = '更新试卷'
+        addOrUpdate = 1;
+        buttonName.value = '更新试卷';
         await request.get(requestUrl + '/getPaper/' + uuid).then((result: any) => {
-            uploadForm.value.name = result.data.响应数据.name
-            uploadForm.value.remark = result.data.响应数据.remark
-            allSubjects.value = arrayToSubject(result.data.响应数据.subjectArray)
-        })
+            uploadForm.value.name = result.data.响应数据.name;
+            uploadForm.value.remark = result.data.响应数据.remark;
+            allSubjects.value = arrayToSubject(result.data.响应数据.subjectArray);
+        });
     }
-})
+});
 
 // 组件销毁时，也及时销毁编辑器
 onBeforeUnmount(() => {
-    const editor = editorRef.value
-    if (editor == null) return
-    editor.destroy()
-})
+    const editor = editorRef.value;
+    if (editor == null) {
+        return;
+    }
+    editor.destroy();
+});
 
 watch(allSubjects, () => {
-    uploadForm.value.subjectArray = subjectToArray(allSubjects.value.replace(/<[^>]+>/g, '').replace(/&nbsp;/ig, ''));
-})
+    const result = htmlToText(allSubjects.value);
+    console.log(result);
+    uploadForm.value.subjectArray = subjectToArray(result);
+});
+
+const htmlToText = (html: string): string => {
+    const $ = cheerio.load(html);
+    let result = '';
+
+    $('p').each((index, element) => {
+        const paragraph = $(element);
+        const imgSrcList = [];
+        paragraph.find('img').each((imgIndex, imgElement) => {
+            const src = $(imgElement).attr('src');
+            if (src) {
+                imgSrcList.push(src);
+            }
+        });
+        result += paragraph + '\n';
+    });
+
+    $()
+    return result;
+};
 
 const handleCreated = (editor: any) => {
     // 记录 editor 实例，重要！
-    editorRef.value = editor
-}
+    editorRef.value = editor;
+};
 
 const uploadImage = () => {
 
-}
+};
 
-const onChange: UploadProps['onChange'] = (uploadFile) :void=> {
-    let reader = new FileReader()
-    reader.readAsDataURL(uploadFile.raw as Blob)
+const onChange: UploadProps['onChange'] = (uploadFile): void => {
+    let reader = new FileReader();
+    reader.readAsDataURL(uploadFile.raw as Blob);
     reader.onload = function () {
-        let img_base64 = this.result
-        allSubjects.value += `<img src="`+img_base64+`" alt="">`
-    }
-    currentImage.value = []
-}
+        let base64 = this.result;
+        allSubjects.value += `<img src="` + base64 + `" alt="">`;
+    };
+    currentImage.value = [];
+};
 
 const toUploadPaper = () => {
-    uploadVisible.value = true
-}
+    uploadVisible.value = true;
+};
 
 const toRequirement = () => {
-    requirementVisible.value = true
-}
+    requirementVisible.value = true;
+};
 
 const viewPaper = () => {
-    console.log(JSON.stringify(uploadForm))
-    localStorage.setItem('viewGZPaperData', JSON.stringify(uploadForm))
-    window.open('/viewGZPaper')
-}
+    console.log(JSON.stringify(uploadForm));
+    localStorage.setItem('viewGZPaperData', JSON.stringify(uploadForm));
+    window.open('/viewGZPaper');
+};
 
 const uploadPaper = () => {
     if (addOrUpdate == 0) {
         request.post(requestUrl + '/addGZPaper', uploadForm.value).then((result: any) => {
-            showMessage(result)
+            showMessage(result);
             if (result.data.响应状态 === 1) {
-                uploadVisible.value = false
+                uploadVisible.value = false;
             }
-        })
+        });
     } else {
         request.put(requestUrl + '/updateGZPaper/' + uuid, uploadForm.value).then((result: any) => {
-            showMessage(result)
+            showMessage(result);
             if (result.data.响应状态 === 1) {
-                uploadVisible.value = false
+                uploadVisible.value = false;
             }
-        })
+        });
     }
-}
+};
 
 const close = () => {
-    uploadVisible.value = false
-    requirementVisible.value = false
-    uploadForm.value.name = ''
-    uploadForm.value.remark = ''
-}
+    uploadVisible.value = false;
+    requirementVisible.value = false;
+    uploadForm.value.name = '';
+    uploadForm.value.remark = '';
+};
 </script>
 <style lang="scss" scoped>
 .main {

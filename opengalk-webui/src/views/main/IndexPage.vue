@@ -31,10 +31,10 @@ import {onMounted, ref} from "vue";
 import request from "../../utils/RequestUtil";
 
 onMounted(() => {
-    request.get("/index").then()
-})
+    request.get("/index").then();
+});
 
-const form = ref([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11])
+const form = ref([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]);
 </script>
 
 <style scoped>

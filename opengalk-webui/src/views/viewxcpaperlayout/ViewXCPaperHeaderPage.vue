@@ -44,31 +44,31 @@ import screenfull from "screenfull";
 import {onMounted, ref} from "vue";
 import {formatPaperType} from "../../utils/FormatterUtil";
 
-const screenValue = ref('进入全屏')
-const name = ref('')
-const type = ref('')
+const screenValue = ref('进入全屏');
+const name = ref('');
+const type = ref('');
 
 onMounted(() => {
-    let paperData = localStorage.getItem('paperData') as any
+    let paperData = localStorage.getItem('paperData') as any;
     if (paperData != null) {
-        paperData = JSON.parse(paperData)
-        name.value = paperData._value.name
-        type.value = formatPaperType(paperData._value.type)
+        paperData = JSON.parse(paperData);
+        name.value = paperData._value.name;
+        type.value = formatPaperType(paperData._value.type);
     }
-})
+});
 
 const fullScreen = () => {
     if (!screenfull.isEnabled) {
-        ElMessageBox.alert("当前浏览器不支持全屏")
+        ElMessageBox.alert("当前浏览器不支持全屏");
     } else {
         if (!screenfull.isFullscreen) {
-            screenValue.value = '退出全屏'
+            screenValue.value = '退出全屏';
         } else {
-            screenValue.value = '进入全屏'
+            screenValue.value = '进入全屏';
         }
-        screenfull.toggle()
+        screenfull.toggle();
     }
-}
+};
 
 </script>
 

@@ -7,6 +7,6 @@
     </div>
 </template>
 <script lang="ts" setup>
-import Header from '../mainlayout/HeaderPage.vue'
+import Header from '../mainlayout/HeaderPage.vue';
 import AddPaperMainPage from "./AddGZPaperMainPage.vue";
 </script>

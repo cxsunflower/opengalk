@@ -72,7 +72,7 @@
 </template>
 
 <script lang="ts" setup>
-import {markRaw, onMounted, ref} from 'vue'
+import {markRaw, onMounted, ref} from 'vue';
 import {
     Avatar,
     Back,
@@ -89,66 +89,66 @@ import request from "../../utils/RequestUtil";
 import {showMessage} from "../../utils/MessageUtil";
 import {ElMessageBox} from "element-plus";
 
-const showZero = ref(false)
-const showOne = ref(false)
-const showTwo = ref(false)
-const showZeroOne = ref(false)
-const isCollapse = ref(false)
+const showZero = ref(false);
+const showOne = ref(false);
+const showTwo = ref(false);
+const showZeroOne = ref(false);
+const isCollapse = ref(false);
 
-const arrow = markRaw(Fold)
-const logoutDialogVisible = ref(false)
+const arrow = markRaw(Fold);
+const logoutDialogVisible = ref(false);
 
 onMounted(() => {
-    show()
-})
+    show();
+});
 
 const handleCollapse = () => {
-    isCollapse.value = !isCollapse.value
+    isCollapse.value = !isCollapse.value;
     if (isCollapse.value === true) {
-        arrow.value = Expand
+        arrow.value = Expand;
     } else {
-        arrow.value = Fold
+        arrow.value = Fold;
     }
-}
+};
 
 const show = () => {
-    const authority = getAuthorityByToken()
+    const authority = getAuthorityByToken();
     switch (authority) {
         case 0:
-            showZero.value = true
-            showZeroOne.value = true
-            break
+            showZero.value = true;
+            showZeroOne.value = true;
+            break;
         case 1:
-            showOne.value = true
-            showZeroOne.value = true
-            break
+            showOne.value = true;
+            showZeroOne.value = true;
+            break;
         case 2:
-            showTwo.value = true
-            break
+            showTwo.value = true;
+            break;
         default:
-            break
+            break;
     }
-}
+};
 
 const toLogout = () => {
-    logoutDialogVisible.value = true
-}
+    logoutDialogVisible.value = true;
+};
 const logout = async () => {
-    logoutDialogVisible.value = false
+    logoutDialogVisible.value = false;
     await request.post('/logout').then(result => {
-        removeToken()
+        removeToken();
         if (result.data.响应状态 === 1) {
             showMessage(result);
         } else {
-            ElMessageBox.alert("注销失败，已移除本地token，请尝试重新登陆")
+            ElMessageBox.alert("注销失败，已移除本地token，请尝试重新登陆");
         }
-    })
-    location.reload()
-}
+    });
+    location.reload();
+};
 
 const cancel = () => {
-    logoutDialogVisible.value = false
-}
+    logoutDialogVisible.value = false;
+};
 
 
 </script>

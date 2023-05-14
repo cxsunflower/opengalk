@@ -77,14 +77,14 @@ import {Postcard, Star} from "@element-plus/icons-vue";
 import request from "../../utils/RequestUtil";
 import router from "../../router";
 
-const requestUrl = '/paper'
-const paperList = ref<any[]>([])
-const activeName = ref('公安专业科目')
-const rankDialogVisible = ref(false)
+const requestUrl = '/paper';
+const paperList = ref<any[]>([]);
+const activeName = ref('公安专业科目');
+const rankDialogVisible = ref(false);
 
 onMounted(() => {
-    getPaperList(0)
-})
+    getPaperList(0);
+});
 
 const getPaperList = (type: number) => {
     request.get(requestUrl + '/getPaperList', {
@@ -92,9 +92,9 @@ const getPaperList = (type: number) => {
             type: type,
         }
     }).then((result: any) => {
-        paperList.value = result.data.响应数据
-    })
-}
+        paperList.value = result.data.响应数据;
+    });
+};
 
 const enterPaper = (id: number) => {
     const routeData = router.resolve({
@@ -102,17 +102,17 @@ const enterPaper = (id: number) => {
         query: {
             uuid: id
         }
-    })
-    window.open(routeData.href)
-}
+    });
+    window.open(routeData.href);
+};
 
 const showRank = () => {
-    rankDialogVisible.value = true
-}
+    rankDialogVisible.value = true;
+};
 
 const cancel = () => {
-    rankDialogVisible.value = false
-}
+    rankDialogVisible.value = false;
+};
 </script>
 
 <style lang="scss" scoped>

@@ -1,7 +1,20 @@
 <template>
     <div class="main">
         <div class="left">
-            <el-button style="margin: 5px 5px 0 5px" type="primary" @click="toRequirement">查看输入题目要求</el-button>
+            <el-button style="margin: 5px 5px 0 5px" type="success" @click="toRequirement">查看输入题目要求</el-button>
+            <el-button style="margin: 5px 5px 0 5px">
+                <el-icon :size="25">
+                    <Upload/>
+                </el-icon>
+                <div>插入图片</div>
+            </el-button>
+
+            <el-button style="margin: 5px 5px 0 5px" type="primary">
+                <el-icon :size="25">
+                    <Document/>
+                </el-icon>
+                <div>从word中导入</div>
+            </el-button>
             <el-input v-model="allSubjects"
                       :rows="29"
                       placeholder="请输入题目"
@@ -13,8 +26,14 @@
 
         <div class="right">
             <div style="margin: 5px 5px 0 5px">
-                <el-button type="primary" @click="viewPaper">整卷预览</el-button>
+                <el-button @click="viewPaper">整卷预览</el-button>
                 <el-button type="success" @click="toUploadPaper">{{ buttonName }}</el-button>
+                <el-button type="primary">
+                    <el-icon :size="25">
+                        <Document/>
+                    </el-icon>
+                    导出为word
+                </el-button>
             </div>
 
             <el-scrollbar>
@@ -72,7 +91,7 @@
         </el-dialog>
 
         <el-dialog v-model="requirementVisible" align-center center title="上传试卷要求页面" width="70%">
-            <img alt="" height="400" src="../../assets/images/gz-requirement.png" width="800"/>
+            <img alt="" src="../../assets/images/gz-requirement.png"/>
             <template #footer>
                 <div>
                     <el-button type="primary" @click="close">
@@ -91,20 +110,20 @@ import {FormInstance, FormRules} from "element-plus";
 import request from "../../utils/RequestUtil";
 import {showMessage} from "../../utils/MessageUtil";
 import {useRoute} from "vue-router";
-import {Editor} from "@wangeditor/editor-for-vue";
+import {Upload} from "@element-plus/icons-vue";
 
-const requestUrl = '/paperManagement'
+const requestUrl = '/paperManagement';
 const uploadFormRef = ref<FormInstance>();
-const allSubjects = ref('')
-const uploadVisible = ref(false)
-const requirementVisible = ref(false)
+const allSubjects = ref('');
+const uploadVisible = ref(false);
+const requirementVisible = ref(false);
 const uploadForm = ref({
     name: '',
     type: 0,
     remark: '',
     subjectArray: <any[]>[],
-})
-const buttonName = ref('上传试卷')
+});
+const buttonName = ref('上传试卷');
 const uploadRules = reactive<FormRules>({
     name: [
         {required: true, message: '不能为空', trigger: 'blur'},
@@ -114,66 +133,66 @@ const uploadRules = reactive<FormRules>({
         {required: true, message: '不能为空', trigger: 'blur'},
         {min: 3, max: 200, message: '长度必须3-200', trigger: 'blur'},
     ],
-})
-let addOrUpdate = 0
-let uuid = <any>
+});
+let addOrUpdate = 0;
+let uuid = <any>'';
 
-    watch(allSubjects, () => {
-        uploadForm.value.subjectArray = subjectToArray(allSubjects.value);
-    })
+watch(allSubjects, () => {
+    uploadForm.value.subjectArray = subjectToArray(allSubjects.value);
+});
 
 onMounted(async () => {
-    const route = useRoute()
-    uuid = route.query.uuid
+    const route = useRoute();
+    uuid = route.query.uuid;
     if (uuid != null) {
-        addOrUpdate = 1
-        buttonName.value = '更新试卷'
+        addOrUpdate = 1;
+        buttonName.value = '更新试卷';
         await request.get(requestUrl + '/getPaper/' + uuid).then((result: any) => {
-            uploadForm.value.name = result.data.响应数据.name
-            uploadForm.value.remark = result.data.响应数据.remark
-            allSubjects.value = arrayToSubject(result.data.响应数据.subjectArray)
-        })
+            uploadForm.value.name = result.data.响应数据.name;
+            uploadForm.value.remark = result.data.响应数据.remark;
+            allSubjects.value = arrayToSubject(result.data.响应数据.subjectArray);
+        });
     }
-})
+});
 
 const toUploadPaper = () => {
-    uploadVisible.value = true
-}
+    uploadVisible.value = true;
+};
 
 const toRequirement = () => {
-    requirementVisible.value = true
-}
+    requirementVisible.value = true;
+};
 
 const viewPaper = () => {
-    console.log(JSON.stringify(uploadForm))
-    localStorage.setItem('viewGZPaperData', JSON.stringify(uploadForm))
-    window.open('/viewGZPaper')
-}
+    console.log(JSON.stringify(uploadForm));
+    localStorage.setItem('viewXCPaperData', JSON.stringify(uploadForm));
+    window.open('/viewXCPaper');
+};
 
 const uploadPaper = () => {
     if (addOrUpdate == 0) {
         request.post(requestUrl + '/addGZPaper', uploadForm.value).then((result: any) => {
-            showMessage(result)
+            showMessage(result);
             if (result.data.响应状态 === 1) {
-                uploadVisible.value = false
+                uploadVisible.value = false;
             }
-        })
+        });
     } else {
         request.put(requestUrl + '/updateGZPaper/' + uuid, uploadForm.value).then((result: any) => {
-            showMessage(result)
+            showMessage(result);
             if (result.data.响应状态 === 1) {
-                uploadVisible.value = false
+                uploadVisible.value = false;
             }
-        })
+        });
     }
-}
+};
 
 const close = () => {
-    uploadVisible.value = false
-    requirementVisible.value = false
-    uploadForm.value.name = ''
-    uploadForm.value.remark = ''
-}
+    uploadVisible.value = false;
+    requirementVisible.value = false;
+    uploadForm.value.name = '';
+    uploadForm.value.remark = '';
+};
 </script>
 <style lang="scss" scoped>
 .main {

@@ -6,7 +6,7 @@ export const showMessage = (response: any) => {
         grouping: true,
         type: response.data.响应状态 === 1 ? 'success' : 'error',
         center: true,
-    })
-}
+    });
+};
 
 

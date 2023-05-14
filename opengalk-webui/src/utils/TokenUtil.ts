@@ -1,30 +1,30 @@
-import jwtDecode from 'jwt-decode'
+import jwtDecode from 'jwt-decode';
 
-const key = 'token'
+const key = 'token';
 
 export const getToken = (): any => {
-    return localStorage.getItem(key)
-}
+    return localStorage.getItem(key);
+};
 
 export const setToken = (token: any) => {
-    return localStorage.setItem(key, token)
-}
+    return localStorage.setItem(key, token);
+};
 
 export const removeToken = () => {
-    return localStorage.removeItem(key)
-}
+    return localStorage.removeItem(key);
+};
 
 export const getAccountByToken = () => {
-    return jwtDecode<any>(getToken()).account
-}
+    return jwtDecode<any>(getToken()).account;
+};
 
 export const getAuthorityByToken = () => {
-    return jwtDecode<any>(getToken()).authority
-}
+    return jwtDecode<any>(getToken()).authority;
+};
 
 export const getIdByToken = () => {
-    return jwtDecode<any>(getToken()).id
-}
+    return jwtDecode<any>(getToken()).id;
+};
 
 
 

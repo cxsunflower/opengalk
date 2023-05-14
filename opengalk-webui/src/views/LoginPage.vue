@@ -91,7 +91,7 @@
 import {onMounted, reactive, ref} from "vue";
 import {FormInstance, FormRules} from "element-plus/es";
 import Left from "../views/components/LeftPage.vue";
-import axios from "axios"
+import axios from "axios";
 import {removeToken, setToken} from "../utils/TokenUtil";
 import router from "../router";
 import {showMessage} from "../utils/MessageUtil";
@@ -117,29 +117,29 @@ const loginForm = ref({
     account: '',
     password: '',
     verificationCode: '',
-})
+});
 
-const register = ref(true)
-const verificationCodeUrl = ref('')
-const verifyEnable = ref(true)
-const loading = ref(false)
-const uuid = ref('')
+const register = ref(true);
+const verificationCodeUrl = ref('');
+const verifyEnable = ref(true);
+const loading = ref(false);
+const uuid = ref('');
 
 onMounted(() => {
-    flushVerificationCode()
-})
+    flushVerificationCode();
+});
 
 const flushVerificationCode = async () => {
-    loginForm.value.verificationCode = ''
+    loginForm.value.verificationCode = '';
     getVerificationCode().then(result => {
-        verificationCodeUrl.value = result[0]
-        uuid.value = result[1]
-    })
-}
+        verificationCodeUrl.value = result[0];
+        uuid.value = result[1];
+    });
+};
 
 const login = async (loginFormRef: FormInstance | undefined) => {
     if (!loginFormRef) {
-        return
+        return;
     }
 
     await loginFormRef.validate((valid) => {
@@ -148,25 +148,25 @@ const login = async (loginFormRef: FormInstance | undefined) => {
                 "account=" + loginForm.value.account +
                 "&password=" + loginForm.value.password +
                 "&uuid=" + uuid.value +
-                "&verificationCode=" + loginForm.value.verificationCode
+                "&verificationCode=" + loginForm.value.verificationCode;
 
             axios.post(baseURL + "/login", form, {
                 headers: {'Content-Type': 'application/x-www-form-urlencoded'}
             }).then(result => {
                 if (result.data.响应状态 === 2) {
-                    flushVerificationCode()
+                    flushVerificationCode();
                 } else if (result.data.响应状态 === 1) {
-                    router.push("/index")
-                    setToken(result.data.响应数据)
+                    router.push("/index");
+                    setToken(result.data.响应数据);
                 } else {
-                    flushVerificationCode()
-                    removeToken()
+                    flushVerificationCode();
+                    removeToken();
                 }
-                showMessage(result)
-            })
+                showMessage(result);
+            });
         }
-    })
-}
+    });
+};
 
 </script>
 

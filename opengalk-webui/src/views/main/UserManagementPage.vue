@@ -265,7 +265,7 @@
     </div>
 </template>
 <script lang="ts" setup>
-import {Refresh, Search} from '@element-plus/icons-vue'
+import {Refresh, Search} from '@element-plus/icons-vue';
 import {onMounted, reactive, ref, watch} from 'vue';
 import {ElMessageBox, FormInstance, FormRules} from "element-plus/es";
 import {showMessage} from "../../utils/MessageUtil";
@@ -273,25 +273,25 @@ import {formatAuthority, formatBirthday, formatGender, formatIsLocked, formatTim
 import {ElMessage} from "element-plus";
 import request from "../../utils/RequestUtil";
 
-const requestUrl = "/userManagement"
-const condition = ref('account')
-const keyword = ref('')
+const requestUrl = "/userManagement";
+const condition = ref('account');
+const keyword = ref('');
 const userFormRef = ref<FormInstance>();
 
 //获取第一页用户
-const tableData = ref<any[]>([])
-const pageSize = ref(8)
-const totalPage = ref(0)
-const currentPage = ref(1)
-const background = ref(true)
-const total = ref(0)
+const tableData = ref<any[]>([]);
+const pageSize = ref(8);
+const totalPage = ref(0);
+const currentPage = ref(1);
+const background = ref(true);
+const total = ref(0);
 
 //新增用户
 const addUserForm = ref({
     account: '',
     password: '',
     authority: ''
-})
+});
 
 // 查看用户信息表
 const userInfoForm = ref({
@@ -306,25 +306,25 @@ const userInfoForm = ref({
     email: '',
     collegeId: undefined,
     collegeName: '',
-})
+});
 
 const collegeList = ref([{
     id: undefined,
     collegeName: ''
-}])
+}]);
 
-const isDisabled = ref(true)
-const isLockedValue = ref(false)
-const editButtonName = ref('编辑个人信息')
+const isDisabled = ref(true);
+const isLockedValue = ref(false);
+const editButtonName = ref('编辑个人信息');
 
 // 修改用户密码
-const editPasswordDialogVisible = ref(false)
-const newPassword = ref('')
-const addDialogVisible = ref(false)
+const editPasswordDialogVisible = ref(false);
+const newPassword = ref('');
+const addDialogVisible = ref(false);
 
 // 查看用户信息
-const userInfoDialogVisible = ref(false)
-const authorityValue = ref()
+const userInfoDialogVisible = ref(false);
+const authorityValue = ref();
 
 const addRules = reactive<FormRules>({
     account: [
@@ -339,18 +339,18 @@ const addRules = reactive<FormRules>({
         {required: true, message: '不能为空', trigger: 'blur'},
         {min: 1, max: 2},
     ]
-})
+});
 
 onMounted(() => {
-    getUserList(1)
-})
+    getUserList(1);
+});
 
 const clean = () => {
     addUserForm.value = {
         account: '',
         password: '',
         authority: ''
-    }
+    };
 
     userInfoForm.value = {
         id: undefined,
@@ -364,16 +364,16 @@ const clean = () => {
         email: '',
         collegeId: undefined,
         collegeName: '',
-    }
+    };
 
-    authorityValue.value = ref()
-    collegeList.value = []
-}
+    authorityValue.value = ref();
+    collegeList.value = [];
+};
 
 const refresh = () => {
-    keyword.value = ''
-    getUserList(currentPage.value)
-}
+    keyword.value = '';
+    getUserList(currentPage.value);
+};
 
 const getUserList = async (currentPage: number) => {
     await request
@@ -386,29 +386,29 @@ const getUserList = async (currentPage: number) => {
             }
         })
         .then((result: any) => {
-            tableData.value = result.data.响应数据.records
-            totalPage.value = result.data.响应数据.pages
-            total.value = result.data.响应数据.total
-        })
-}
+            tableData.value = result.data.响应数据.records;
+            totalPage.value = result.data.响应数据.pages;
+            total.value = result.data.响应数据.total;
+        });
+};
 
 // 分页
 watch(currentPage, () => {
     getUserList(currentPage.value);
-})
+});
 
 watch(isDisabled, () => {
     if (isDisabled.value === true) {
-        editButtonName.value = '编辑个人信息'
+        editButtonName.value = '编辑个人信息';
     } else {
-        editButtonName.value = '取消编辑'
+        editButtonName.value = '取消编辑';
     }
-})
+});
 
 const toAddUser = () => {
-    addDialogVisible.value = true
-    clean()
-}
+    addDialogVisible.value = true;
+    clean();
+};
 
 const addUser = async (userFormRef: FormInstance | undefined) => {
     if (!userFormRef) {
@@ -418,41 +418,41 @@ const addUser = async (userFormRef: FormInstance | undefined) => {
     await userFormRef.validate((valid) => {
         if (valid) {
             request.post(requestUrl + '/addUser', addUserForm.value).then((result: any) => {
-                showMessage(result)
+                showMessage(result);
                 if (result.data.响应状态 === 1) {
-                    addDialogVisible.value = false
+                    addDialogVisible.value = false;
                 }
-            })
+            });
         } else {
-            ElMessageBox.alert('请检查表单内容是否符合规范')
+            ElMessageBox.alert('请检查表单内容是否符合规范');
         }
-        clean()
-        getUserList(currentPage.value)
-    })
-}
+        clean();
+        getUserList(currentPage.value);
+    });
+};
 
 const toEditUser = () => {
-    isDisabled.value = !isDisabled.value
-}
+    isDisabled.value = !isDisabled.value;
+};
 
 const showUserInfo = async (scope: any) => {
-    isLockedValue.value = formatIsLocked(scope.row) == "未锁定"
-    const id = tableData.value[scope.$index].id
+    isLockedValue.value = formatIsLocked(scope.row) == "未锁定";
+    const id = tableData.value[scope.$index].id;
     await request.get(requestUrl + '/getUserInfo/' + id).then(result => {
         if (result.data.响应数据 != null) {
-            userInfoForm.value = result.data.响应数据
-            authorityValue.value = formatAuthority(userInfoForm.value.authority as number)
-            userInfoForm.value.gender = formatGender(userInfoForm.value.gender)
-            userInfoForm.value.birthday = formatBirthday(userInfoForm.value.birthday, 0)
+            userInfoForm.value = result.data.响应数据;
+            authorityValue.value = formatAuthority(userInfoForm.value.authority as number);
+            userInfoForm.value.gender = formatGender(userInfoForm.value.gender);
+            userInfoForm.value.birthday = formatBirthday(userInfoForm.value.birthday, 0);
         }
-    })
+    });
     userInfoDialogVisible.value = true;
-}
+};
 
 const editUser = async () => {
-    userInfoForm.value.authority = formatAuthority(authorityValue.value)
-    userInfoForm.value.gender = formatGender(userInfoForm.value.gender)
-    userInfoForm.value.birthday = formatBirthday(userInfoForm.value.birthday, 0)
+    userInfoForm.value.authority = formatAuthority(authorityValue.value);
+    userInfoForm.value.gender = formatGender(userInfoForm.value.gender);
+    userInfoForm.value.birthday = formatBirthday(userInfoForm.value.birthday, 0);
 
     for (let i = 0; i < collegeList.value.length; i++) {
         if (collegeList.value[i].collegeName === userInfoForm.value.collegeName) {
@@ -462,73 +462,73 @@ const editUser = async () => {
 
     await request.put(requestUrl + '/updateUserInfo', userInfoForm.value).then((result: any) => {
         if (result.data.响应状态 === 1) {
-            userInfoDialogVisible.value = false
-            clean()
+            userInfoDialogVisible.value = false;
+            clean();
         } else {
-            userInfoForm.value.gender = formatGender(userInfoForm.value.gender)
-            userInfoForm.value.authority = formatAuthority(userInfoForm.value.authority)
+            userInfoForm.value.gender = formatGender(userInfoForm.value.gender);
+            userInfoForm.value.authority = formatAuthority(userInfoForm.value.authority);
         }
-        showMessage(result)
-    })
-}
+        showMessage(result);
+    });
+};
 
 const cancel = () => {
-    addDialogVisible.value = false
-    userInfoDialogVisible.value = false
-    isDisabled.value = true
-    clean()
-    getUserList(currentPage.value)
-}
+    addDialogVisible.value = false;
+    userInfoDialogVisible.value = false;
+    isDisabled.value = true;
+    clean();
+    getUserList(currentPage.value);
+};
 
 const toEditPassword = () => {
-    newPassword.value = ''
+    newPassword.value = '';
     editPasswordDialogVisible.value = true;
-}
+};
 
 const editPassword = async () => {
     if (newPassword.value.length < 6 || newPassword.value.length > 20) {
-        ElMessage.error('密码长度在6-20之间')
-        return
+        ElMessage.error('密码长度在6-20之间');
+        return;
     }
     await request.put(requestUrl + '/updateUserPassword/' + userInfoForm.value.id, newPassword.value).then(result => {
         if (result.data.响应状态 === 1) {
             editPasswordDialogVisible.value = false;
         }
-        showMessage(result)
-    })
-}
+        showMessage(result);
+    });
+};
 
 //删除用户
 const deleteUser = (id: number) => {
     request.delete(requestUrl + '/deleteUser/' + id).then((result: any) => {
-        showMessage(result)
+        showMessage(result);
         if (result.data.响应状态 === 1) {
-            getUserList(currentPage.value)
+            getUserList(currentPage.value);
         }
-    })
-}
+    });
+};
 
 const getCollegeList = async () => {
     await request.get(requestUrl + "/getCollegeList").then(result => {
-        collegeList.value = result.data.响应数据
-    })
-}
+        collegeList.value = result.data.响应数据;
+    });
+};
 
 const changeIsLockedValue = () => {
     if (isLockedValue.value) {
-        userInfoForm.value.isLocked = 0
+        userInfoForm.value.isLocked = 0;
     } else {
-        userInfoForm.value.isLocked = 1
+        userInfoForm.value.isLocked = 1;
     }
-}
+};
 
 const formatTimeInRow = (row: any, column: any) => {
-    return formatTime(row[column.property])
-}
+    return formatTime(row[column.property]);
+};
 
 const formatAuthorityInRow = (row: any) => {
-    return formatAuthority(row.authority)
-}
+    return formatAuthority(row.authority);
+};
 
 </script>
 
