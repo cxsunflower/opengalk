@@ -61,7 +61,6 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
     @Transactional
     @Override
     public ResponseResult<?> register(RegisterForm registerForm) {
-        // TODO 邮箱注册
         log.info("注册用户:" + registerForm);
         ResponseResult<?> result = verifyCodeService.verifiedResponse(registerForm.getUuid(), registerForm.getVerificationCode());
 

@@ -36,7 +36,6 @@ public class AuthenticationSuccessHandlerImpl implements AuthenticationSuccessHa
 
     private final VerifyCodeServiceImpl verifyCodeService;
 
-    // TODO qq微信登陆
     @Override
     public void onAuthenticationSuccess(@NonNull HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
         ResponseResult<?> result = verifyCodeService.verifiedResponse(request.getParameter("uuid"), request.getParameter("verificationCode"));
