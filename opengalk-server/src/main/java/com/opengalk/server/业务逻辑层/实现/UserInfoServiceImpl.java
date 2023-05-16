@@ -348,7 +348,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
         try (InputStream in = new FileInputStream(filePath)) {
             data = new byte[in.available()];
             int counts = in.read(data);
-            log.info("输入字节：" + counts);
+            log.info("I/O字节：" + counts);
         } catch (IOException e) {
             log.error(ExceptionUtil.stacktraceToString(e));
         }
