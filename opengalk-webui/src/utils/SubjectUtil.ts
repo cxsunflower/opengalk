@@ -1,17 +1,34 @@
-// 将一个个题目字符串拆解/组合成题目对象
+interface Subject {
+    content: string,
+    imgs: string[],
+}
 
-export const subjectToArray = (allSubjects: string): any[] => {
+interface Selection {
+    imgs: string[],
+    text: string,
+    value: string,
+}
+
+export interface SubjectObject {
+    type: number,
+    subject: Subject,
+    answer: string[],
+    items: Selection[],
+    error: string,
+}
+
+// 将一个个题目字符串拆解/组合成题目对象
+export const subjectToArray = (allSubjects: string): SubjectObject[] => {
     let subjectArray: string[] = allSubjects.split(/\n\n/);
     let subjectObjectArray: any[] = [];
 
     for (const key in subjectArray) {
 
-        // TODO 使用对象存题干和题目选项以用来读取图片
-        let subjectObject = {
+        let subjectObject: SubjectObject = {
             type: 0,                // 类型，0为单选，1为多选
-            subject: '',            // 题干
+            subject: <Subject>{},   // 题干
             answer: <string[]>[],   // 正确答案
-            items: <any>[],         // 题目选项
+            items: <Selection[]>[], // 题目选项
             error: ''               // 错误提示
         };
 
@@ -30,7 +47,6 @@ export const subjectToArray = (allSubjects: string): any[] => {
         // 拆分题干与选项
         let selectionReg = /\n\s*答案[:：]\s*[A-Z]+/i;
         let sourceTimu = subject.replace(selectionReg, '');
-
         let sourceTimuArr = sourceTimu.split(/[A-Z][.、． ]/ig);
 
         if (sourceTimuArr.length == 1) {
@@ -39,15 +55,30 @@ export const subjectToArray = (allSubjects: string): any[] => {
 
         let valArr: string[] = [];
         sourceTimuArr.forEach((item: string, i: number) => {
-            sourceTimuArr[i] = item.trim().replace(/\s+/g, ' ');
+            sourceTimuArr[i] = item.trim().replace(/\s+/g, '');
+            console.log("source:" + i + ":" + sourceTimuArr[i]);
 
             if (i === 0) {
+                let imgs = sourceTimuArr[i].split(/\s*data:image/) as string[];
+                console.log('imgs0:' + imgs[0]);
+                console.log('imgs1:' + imgs[1]);
+                if (imgs.length == 0) {
+                    subjectObject.error = '缺少题干';
+                } else {
+                    for (let j = 1; j < imgs.length; j++) {
+                        imgs[j] = 'data:image' + imgs[j].replaceAll('\n', '');
+                    }
+                }
                 // 题干
-                subjectObject.subject = sourceTimuArr[i];
+                subjectObject.subject = {
+                    content: imgs[0],
+                    imgs: imgs.slice(1),
+                };
+
             } else {
                 // 选项
-                let selectionObject = {
-                    picture: '',
+                let selectionObject: Selection = {
+                    imgs: [],
                     text: sourceTimuArr[i],
                     value: String.fromCharCode(65 + i - 1) // ascii转字母
                 };
