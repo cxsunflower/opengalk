@@ -11,7 +11,7 @@
   "dependencies": {
     "@element-plus/icons-vue": "^2.1.0",
     "@jridgewell/sourcemap-codec": "^1.4.15",
-    "@packy-tang/vue-tinymce": "2.0.0-beta.1",
+    "@tinymce/tinymce-vue": "^5",
     "axios": "^1.4.0",
     "cheerio": "1.0.0-rc.12",
     "element-plus": "^2.3.4",
@@ -27,7 +27,7 @@
   "devDependencies": {
     "@element-plus/icons-vue": "^2.1.0",
     "@jridgewell/sourcemap-codec": "^1.4.15",
-    "@packy-tang/vue-tinymce": "2.0.0-beta.1",
+    "@vitejs/plugin-vue": "^4.2.3",
     "axios": "^1.4.0",
     "cheerio": "1.0.0-rc.12",
     "element-plus": "^2.3.4",
@@ -37,6 +37,8 @@
     "sass": "^1.62.1",
     "sass-loader": "^13.2.2",
     "screenfull": "^6.0.2",
+    "typescript": "^5.0.4",
+    "vite": "^4.3.7",
     "vue": "^3.3.2",
     "vue-router": "^4.2.0"
   }
