@@ -1,10 +1,10 @@
 <template>
-    <div>
-        <ViewPaperHeaderPage/>
-        <div class="main">
-            <ViewPaperMainPage/>
-        </div>
+  <div>
+    <ViewPaperHeaderPage/>
+    <div class="main">
+      <ViewPaperMainPage/>
     </div>
+  </div>
 </template>
 <script lang="ts" setup>
 import ViewPaperHeaderPage from "./ViewXCPaperHeaderPage.vue";

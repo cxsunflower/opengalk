@@ -1,29 +1,29 @@
 <template>
-    <div id="header">
-        <div class="left">
-            <div id="title" @click="toIndex">
-                OpenGALK
-            </div>
-        </div>
-
-        <div class="right">
-            <div id="avatar">
-                <img v-show="avatarUrl" :src="'data:image/png;base64,'+avatarUrl" alt="" class="avatar"/>
-                <el-avatar v-show="!avatarUrl" :icon="UserFilled as string" :size="37"/>
-            </div>
-
-            <div id="info">
-                &nbsp;{{ account }}
-            </div>
-
-            <div id="fullscreen" @click="fullScreen">
-                <el-icon size="24">
-                    <FullScreen/>
-                </el-icon>
-                <span>{{ screenValue }}</span>
-            </div>
-        </div>
+  <div id="header">
+    <div class="left">
+      <div id="title" @click="toIndex">
+        OpenGALK
+      </div>
     </div>
+
+    <div class="right">
+      <div id="avatar">
+        <img v-show="avatarUrl" :src="'data:image/png;base64,'+avatarUrl" alt="" class="avatar"/>
+        <el-avatar v-show="!avatarUrl" :icon="UserFilled as string" :size="37"/>
+      </div>
+
+      <div id="info">
+        &nbsp;{{ account }}
+      </div>
+
+      <div id="fullscreen" @click="fullScreen">
+        <el-icon size="24">
+          <FullScreen/>
+        </el-icon>
+        <span>{{ screenValue }}</span>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script lang="ts" setup>
@@ -41,25 +41,25 @@ const requestUrl = '/header';
 const avatarUrl = ref('');
 
 onMounted(() => {
-    request.get(requestUrl + '/getAvatar').then((result: any) => {
-        avatarUrl.value = result.data.响应数据;
-    });
+  request.get(requestUrl + '/getAvatar').then((result: any) => {
+    avatarUrl.value = result.data.响应数据;
+  });
 });
 
 const toIndex = () => {
-    router.push('/index');
+  router.push('/index');
 };
 const fullScreen = () => {
-    if (!screenfull.isEnabled) {
-        ElMessageBox.alert("当前浏览器不支持全屏");
+  if (!screenfull.isEnabled) {
+    ElMessageBox.alert("当前浏览器不支持全屏");
+  } else {
+    if (!screenfull.isFullscreen) {
+      screenValue.value = '退出全屏';
     } else {
-        if (!screenfull.isFullscreen) {
-            screenValue.value = '退出全屏';
-        } else {
-            screenValue.value = '进入全屏';
-        }
-        screenfull.toggle();
+      screenValue.value = '进入全屏';
     }
+    screenfull.toggle();
+  }
 };
 
 </script>

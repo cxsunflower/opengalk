@@ -1,139 +1,139 @@
 <template>
-    <div class="aside">
-        <el-scrollbar :always="true" class="scrollbar">
-            <div style="display: flex;flex-direction: column;padding: 10px 15px 10px 10px">
-                <div class="知觉与速度" style="position: relative;">
-                    <div class="题块">知觉速度与准确性</div>
-                    <div v-for="i in 60"
-                         :class="{changeColor:currentIndex == i || answerArray[i - 1] != ''}"
-                         class="题号"
-                         @click="alterSubject(i)">
-                        <div>{{ i }}</div>
-                    </div>
-                </div>
+  <div class="aside">
+    <el-scrollbar :always="true" class="scrollbar">
+      <div style="display: flex;flex-direction: column;padding: 10px 15px 10px 10px">
+        <div class="知觉与速度" style="position: relative;">
+          <div class="题块">知觉速度与准确性</div>
+          <div v-for="i in 60"
+               :class="{changeColor:currentIndex == i || answerArray[i - 1] != ''}"
+               class="题号"
+               @click="alterSubject(i)">
+            <div>{{ i }}</div>
+          </div>
+        </div>
 
-                <div class="常识判断" style="position: relative;">
-                    <div class="题块">常识判断</div>
-                    <div v-for="i in 80" v-show="i > 60"
-                         class="题号"
-                         @click="alterSubject(i)">
-                        <div>{{ i }}</div>
-                    </div>
-                </div>
+        <div class="常识判断" style="position: relative;">
+          <div class="题块">常识判断</div>
+          <div v-for="i in 80" v-show="i > 60"
+               class="题号"
+               @click="alterSubject(i)">
+            <div>{{ i }}</div>
+          </div>
+        </div>
 
-                <div class="言语理解与表达" style="position: relative;">
-                    <div class="题块">言语理解与表达</div>
-                    <div v-for="i in 110" v-show="i > 80"
-                         class="题号"
-                         @click="alterSubject(i)">
-                        <div>{{ i }}</div>
-                    </div>
-                </div>
+        <div class="言语理解与表达" style="position: relative;">
+          <div class="题块">言语理解与表达</div>
+          <div v-for="i in 110" v-show="i > 80"
+               class="题号"
+               @click="alterSubject(i)">
+            <div>{{ i }}</div>
+          </div>
+        </div>
 
-                <div class="数量关系">
-                    <div class="题块">数量关系</div>
-                    <div v-for="i in 120" v-show="i > 110"
-                         class="题号"
-                         @click="alterSubject(i)">{{ i }}
-                    </div>
-                </div>
+        <div class="数量关系">
+          <div class="题块">数量关系</div>
+          <div v-for="i in 120" v-show="i > 110"
+               class="题号"
+               @click="alterSubject(i)">{{ i }}
+          </div>
+        </div>
 
-                <div class="判断推理">
-                    <div class="题块">判断推理</div>
-                    <div v-for="i in 180" v-show="i > 120"
-                         class="题号"
-                         @click="alterSubject(i)">{{ i }}
-                    </div>
-                </div>
+        <div class="判断推理">
+          <div class="题块">判断推理</div>
+          <div v-for="i in 180" v-show="i > 120"
+               class="题号"
+               @click="alterSubject(i)">{{ i }}
+          </div>
+        </div>
 
-                <div class="资料分析">
-                    <div class="题块">资料分析</div>
-                    <div v-for="i in 180" v-show="i > 160"
-                         class="题号"
-                         @click="alterSubject(i)">{{ i }}
-                    </div>
-                </div>
-            </div>
-        </el-scrollbar>
+        <div class="资料分析">
+          <div class="题块">资料分析</div>
+          <div v-for="i in 180" v-show="i > 160"
+               class="题号"
+               @click="alterSubject(i)">{{ i }}
+          </div>
+        </div>
+      </div>
+    </el-scrollbar>
+  </div>
+
+  <div class="right">
+    <div class="题型">
+      <div style="font-size: 16px">单选题（共30题）</div>
+      <div style="font-size: 18px">请按每道题的答题要求作答</div>
+    </div>
+    <div class="top">
+      <div class="top-left">
+        <div style="width: 45px;height: 30px;background-color: #b0caf6;line-height: 30px;text-align: center">
+          {{ currentIndex }}
+        </div>
+        <div style="margin-left: 10px;font-size: 18px">({{ currentType }}选)</div>
+      </div>
+      <div class="top-right">
+        <el-button :disabled="true" :icon="ZoomIn as string" class="top-right-button">纠错</el-button>
+        <el-button :disabled="true" :icon="Star as string" class="top-right-button">收藏本题</el-button>
+      </div>
+
     </div>
 
-    <div class="right">
-        <div class="题型">
-            <div style="font-size: 16px">单选题（共30题）</div>
-            <div style="font-size: 18px">请按每道题的答题要求作答</div>
+    <div style="flex: 1;display: block;border-bottom: #d3dce6 1px solid;">
+      <el-scrollbar :always="true">
+        <div class="题目">
+          <div>
+            {{ subject }}
+          </div>
         </div>
-        <div class="top">
-            <div class="top-left">
-                <div style="width: 45px;height: 30px;background-color: #b0caf6;line-height: 30px;text-align: center">
-                    {{ currentIndex }}
-                </div>
-                <div style="margin-left: 10px;font-size: 18px">({{ currentType }}选)</div>
+        <div style="margin:25px 0 0 70px">
+          <el-checkbox-group
+              v-show="currentType === '多'"
+              v-model="answerArray"
+              size="large"
+          >
+            <div class="checkbox" style="margin-top: 45px">
+              <el-checkbox :label="'A'">A、{{ optionA }}</el-checkbox>
             </div>
-            <div class="top-right">
-                <el-button :disabled="true" :icon="ZoomIn as string" class="top-right-button">纠错</el-button>
-                <el-button :disabled="true" :icon="Star as string" class="top-right-button">收藏本题</el-button>
+            <div class="checkbox">
+              <el-checkbox :label="'B'">B、{{ optionB }}</el-checkbox>
             </div>
+            <div class="checkbox">
+              <el-checkbox :label="'C'">C、{{ optionC }}</el-checkbox>
+            </div>
+            <div class="checkbox">
+              <el-checkbox :label="'D'">D、{{ optionD }}</el-checkbox>
+            </div>
+          </el-checkbox-group>
 
+          <el-radio-group v-show="currentType === '单'" v-model="answer" size="large" style="display: table">
+            <div class="radio">
+              <el-radio v-show="currentType === '单'" :label="'A'">A、{{ optionA }}</el-radio>
+            </div>
+            <div class="radio">
+              <el-radio v-show="currentType === '单'" :label="'B'">B、{{ optionB }}</el-radio>
+            </div>
+            <div class="radio">
+              <el-radio v-show="currentType === '单'" :label="'C'">C、{{ optionC }}</el-radio>
+            </div>
+            <div class="radio">
+              <el-radio v-show="currentType === '单'" :label="'D'">D、{{ optionD }}</el-radio>
+            </div>
+          </el-radio-group>
         </div>
-
-        <div style="flex: 1;display: block;border-bottom: #d3dce6 1px solid;">
-            <el-scrollbar :always="true">
-                <div class="题目">
-                    <div>
-                        {{ subject }}
-                    </div>
-                </div>
-                <div style="margin:25px 0 0 70px">
-                    <el-checkbox-group
-                            v-show="currentType === '多'"
-                            v-model="answerArray"
-                            size="large"
-                    >
-                        <div class="checkbox" style="margin-top: 45px">
-                            <el-checkbox :label="'A'">A、{{ optionA }}</el-checkbox>
-                        </div>
-                        <div class="checkbox">
-                            <el-checkbox :label="'B'">B、{{ optionB }}</el-checkbox>
-                        </div>
-                        <div class="checkbox">
-                            <el-checkbox :label="'C'">C、{{ optionC }}</el-checkbox>
-                        </div>
-                        <div class="checkbox">
-                            <el-checkbox :label="'D'">D、{{ optionD }}</el-checkbox>
-                        </div>
-                    </el-checkbox-group>
-
-                    <el-radio-group v-show="currentType === '单'" v-model="answer" size="large" style="display: table">
-                        <div class="radio">
-                            <el-radio v-show="currentType === '单'" :label="'A'">A、{{ optionA }}</el-radio>
-                        </div>
-                        <div class="radio">
-                            <el-radio v-show="currentType === '单'" :label="'B'">B、{{ optionB }}</el-radio>
-                        </div>
-                        <div class="radio">
-                            <el-radio v-show="currentType === '单'" :label="'C'">C、{{ optionC }}</el-radio>
-                        </div>
-                        <div class="radio">
-                            <el-radio v-show="currentType === '单'" :label="'D'">D、{{ optionD }}</el-radio>
-                        </div>
-                    </el-radio-group>
-                </div>
-            </el-scrollbar>
-        </div>
-        <div class="right-bottom">
-            <div style="width: 50%">
-                <el-button :disabled="perviousDisable" class="bottom-button" size="large" @click="previous">上一题
-                </el-button>
-                <el-button :disabled="nextDisable" class="bottom-button" size="large" type="primary" @click="next">下一题
-                </el-button>
-            </div>
-
-            <div style="width: 50%;float: right">
-                <el-button :disabled="true" :icon="Star as string" class="mark" size="large">标记</el-button>
-            </div>
-        </div>
-
+      </el-scrollbar>
     </div>
+    <div class="right-bottom">
+      <div style="width: 50%">
+        <el-button :disabled="perviousDisable" class="bottom-button" size="large" @click="previous">上一题
+        </el-button>
+        <el-button :disabled="nextDisable" class="bottom-button" size="large" type="primary" @click="next">下一题
+        </el-button>
+      </div>
+
+      <div style="width: 50%;float: right">
+        <el-button :disabled="true" :icon="Star as string" class="mark" size="large">标记</el-button>
+      </div>
+    </div>
+
+  </div>
 </template>
 
 <script lang="ts" setup>
@@ -155,54 +155,54 @@ const perviousDisable = ref(false);
 const nextDisable = ref(false);
 
 watch(currentIndex, () => {
-    if (currentIndex.value == 1) {
-        perviousDisable.value = true;
-    } else if (currentIndex.value == 100) {
-        nextDisable.value = true;
-    } else {
-        nextDisable.value = false;
-        perviousDisable.value = false;
-    }
-    alterSubject(currentIndex.value);
+  if (currentIndex.value == 1) {
+    perviousDisable.value = true;
+  } else if (currentIndex.value == 100) {
+    nextDisable.value = true;
+  } else {
+    nextDisable.value = false;
+    perviousDisable.value = false;
+  }
+  alterSubject(currentIndex.value);
 });
 
 onMounted(() => {
-    paperSubjects = JSON.parse(localStorage.getItem('viewGZPaperData') as string)._value.subjectArray;
-    console.log(paperSubjects.value);
-    alterSubject(1);
+  paperSubjects = JSON.parse(localStorage.getItem('viewGZPaperData') as string)._value.subjectArray;
+  console.log(paperSubjects.value);
+  alterSubject(1);
 });
 
 const alterSubject = (i: number) => {
-    currentIndex.value = i;
-    const currentSubject = paperSubjects[i - 1];
-    console.log(paperSubjects[i - 1]);
-    if (currentSubject != undefined) {
-        subject.value = currentSubject.subject;
-        currentType.value = formatSubjectType(currentSubject.type);
-        optionA.value = currentSubject.items[0].text;
-        optionB.value = currentSubject.items[1].text;
-        optionC.value = currentSubject.items[2].text;
-        optionD.value = currentSubject.items[3].text;
-    } else {
-        clean();
-    }
+  currentIndex.value = i;
+  const currentSubject = paperSubjects[i - 1];
+  console.log(paperSubjects[i - 1]);
+  if (currentSubject != undefined) {
+    subject.value = currentSubject.subject;
+    currentType.value = formatSubjectType(currentSubject.type);
+    optionA.value = currentSubject.items[0].text;
+    optionB.value = currentSubject.items[1].text;
+    optionC.value = currentSubject.items[2].text;
+    optionD.value = currentSubject.items[3].text;
+  } else {
+    clean();
+  }
 };
 
 const previous = () => {
-    currentIndex.value -= 1;
+  currentIndex.value -= 1;
 };
 
 const next = () => {
-    currentIndex.value += 1;
+  currentIndex.value += 1;
 };
 
 const clean = () => {
-    subject.value = '';
-    currentType.value = '';
-    optionA.value = '';
-    optionB.value = '';
-    optionC.value = '';
-    optionD.value = '';
+  subject.value = '';
+  currentType.value = '';
+  optionA.value = '';
+  optionB.value = '';
+  optionC.value = '';
+  optionD.value = '';
 };
 
 </script>

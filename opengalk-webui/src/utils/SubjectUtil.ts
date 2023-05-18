@@ -1,5 +1,5 @@
 // 将一个个题目字符串拆解/组合成题目对象
-import {Selection, Subject, SubjectObject} from "../data"
+import {Selection, Subject, SubjectObject} from "../data";
 
 export const subjectToArray = (allSubjects: string): SubjectObject[] => {
     let subjectArray: string[] = allSubjects.split(/\n\n/);
