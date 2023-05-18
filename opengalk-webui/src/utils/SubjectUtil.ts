@@ -1,23 +1,6 @@
-interface Subject {
-    content: string,
-    imgs: string[],
-}
-
-interface Selection {
-    imgs: string[],
-    text: string,
-    value: string,
-}
-
-export interface SubjectObject {
-    type: number,
-    subject: Subject,
-    answer: string[],
-    items: Selection[],
-    error: string,
-}
-
 // 将一个个题目字符串拆解/组合成题目对象
+import {Selection, Subject, SubjectObject} from "../data"
+
 export const subjectToArray = (allSubjects: string): SubjectObject[] => {
     let subjectArray: string[] = allSubjects.split(/\n\n/);
     let subjectObjectArray: any[] = [];
@@ -78,7 +61,7 @@ export const subjectToArray = (allSubjects: string): SubjectObject[] => {
             } else {
                 // 选项
                 let selectionObject: Selection = {
-                    imgs: [],
+                    imgs: <string[]>[],
                     text: sourceTimuArr[i],
                     value: String.fromCharCode(65 + i - 1) // ascii转字母
                 };

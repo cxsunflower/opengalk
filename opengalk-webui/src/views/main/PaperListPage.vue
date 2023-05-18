@@ -76,9 +76,10 @@ import {onMounted, ref} from "vue";
 import {Postcard, Star} from "@element-plus/icons-vue";
 import request from "../../utils/RequestUtil";
 import router from "../../router";
+import {Paper} from "../../data";
 
 const requestUrl = '/paper';
-const paperList = ref<any[]>([]);
+const paperList = ref<Paper[]>([]);
 const activeName = ref('公安专业科目');
 const rankDialogVisible = ref(false);
 
@@ -96,7 +97,7 @@ const getPaperList = (type: number) => {
     });
 };
 
-const enterPaper = (id: number) => {
+const enterPaper = (id: string) => {
     const routeData = router.resolve({
         path: '/GZPaper',
         query: {

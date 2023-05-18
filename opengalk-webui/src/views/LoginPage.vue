@@ -98,6 +98,7 @@ import {showMessage} from "../utils/MessageUtil";
 import {Lock, Postcard, User} from "@element-plus/icons-vue";
 import {baseURL} from "../utils/RequestUtil";
 import {getVerificationCode} from "../utils/VerificationCodeUtil";
+import {ResponseResult} from "../data";
 
 const loginRules = reactive<FormRules>({
     account: [
@@ -150,7 +151,7 @@ const login = async (loginFormRef: FormInstance | undefined) => {
                 "&uuid=" + uuid.value +
                 "&verificationCode=" + loginForm.value.verificationCode;
 
-            axios.post(baseURL + "/login", form, {
+            axios.post<ResponseResult>(baseURL + "/login", form, {
                 headers: {'Content-Type': 'application/x-www-form-urlencoded'}
             }).then(result => {
                 if (result.data.响应状态 === 2) {

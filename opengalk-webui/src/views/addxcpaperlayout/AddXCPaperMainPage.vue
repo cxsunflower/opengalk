@@ -110,7 +110,8 @@ import {FormInstance, FormRules} from "element-plus";
 import request from "../../utils/RequestUtil";
 import {showMessage} from "../../utils/MessageUtil";
 import {useRoute} from "vue-router";
-import {Upload} from "@element-plus/icons-vue";
+import {Document, Upload} from "@element-plus/icons-vue";
+import {SubjectObject} from "../../data";
 
 const requestUrl = '/paperManagement';
 const uploadFormRef = ref<FormInstance>();
@@ -121,7 +122,7 @@ const uploadForm = ref({
     name: '',
     type: 0,
     remark: '',
-    subjectArray: <any[]>[],
+    subjectArray: <SubjectObject[]>[],
 });
 const buttonName = ref('上传试卷');
 const uploadRules = reactive<FormRules>({
