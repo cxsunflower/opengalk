@@ -329,7 +329,7 @@ const authorityValue = ref();
 const addRules = reactive<FormRules>({
   account: [
     {required: true, message: '不能为空', trigger: 'blur'},
-    {min: 3, max: 20, message: '长度必须3-20', trigger: 'blur'},
+    {min: 5, max: 20, message: '长度必须3-20', trigger: 'blur'},
   ],
   password: [
     {required: true, message: '不能为空', trigger: 'blur'},

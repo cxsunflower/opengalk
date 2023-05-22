@@ -49,13 +49,12 @@ public class UserManagementController {
     }
 
     @PostMapping("/addUser")
-    public ResponseResult<?> addUser(@RequestBody @Valid UserInfo userInfo) {
+    public ResponseResult<?> addUser(@Valid @RequestBody UserInfo userInfo) {
         return userInfoService.addUser(userInfo);
-
     }
 
     @PutMapping("/updateUserInfo")
-    public ResponseResult<?> updateUserInfoByAdmin(@RequestBody @Valid UserInfo userInfo) {
+    public ResponseResult<?> updateUserInfoByAdmin(@Valid @RequestBody UserInfo userInfo) {
         log.info(userInfo.toString());
         Integer authority = userInfo.getAuthority();
         Integer isLocked = userInfo.getIsLocked();
