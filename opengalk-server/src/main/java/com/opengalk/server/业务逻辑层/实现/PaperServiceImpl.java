@@ -9,7 +9,7 @@ import com.opengalk.server.响应类.ResponseResult;
 import com.opengalk.server.实体类.GZSubjectObject;
 import com.opengalk.server.实体类.PaperInfo;
 import com.opengalk.server.实体类.PaperRecord;
-import com.opengalk.server.实体类.Subject;
+import com.opengalk.server.实体类.SubjectObject;
 import com.opengalk.server.工具类.LoginUserUtil;
 import com.opengalk.server.数据访问层.PaperInfoMapper;
 import com.opengalk.server.数据访问层.PaperRecordMapper;
@@ -94,13 +94,13 @@ public class PaperServiceImpl extends ServiceImpl<PaperInfoMapper, PaperInfo>
         String uuid = UUID.fastUUID().toString().replaceAll("-", "");
         paperInfoMapper.addGZPaper(uuid);
 
-        Subject[] subjectArray = paperInfo.getSubjectArray();
+        SubjectObject[] subjectArray = paperInfo.getSubjectArray();
         for (int i = 0; i < subjectArray.length; i++) {
             GZSubjectObject gzSubjectObject = GZSubjectObject.builder()
                     .uuid(uuid)
                     .id(i)
                     .type(subjectArray[i].getType())
-                    .subject(subjectArray[i].getSubject())
+                    .subject(subjectArray[i].getSubject().getContent())
                     .optionA(String.join("", subjectArray[i].getItems()[0].getText()))
                     .optionB(String.join("", subjectArray[i].getItems()[1].getText()))
                     .optionC(String.join("", subjectArray[i].getItems()[2].getText()))
@@ -108,6 +108,7 @@ public class PaperServiceImpl extends ServiceImpl<PaperInfoMapper, PaperInfo>
                     .answer(String.join("", subjectArray[i].getAnswer()))
                     .build();
 
+            // TODO 图片入库
             paperInfoMapper.insertGZSubject(gzSubjectObject);
         }
 
@@ -144,13 +145,13 @@ public class PaperServiceImpl extends ServiceImpl<PaperInfoMapper, PaperInfo>
         paperInfo.setId(uuid);
         paperInfoMapper.updateById(paperInfo);
 
-        Subject[] subjectArray = paperInfo.getSubjectArray();
+        SubjectObject[] subjectArray = paperInfo.getSubjectArray();
         for (int i = 0; i < subjectArray.length; i++) {
             GZSubjectObject gzSubjectObject = GZSubjectObject.builder()
                     .uuid(uuid)
                     .id(i)
                     .type(subjectArray[i].getType())
-                    .subject(subjectArray[i].getSubject())
+                    .subject(subjectArray[i].getSubject().getContent())
                     .optionA(String.join("", subjectArray[i].getItems()[0].getText()))
                     .optionB(String.join("", subjectArray[i].getItems()[1].getText()))
                     .optionC(String.join("", subjectArray[i].getItems()[2].getText()))
@@ -161,6 +162,7 @@ public class PaperServiceImpl extends ServiceImpl<PaperInfoMapper, PaperInfo>
             paperInfoMapper.insertGZSubject(gzSubjectObject);
         }
 
+        // TODO 获取图片
         return new ResponseResult<>(1, "更新成功", null);
     }
 
