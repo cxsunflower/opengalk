@@ -1,7 +1,7 @@
 package com.opengalk.server.数据访问层;
 
-import com.opengalk.server.实体类.UserLoginAndLogoutRecord;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.opengalk.server.实体类.UserLoginAndLogoutRecord;
 import org.apache.ibatis.annotations.Mapper;
 
 /**

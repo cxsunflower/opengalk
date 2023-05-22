@@ -1,8 +1,8 @@
 package com.opengalk.server.业务逻辑层;
 
-import com.opengalk.server.实体类.CollegeInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.opengalk.server.响应类.ResponseResult;
+import com.opengalk.server.实体类.CollegeInfo;
 import org.springframework.transaction.annotation.Transactional;
 
 /**

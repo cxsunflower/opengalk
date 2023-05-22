@@ -19,7 +19,7 @@ public class VerifyCodeController {
     private final VerifyCodeServiceImpl verifyCodeService;
 
     @GetMapping("/getVerificationCode")
-    public ResponseResult<?> getVerificationCode(){
+    public ResponseResult<?> getVerificationCode() {
         return verifyCodeService.getVerificationCode();
     }
 

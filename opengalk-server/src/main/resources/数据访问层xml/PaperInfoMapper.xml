@@ -9,13 +9,19 @@
             id       smallint not null primary key,
             type     smallint not null,
             subject  varchar  not null,
-            picture  varchar,
             option_a varchar  not null,
             option_b varchar  not null,
             option_c varchar  not null,
             option_d varchar  not null,
-            answer   varchar  not null
+            answer   varchar  not null,
+            has_imgs smallint default 0
         );
+    </update>
+
+    <update id="setHasImgs">
+        update paper."${uuid}"
+        set has_imgs=1
+        where id = #{id}
     </update>
 
     <select id="isPaperExist" parameterType="java.lang.String">
@@ -42,7 +48,6 @@
         select id,
                type,
                subject,
-               picture,
                option_a,
                option_b,
                option_c,
@@ -56,10 +61,16 @@
     </select>
 
     <select id="getPaperList" resultType="paperInfo">
-        select pi.id, pi.name,pr.score
+        select pi.id, pi.name, pr.score
         from "paper".paper_info as pi
                  left join "paper".paper_record as pr on pr.user_id = #{userId} and pi.id = pr.id
         where pi.is_deleted = 0
+    </select>
+
+    <select id="getHasImgs" resultType="java.lang.Integer">
+        select has_key
+        from paper."${uuid}"
+        where id = #{id}
     </select>
 
 

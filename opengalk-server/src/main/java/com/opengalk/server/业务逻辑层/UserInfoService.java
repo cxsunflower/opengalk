@@ -1,12 +1,11 @@
 package com.opengalk.server.业务逻辑层;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.opengalk.server.接受对象.UpdatePasswordForm;
-import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.transaction.annotation.Transactional;
-import com.opengalk.server.接受对象.RegisterForm;
 import com.opengalk.server.响应类.ResponseResult;
 import com.opengalk.server.实体类.UserInfo;
+import com.opengalk.server.接受对象.RegisterForm;
+import com.opengalk.server.接受对象.UpdatePasswordForm;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 /**

@@ -1,7 +1,7 @@
 package com.opengalk.server.配置类;
 
 import com.opengalk.server.过滤器.JavaWebTokenFilter;
-import lombok.NonNull;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -48,7 +48,7 @@ public class SpringSecurityConfig {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(@NonNull AuthenticationConfiguration authenticationConfiguration) throws Exception {
+    public AuthenticationManager authenticationManager(@NotNull AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
@@ -64,7 +64,7 @@ public class SpringSecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(@NonNull HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(@NotNull HttpSecurity http) throws Exception {
         return http
                 // 跨域配置
                 .cors(corsCustomizer -> corsConfigurationSource())

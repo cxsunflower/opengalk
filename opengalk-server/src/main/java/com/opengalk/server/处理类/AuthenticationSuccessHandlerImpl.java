@@ -11,7 +11,7 @@ import com.opengalk.server.工具类.ResponseUtil;
 import com.opengalk.server.数据访问层.UserLoginAndLogoutRecordMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.NonNull;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -37,7 +37,7 @@ public class AuthenticationSuccessHandlerImpl implements AuthenticationSuccessHa
     private final VerifyCodeServiceImpl verifyCodeService;
 
     @Override
-    public void onAuthenticationSuccess(@NonNull HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
+    public void onAuthenticationSuccess(@NotNull HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
         ResponseResult<?> result = verifyCodeService.verifiedResponse(request.getParameter("uuid"), request.getParameter("verificationCode"));
 
         if (!ObjectUtils.isEmpty(result)) {

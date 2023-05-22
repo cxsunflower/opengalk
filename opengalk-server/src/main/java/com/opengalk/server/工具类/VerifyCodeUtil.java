@@ -1,7 +1,7 @@
 package com.opengalk.server.工具类;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
-import lombok.NonNull;
+import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 
 import java.awt.*;
@@ -41,7 +41,7 @@ public class VerifyCodeUtil {
     /**
      * 初始化基础参数
      */
-    private VerifyCodeUtil(@NonNull Builder builder){
+    private VerifyCodeUtil(@NotNull Builder builder) {
         SIZE = builder.size;
         LINES = builder.lines;
         WIDTH = builder.width;
@@ -62,7 +62,7 @@ public class VerifyCodeUtil {
      *
      * @return Builder()
      */
-    @NonNull
+    @NotNull
     public static Builder newBuilder() {
         return new Builder();
     }
@@ -137,7 +137,7 @@ public class VerifyCodeUtil {
     /**
      * 随机取色
      */
-    @NonNull
+    @NotNull
     private Color getRandomColor() {
         return new Color(RAN.nextInt(256), RAN.nextInt(256), RAN.nextInt(256));
     }
@@ -196,7 +196,7 @@ public class VerifyCodeUtil {
             return this;
         }
 
-        public VerifyCodeUtil build(){
+        public VerifyCodeUtil build() {
             return new VerifyCodeUtil(this);
         }
     }

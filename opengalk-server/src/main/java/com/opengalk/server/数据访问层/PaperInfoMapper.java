@@ -19,6 +19,10 @@ public interface PaperInfoMapper extends BaseMapper<PaperInfo> {
 
     void deleteGZPaper(String uuid);
 
+    void setHasImgs(String uuid, Integer id);
+
+    int getHasImgs(String uuid, Integer id);
+
     PaperInfo[] getPaperList(Long userId, Integer type);
 
     GZSubjectObject[] getGZPaperById(String uuid);

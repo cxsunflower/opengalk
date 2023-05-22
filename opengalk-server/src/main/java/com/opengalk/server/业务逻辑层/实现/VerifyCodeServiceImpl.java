@@ -25,7 +25,7 @@ public class VerifyCodeServiceImpl {
 
     public final StringRedisTemplate stringRedisTemplate;
 
-    public ResponseResult<?> getVerificationCode(){
+    public ResponseResult<?> getVerificationCode() {
         String uuid = UUID.fastUUID().toString();
 
         // 利用图片工具生成图片
@@ -66,7 +66,7 @@ public class VerifyCodeServiceImpl {
     /**
      * 校验验证码
      *
-     * @param uuid uuid
+     * @param uuid             uuid
      * @param verificationCode 验证码
      * @return 0验证码正确，1验证码错误，2验证码失效
      */
@@ -102,7 +102,7 @@ public class VerifyCodeServiceImpl {
     /**
      * 返回校验验证码结果
      *
-     * @param uuid uuid
+     * @param uuid             uuid
      * @param verificationCode 验证码
      * @return ResponseResult
      */

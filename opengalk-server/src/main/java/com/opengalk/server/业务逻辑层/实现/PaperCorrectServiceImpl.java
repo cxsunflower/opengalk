@@ -3,11 +3,10 @@ package com.opengalk.server.业务逻辑层.实现;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.opengalk.server.业务逻辑层.PaperCorrectService;
 import com.opengalk.server.响应类.ResponseResult;
-import com.opengalk.server.实体类.PaperCollect;
 import com.opengalk.server.实体类.PaperCorrect;
 import com.opengalk.server.工具类.LoginUserUtil;
-import com.opengalk.server.数据访问层.PaperCollectMapper;
 import com.opengalk.server.数据访问层.PaperCorrectMapper;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -28,7 +27,7 @@ public class PaperCorrectServiceImpl extends ServiceImpl<PaperCorrectMapper, Pap
     private final LoginUserUtil loginUserUtil;
 
     @Override
-    public ResponseResult<?> correct(PaperCorrect paperCorrect) {
+    public ResponseResult<?> correct(@NotNull PaperCorrect paperCorrect) {
         String uuid = paperCorrect.getUuid();
         Long userId = loginUserUtil.getLoginUserID();
         Integer subjectId = paperCorrect.getSubjectId();

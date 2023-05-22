@@ -21,36 +21,31 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @TableName(value = "paper_record", schema = "\"paper\"")
 public class PaperRecord implements Serializable {
+    @Serial
+    @TableField(exist = false)
+    private static final long serialVersionUID = 1L;
     /**
      *
      */
     private String id;
-
     /**
      *
      */
     @TableField(value = "user_id")
     private Long userId;
-
     /**
      *
      */
     @TableField(value = "score")
     private Integer score;
-
     /**
      *
      */
     @TableField(value = "create_time", fill = FieldFill.INSERT)
     private LocalDateTime createTime;
-
     /**
      *
      */
     @TableField(value = "answer")
     private String answer;
-
-    @Serial
-    @TableField(exist = false)
-    private static final long serialVersionUID = 1L;
 }

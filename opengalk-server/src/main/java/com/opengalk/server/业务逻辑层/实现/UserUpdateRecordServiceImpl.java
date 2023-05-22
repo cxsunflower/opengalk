@@ -1,11 +1,10 @@
 package com.opengalk.server.业务逻辑层.实现;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 import com.opengalk.server.业务逻辑层.UserUpdateRecordService;
 import com.opengalk.server.实体类.UserUpdateRecord;
 import com.opengalk.server.数据访问层.UserUpdateRecordMapper;
+import org.springframework.stereotype.Service;
 
 /**
  * @author cx

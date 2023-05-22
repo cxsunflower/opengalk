@@ -1,8 +1,8 @@
 package com.opengalk.server.业务逻辑层.实现;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.opengalk.server.实体类.UserLoginAndLogoutRecord;
 import com.opengalk.server.业务逻辑层.UserLoginAndLogoutRecordService;
+import com.opengalk.server.实体类.UserLoginAndLogoutRecord;
 import com.opengalk.server.数据访问层.UserLoginAndLogoutRecordMapper;
 import org.springframework.stereotype.Service;
 
