@@ -6,9 +6,9 @@ import com.opengalk.server.响应类.ResponseResult;
 import com.opengalk.server.实体类.PaperCollect;
 import com.opengalk.server.工具类.LoginUserUtil;
 import com.opengalk.server.数据访问层.PaperCollectMapper;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -31,7 +31,7 @@ public class PaperCollectServiceImpl extends ServiceImpl<PaperCollectMapper, Pap
     private final LoginUserUtil loginUserUtil;
 
     @Override
-    public ResponseResult<?> collect(@NonNull PaperCollect paperCollect) {
+    public ResponseResult<?> collect(@NotNull PaperCollect paperCollect) {
         String uuid = paperCollect.getUuid();
         Long userId = loginUserUtil.getLoginUserID();
         Integer subjectId = paperCollect.getSubjectId();

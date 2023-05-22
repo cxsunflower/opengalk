@@ -3,8 +3,8 @@ package com.opengalk.server.工具类;
 import cn.hutool.core.exceptions.ExceptionUtil;
 import cn.hutool.jwt.JWTUtil;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
 
 @Slf4j

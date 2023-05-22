@@ -6,9 +6,9 @@ import com.opengalk.server.响应类.ResponseResult;
 import com.opengalk.server.实体类.PaperCorrect;
 import com.opengalk.server.工具类.LoginUserUtil;
 import com.opengalk.server.数据访问层.PaperCorrectMapper;
-import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
 /**
