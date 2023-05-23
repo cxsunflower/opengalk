@@ -42,6 +42,8 @@ public class SpringSecurityConfig {
 
     private final LogoutSuccessHandler logoutSuccessHandler;
 
+    private final CorsConfigurationSource corsConfigurationSource;
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -67,7 +69,7 @@ public class SpringSecurityConfig {
     public SecurityFilterChain filterChain(@NotNull HttpSecurity http) throws Exception {
         return http
                 // 跨域配置
-                .cors(corsCustomizer -> corsConfigurationSource())
+                .cors(corsCustomizer -> corsCustomizer.configurationSource(corsConfigurationSource))
                 // 不使用csrf防护
                 .csrf(AbstractHttpConfigurer::disable)
                 // 登陆
