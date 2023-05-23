@@ -21,6 +21,8 @@ public interface PaperService extends IService<PaperInfo> {
 
     ResponseResult<?> submitPaper(PaperRecord paperRecord);
 
+    ResponseResult<?> getPaperImgs(String uuid, int id);
+
     @Transactional
     ResponseResult<?> updateGZPaper(String uuid, PaperInfo paperInfo);
 

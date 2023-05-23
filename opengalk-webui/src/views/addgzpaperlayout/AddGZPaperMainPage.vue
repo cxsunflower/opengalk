@@ -50,7 +50,9 @@
       <el-scrollbar>
         <div v-for="subject in uploadForm.subjectArray" style="margin: 5px 5px 5px 5px;padding-left: 5px">
           {{ subject.subject.content }}
-          <img v-for="i in subject.subject.imgs" :src="subject.subject.imgs[i]" alt=""/>
+          <div v-for="i in subject.subject.imgs">
+            <img :src="'data:image' + i" alt=""/>
+          </div>
           <el-radio-group v-show="subject.type !== 1" v-model="subject.answer[0]"
                           size="large" style="display: table"
           >
@@ -117,7 +119,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-import {onBeforeUnmount, onMounted, reactive, ref, shallowRef, watch} from "vue";
+import {onMounted, reactive, ref, watch} from "vue";
 import {arrayToSubject, subjectToArray} from "../../utils/SubjectUtil";
 import {FormInstance, FormRules, UploadProps, UploadUserFile} from "element-plus";
 import request from "../../utils/RequestUtil";
@@ -136,7 +138,6 @@ const allSubjects = ref('');
 const uploadVisible = ref(false);
 const requirementVisible = ref(false);
 const buttonName = ref('上传试卷');
-const editorRef = shallowRef();
 const currentImage = ref<UploadUserFile[]>();
 const editorConfig = ref({
   base_url: '/static/tinymce',
@@ -144,8 +145,9 @@ const editorConfig = ref({
   suffix: ".min",
   language: "zh-Hans",
   toolbar: false,
-  menubar: false,
   statusbar: false,
+  plugins: 'paste',
+  paste_filter_drop: false,
 });
 const uploadForm = ref({
   name: '',
@@ -174,20 +176,11 @@ onMounted(async () => {
     addOrUpdate = 1;
     buttonName.value = '更新试卷';
     await request.get(requestUrl + '/getPaper/' + uuid).then(result => {
-      uploadForm.value.name = result.data.响应消息.name;
+      uploadForm.value.name = result.data.响应数据.name;
       uploadForm.value.remark = result.data.响应数据.remark;
       allSubjects.value = arrayToSubject(result.data.响应数据.subjectArray);
     });
   }
-});
-
-// 组件销毁时，也及时销毁编辑器
-onBeforeUnmount(() => {
-  const editor = editorRef.value;
-  if (editor == null) {
-    return;
-  }
-  editor.destroy();
 });
 
 watch(allSubjects, () => {
@@ -198,8 +191,9 @@ watch(allSubjects, () => {
 const htmlToText = (html: string): string => {
   const $ = cheerio.load(html);
   let result = '';
-  console.log($.text());
-  $('p').each((index, element) => {
+  console.log($.html())
+
+  $('p' as any).each((index, element) => {
     const paragraph = $(element);
     const imgSrcList: string[] = [];
     paragraph.find('img').each((imgIndex, imgElement) => {
@@ -212,12 +206,20 @@ const htmlToText = (html: string): string => {
     for (let i = 0; i < imgSrcList.length; i++) {
       result += imgSrcList[i] + '\n';
     }
+
+    // 由于受</br>影响，可能会出现把</br>识别为一道题
+    if (paragraph.html() == "&nbsp;") {
+      result += '\n\n';
+    }
+
   });
+  console.log(result)
   return result;
 };
 
+// 不发送请求
 const uploadImage = () => {
-
+  return;
 };
 
 const onChange: UploadProps['onChange'] = (uploadFile) => {

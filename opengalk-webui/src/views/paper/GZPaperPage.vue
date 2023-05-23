@@ -95,6 +95,10 @@
               <div>
                 {{ subject }}
               </div>
+
+              <p v-for="i in subjectImgs">
+                <img :src="'data:image/jpg;base64,' + i" alt=""/>
+              </p>
             </div>
             <div style="margin:25px 0 0 70px">
               <el-checkbox-group
@@ -198,6 +202,7 @@ import screenfull from "screenfull";
 import {ElMessageBox} from "element-plus";
 import {showMessage} from "../../utils/MessageUtil";
 import {Countdown, CountdownEventName, fillZero} from "../../utils/TimeUtil";
+import {SubjectDTO} from "../../data";
 
 const screenValue = ref('进入全屏');
 const name = ref('');
@@ -206,6 +211,7 @@ const requestUrl = '/paper';
 const radioAnswer = ref('');
 const checkboxAnswer = ref([]);
 const subject = ref('');
+const subjectImgs = ref<string[]>([]);
 const subjectType = ref('单选题（共50题）');
 const currentIndex = ref(0);
 const currentType = ref('');
@@ -222,7 +228,7 @@ const correctText = ref('');
 const time = ref('');
 let markArray = ref(new Array(100).fill(0));
 let uuid = '';
-let paperSubjects = <any>[];
+let paperSubjects = <SubjectDTO[]>[];
 
 watch(currentIndex, () => {
   if (currentIndex.value == 1) {
@@ -252,11 +258,11 @@ watch(time, () => {
 
 onMounted(async () => {
   await getPaper();
-  alterSubject(1);
+  await alterSubject(1);
   number.value = Math.floor(Math.random() * 101);
 
   const countdown = new Countdown(Date.now() + 2 * 60 * 60 * 1000, 1);
-  countdown.on(CountdownEventName.RUNNING, (remainTimeData) => {
+  countdown.on(CountdownEventName.RUNNING as any, (remainTimeData) => {
     const {hours, minutes, seconds} = remainTimeData;
     time.value = [hours, minutes, seconds].map(fillZero).join(':');
   });
@@ -335,7 +341,7 @@ const submit = async () => {
     id: uuid,
     answer: answerArray.value.join(',')
   };
-  await request.post(requestUrl + '/submitGZPaper', submitForm).then((result: any) => {
+  await request.post(requestUrl + '/submitGZPaper', submitForm).then(result => {
     showMessage(result);
     if (result.data.响应状态 === 1) {
       submitDialogVisible.value = false;
@@ -348,17 +354,27 @@ const cancel = () => {
   correctDialogVisible.value = false;
 };
 
-const alterSubject = (i: number) => {
+const alterSubject = async (i: number) => {
   if (currentType.value === '单') {
     radioAnswer.value = answerArray.value[i - 1];
   } else if (currentType.value === '多') {
     checkboxAnswer.value = answerArray.value[i - 1].split('');
   }
   currentIndex.value = i;
-  const currentSubject = paperSubjects[i - 1];
 
-  if (currentSubject != undefined) {
+  if (i <= paperSubjects.length) {
+    const currentSubject = paperSubjects[i - 1];
     subject.value = currentSubject.subject;
+    if (currentSubject.hasImgs === 1) {
+      await request.get(requestUrl + '/getPaperImgs', {
+        params: {
+          uuid: uuid,
+          id: i - 1,
+        }
+      }).then(result => {
+        subjectImgs.value = result.data.响应数据;
+      });
+    }
     currentType.value = formatSubjectType(currentSubject.type);
     optionA.value = currentSubject.optionA;
     optionB.value = currentSubject.optionB;
@@ -561,7 +577,7 @@ const clean = () => {
       margin: 10px 10px 10px 50px;
       font-size: 17px;
       display: flex;
-      flex-direction: row;
+      flex-direction: column;
     }
 
     .radio {

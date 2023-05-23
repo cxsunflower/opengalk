@@ -50,6 +50,11 @@
           <div>
             {{ subject }}
           </div>
+
+          <p v-for="i in subjectImgs">
+            <img :src="'data:image' + i" alt=""/>
+          </p>
+
         </div>
         <div style="margin:25px 0 0 70px">
           <el-checkbox-group
@@ -108,11 +113,13 @@
 import {Star, ZoomIn} from "@element-plus/icons-vue";
 import {onMounted, ref, watch} from "vue";
 import {formatSubjectType} from "../../utils/FormatterUtil";
+import {SubjectObject} from "../../data";
 
 const answer = ref('');
 const answerArray = ref([]);
-let paperSubjects = <any>[];
+let paperSubjects = <SubjectObject[]>[];
 const subject = ref('');
+const subjectImgs = ref<string[]>([]);
 const currentIndex = ref(0);
 const currentType = ref('');
 const optionA = ref('');
@@ -136,16 +143,17 @@ watch(currentIndex, () => {
 
 onMounted(() => {
   paperSubjects = JSON.parse(localStorage.getItem('viewGZPaperData') as string)._value.subjectArray;
-  console.log(paperSubjects.value);
+  console.log(paperSubjects);
   alterSubject(1);
 });
 
 const alterSubject = (i: number) => {
   currentIndex.value = i;
-  const currentSubject = paperSubjects[i - 1];
-  console.log(paperSubjects[i - 1]);
-  if (currentSubject != undefined) {
-    subject.value = currentSubject.subject;
+  if (i <= paperSubjects.length) {
+    const currentSubject = paperSubjects[i - 1];
+    console.log(currentSubject);
+    subject.value = currentSubject.subject.content;
+    subjectImgs.value = currentSubject.subject.imgs;
     currentType.value = formatSubjectType(currentSubject.type);
     optionA.value = currentSubject.items[0].text;
     optionB.value = currentSubject.items[1].text;
@@ -246,7 +254,7 @@ const clean = () => {
     margin: 10px 10px 10px 50px;
     font-size: 17px;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
   }
 
   .radio {

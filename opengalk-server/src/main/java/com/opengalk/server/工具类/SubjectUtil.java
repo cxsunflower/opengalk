@@ -5,6 +5,7 @@ import com.opengalk.server.实体类.SubjectObject;
 import com.opengalk.server.数据访问层.PaperInfoMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
@@ -21,7 +22,7 @@ public class SubjectUtil {
 
     private final ImageUtil imageUtil;
 
-    public int addGZPaper(SubjectObject[] subjectArray, String uuid, final String imgDir) {
+    public int addGZPaper(SubjectObject @NotNull [] subjectArray, String uuid, final String imgDir) {
         for (int i = 0; i < subjectArray.length; i++) {
             // 当前题目
             SubjectObject tmp = subjectArray[i];
@@ -35,6 +36,7 @@ public class SubjectUtil {
                     .optionC(String.join("", tmp.getItems()[2].getText()))
                     .optionD(String.join("", tmp.getItems()[3].getText()))
                     .answer(String.join("", tmp.getAnswer()))
+                    .hasImgs(0)
                     .build();
 
             paperInfoMapper.insertGZSubject(gzSubjectObject);

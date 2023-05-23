@@ -1,13 +1,12 @@
 package com.opengalk.server.工具类;
 
 import cn.hutool.core.codec.Base64;
+import cn.hutool.core.codec.Base64Encoder;
 import cn.hutool.core.exceptions.ExceptionUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 
 @Slf4j
 @Component
@@ -19,7 +18,7 @@ public class ImageUtil {
      * @param filePath
      * @return 0失败，1成功
      */
-    public int Base64ToImage(String base64, String filePath) {
+    public int Base64ToImage(String base64, final String filePath) {
         try {
             // 去掉base64前缀 data:image/jpg;base64,
             base64 = base64.substring(base64.indexOf(",", 1) + 1);
@@ -39,6 +38,26 @@ public class ImageUtil {
         } catch (IOException e) {
             log.error(ExceptionUtil.stacktraceToString(e));
             return 0;
+        }
+    }
+
+    /**
+     * 图片转base64
+     *
+     * @param filePath
+     * @return Base64
+     */
+    public String ImageToBase64(final String filePath){
+        byte[] data;
+        // 读取图片字节数组
+        try (InputStream in = new FileInputStream(filePath)) {
+            data = new byte[in.available()];
+            int counts = in.read(data);
+            log.info("I/O字节：" + counts);
+            return Base64Encoder.encode(data);
+        } catch (IOException e) {
+            log.error(ExceptionUtil.stacktraceToString(e));
+            return null;
         }
     }
 }

@@ -14,7 +14,7 @@
             option_c varchar  not null,
             option_d varchar  not null,
             answer   varchar  not null,
-            has_imgs smallint default 0
+            has_imgs smallint default 0 not null
         );
     </update>
 
@@ -31,8 +31,8 @@
     </select>
 
     <insert id="insertGZSubject" parameterType="GZSubjectObject">
-        insert into paper."${uuid}"(id, type, subject, picture, option_a, option_b, option_c, option_d, answer)
-        values (#{id}, #{type}, #{subject}, #{picture}, #{optionA}, #{optionB}, #{optionC}, #{optionD}, #{answer})
+        insert into paper."${uuid}"(id, type, subject, option_a, option_b, option_c, option_d, answer,has_imgs)
+        values (#{id}, #{type}, #{subject}, #{optionA}, #{optionB}, #{optionC}, #{optionD}, #{answer},#{hasImgs})
     </insert>
 
     <insert id="deleteGZPaper" parameterType="java.lang.String">
@@ -51,7 +51,8 @@
                option_a,
                option_b,
                option_c,
-               option_d
+               option_d,
+               has_imgs
         from paper."${uuid}"
     </select>
 
@@ -68,7 +69,7 @@
     </select>
 
     <select id="getHasImgs" resultType="java.lang.Integer">
-        select has_key
+        select has_imgs
         from paper."${uuid}"
         where id = #{id}
     </select>

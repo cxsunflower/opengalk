@@ -33,3 +33,16 @@ export interface SubjectObject {
     items: Selection[],
     error: string,
 }
+
+export interface SubjectDTO {
+    uuid: string,
+    id: number,
+    type: number,
+    subject: string,
+    optionA: string,
+    optionB: string,
+    optionC: string,
+    optionD: string,
+    answer: string,
+    hasImgs: number,
+}

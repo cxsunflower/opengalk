@@ -36,9 +36,6 @@ public class GZSubjectObject {
     @TableField(value = "subject")
     private String subject;
 
-    @TableField(value = "picture")
-    private String picture;
-
     @TableField(value = "option_a")
     private String optionA;
 
@@ -54,4 +51,7 @@ public class GZSubjectObject {
     @Size(max = 4)
     @TableField(value = "answer")
     private String answer;
+
+    @TableField(value = "has_imgs")
+    private Integer hasImgs;
 }
