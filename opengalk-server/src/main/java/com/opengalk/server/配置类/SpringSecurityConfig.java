@@ -75,9 +75,7 @@ public class SpringSecurityConfig {
                 // 登陆
                 .formLogin(
                         formLoginCustomizer -> formLoginCustomizer
-                                .loginPage("/login")
                                 .loginProcessingUrl("/login")
-                                .failureForwardUrl("/login")
                                 .usernameParameter("account")
                                 .passwordParameter("password")
                                 .failureHandler(authenticationFailureHandler)

@@ -1,6 +1,5 @@
 package com.opengalk.server.业务逻辑层.实现;
 
-import cn.hutool.core.codec.Base64Encoder;
 import cn.hutool.core.exceptions.ExceptionUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.json.JSONUtil;
@@ -12,6 +11,7 @@ import com.opengalk.server.业务逻辑层.UserUpdateRecordService;
 import com.opengalk.server.响应类.ResponseResult;
 import com.opengalk.server.实体类.UserInfo;
 import com.opengalk.server.实体类.UserUpdateRecord;
+import com.opengalk.server.工具类.ImageUtil;
 import com.opengalk.server.工具类.LoginUserUtil;
 import com.opengalk.server.工具类.RedisUtil;
 import com.opengalk.server.接受对象.RegisterForm;
@@ -28,9 +28,6 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 
 /**
  * @author cx
@@ -49,6 +46,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
     private final UserUpdateRecordService userUpdateRecordService;
     private final VerifyCodeServiceImpl verifyCodeService;
     private final LoginUserUtil loginUserUtil;
+    private final ImageUtil imageUtil;
     private final RedisUtil redisUtil;
     private final PasswordEncoder passwordEncoder;
 
@@ -336,18 +334,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
     public ResponseResult<?> getAvatar() {
         Long id = loginUserUtil.getLoginUserID();
         String filePath = FILE_DIR + id;
-        byte[] data = null;
-
-        // 读取图片字节数组
-        try (InputStream in = new FileInputStream(filePath)) {
-            data = new byte[in.available()];
-            int counts = in.read(data);
-            log.info("I/O字节：" + counts);
-        } catch (IOException e) {
-            log.error(ExceptionUtil.stacktraceToString(e));
-        }
-
-        return new ResponseResult<>(0, null, Base64Encoder.encode(data));
+        return new ResponseResult<>(0, null, imageUtil.ImageToBase64(filePath));
     }
 
 }
