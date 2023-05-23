@@ -65,7 +65,7 @@ public class PaperInfo implements Serializable {
     private String teacherName;
 
     @TableField(exist = false)
-    private Subject[] subjectArray;
+    private SubjectObject[] subjectArray;
 
     @TableField(exist = false)
     private Integer score;

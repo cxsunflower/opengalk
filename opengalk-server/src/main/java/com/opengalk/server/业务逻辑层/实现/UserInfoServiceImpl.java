@@ -1,6 +1,6 @@
 package com.opengalk.server.业务逻辑层.实现;
 
-import cn.hutool.core.codec.Base64Encoder;
+import cn.hutool.core.exceptions.ExceptionUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -11,6 +11,7 @@ import com.opengalk.server.业务逻辑层.UserUpdateRecordService;
 import com.opengalk.server.响应类.ResponseResult;
 import com.opengalk.server.实体类.UserInfo;
 import com.opengalk.server.实体类.UserUpdateRecord;
+import com.opengalk.server.工具类.ImageUtil;
 import com.opengalk.server.工具类.LoginUserUtil;
 import com.opengalk.server.工具类.RedisUtil;
 import com.opengalk.server.接受对象.RegisterForm;
@@ -19,6 +20,7 @@ import com.opengalk.server.数据访问层.UserInfoMapper;
 import com.opengalk.server.数据访问层.UserUpdateRecordMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,9 +28,6 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 
 /**
  * @author cx
@@ -41,26 +40,19 @@ import java.io.InputStream;
 public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
         implements UserInfoService {
 
-    private final UserInfoMapper userInfoMapper;
-
-    private final UserUpdateRecordMapper userUpdateRecordMapper;
-
-    private final UserUpdateRecordService userUpdateRecordService;
-
-    private final VerifyCodeServiceImpl verifyCodeService;
-
-    private final LoginUserUtil loginUserUtil;
-
-    private final RedisUtil redisUtil;
-
-    private final PasswordEncoder passwordEncoder;
-
     private final static String FILE_DIR = System.getProperty("user.dir") + "/user_avatar/";
+    private final UserInfoMapper userInfoMapper;
+    private final UserUpdateRecordMapper userUpdateRecordMapper;
+    private final UserUpdateRecordService userUpdateRecordService;
+    private final VerifyCodeServiceImpl verifyCodeService;
+    private final LoginUserUtil loginUserUtil;
+    private final ImageUtil imageUtil;
+    private final RedisUtil redisUtil;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     @Override
-    public ResponseResult<?> register(RegisterForm registerForm) {
-        // TODO 邮箱注册
+    public ResponseResult<?> register(@NotNull RegisterForm registerForm) {
         log.info("注册用户:" + registerForm);
         ResponseResult<?> result = verifyCodeService.verifiedResponse(registerForm.getUuid(), registerForm.getVerificationCode());
 
@@ -87,7 +79,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
     }
 
     @Override
-    public ResponseResult<?> getUserList(Integer currentPage, Integer pageSize, String condition, String keyword) {
+    public ResponseResult<?> getUserList(Integer currentPage, Integer pageSize, String condition, @NotNull String keyword) {
         Page<UserInfo> page = new Page<>(currentPage, pageSize);
         QueryWrapper<UserInfo> queryWrapper = new QueryWrapper<>();
         queryWrapper
@@ -137,7 +129,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
 
     @Transactional
     @Override
-    public ResponseResult<?> addUser(UserInfo userInfo) {
+    public ResponseResult<?> addUser(@NotNull UserInfo userInfo) {
         log.info(userInfo.toString());
         QueryWrapper<UserInfo> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("account", userInfo.getAccount());
@@ -213,7 +205,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
     }
 
     @Override
-    public ResponseResult<?> updatePersonalPassword(UpdatePasswordForm updatePasswordForm) {
+    public ResponseResult<?> updatePersonalPassword(@NotNull UpdatePasswordForm updatePasswordForm) {
         Long id = loginUserUtil.getLoginUserID();
 
         QueryWrapper<UserInfo> queryWrapper = new QueryWrapper<>();
@@ -249,7 +241,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
 
     @Transactional
     @Override
-    public ResponseResult<?> updateUserInfoById(UserInfo userInfo, Long id) {
+    public ResponseResult<?> updateUserInfoById(@NotNull UserInfo userInfo, Long id) {
         UserInfo updateUser = UserInfo.builder()
                 .id(id)
                 .name(userInfo.getName())
@@ -321,16 +313,17 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
         System.out.println(filePath);
 
         File fileDir = new File(filePath);
-        // 如果没有file文件夹则建一个
-        if (!fileDir.getParentFile().exists()) {
-            fileDir.getParentFile().mkdirs();
+
+        // 如果没有文件夹则建一个
+        if (!fileDir.getParentFile().exists() && fileDir.getParentFile().mkdirs()) {
+            log.info("创建文件夹成功：" + fileDir.getAbsolutePath());
         }
 
         try {
             // 把文件写入到上传的路径
             FileUtil.writeBytes(file.getBytes(), filePath);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(ExceptionUtil.stacktraceToString(e));
             return new ResponseResult<>(0, "头像上传失败", null);
         }
 
@@ -338,21 +331,10 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
     }
 
     @Override
-    public ResponseResult<?> getAvatar(){
+    public ResponseResult<?> getAvatar() {
         Long id = loginUserUtil.getLoginUserID();
         String filePath = FILE_DIR + id;
-        byte[] data = null;
-        // 读取图片字节数组
-        try {
-            InputStream in = new FileInputStream(filePath);
-            data = new byte[in.available()];
-            in.read(data);
-            in.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return new ResponseResult<>(0,null, Base64Encoder.encode(data));
+        return new ResponseResult<>(0, null, imageUtil.ImageToBase64(filePath));
     }
 
 }

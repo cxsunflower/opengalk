@@ -9,19 +9,21 @@ import com.opengalk.server.响应类.ResponseResult;
 import com.opengalk.server.实体类.GZSubjectObject;
 import com.opengalk.server.实体类.PaperInfo;
 import com.opengalk.server.实体类.PaperRecord;
-import com.opengalk.server.实体类.Subject;
+import com.opengalk.server.实体类.SubjectObject;
+import com.opengalk.server.工具类.ImageUtil;
 import com.opengalk.server.工具类.LoginUserUtil;
+import com.opengalk.server.工具类.SubjectUtil;
 import com.opengalk.server.数据访问层.PaperInfoMapper;
 import com.opengalk.server.数据访问层.PaperRecordMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.io.File;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -29,11 +31,12 @@ import java.util.Map;
 public class PaperServiceImpl extends ServiceImpl<PaperInfoMapper, PaperInfo>
         implements PaperService {
 
+    private final static String IMGS_DIR = System.getProperty("user.dir") + "/paper_imgs/";
     private final PaperInfoMapper paperInfoMapper;
-
     private final PaperRecordMapper paperRecordMapper;
-
     private final LoginUserUtil loginUserUtil;
+    private final SubjectUtil subjectUtil;
+    private final ImageUtil imageUtil;
 
     @Override
     public ResponseResult<?> getPaperList(Integer currentPage, Integer pageSize, String condition, String keyword) {
@@ -49,7 +52,7 @@ public class PaperServiceImpl extends ServiceImpl<PaperInfoMapper, PaperInfo>
 
     @Override
     public ResponseResult<?> getPaperList(Integer type) {
-        return new ResponseResult<>(1, null, paperInfoMapper.getPaperList(loginUserUtil.getLoginUserID(),type));
+        return new ResponseResult<>(1, null, paperInfoMapper.getPaperList(loginUserUtil.getLoginUserID(), type));
     }
 
     @Override
@@ -68,13 +71,10 @@ public class PaperServiceImpl extends ServiceImpl<PaperInfoMapper, PaperInfo>
             GZSubjectObjects = paperInfoMapper.getGZPaperById(uuid);
         }
 
-        Map<String, Object> map = new HashMap<>() {
-            {
-                put("name", paperInfo.getName());
-                put("remark", paperInfo.getRemark());
-                put("subjectArray", GZSubjectObjects);
-            }
-        };
+        Map<String, Object> map = new HashMap<>();
+        map.put("name", paperInfo.getName());
+        map.put("remark", paperInfo.getRemark());
+        map.put("subjectArray", GZSubjectObjects);
 
         log.info(Arrays.toString(GZSubjectObjects));
         return new ResponseResult<>(1, null, map);
@@ -92,28 +92,15 @@ public class PaperServiceImpl extends ServiceImpl<PaperInfoMapper, PaperInfo>
 
     @Transactional
     @Override
-    public ResponseResult<?> addGZPaper(PaperInfo paperInfo) {
+    public ResponseResult<?> addGZPaper(@NotNull PaperInfo paperInfo) {
         log.info(paperInfo.toString());
         String uuid = UUID.fastUUID().toString().replaceAll("-", "");
         paperInfoMapper.addGZPaper(uuid);
 
-        Subject[] subjectArray = paperInfo.getSubjectArray();
-        for (int i = 0; i < subjectArray.length; i++) {
-            GZSubjectObject gzSubjectObject = GZSubjectObject.builder()
-                    .uuid(uuid)
-                    .id(i)
-                    .type(subjectArray[i].getType())
-                    .subject(subjectArray[i].getSubject())
-                    .optionA(String.join("", subjectArray[i].getItems()[0].getText()))
-                    .optionB(String.join("", subjectArray[i].getItems()[1].getText()))
-                    .optionC(String.join("", subjectArray[i].getItems()[2].getText()))
-                    .optionD(String.join("", subjectArray[i].getItems()[3].getText()))
-                    .answer(String.join("", subjectArray[i].getAnswer()))
-                    .build();
-
-            paperInfoMapper.insertGZSubject(gzSubjectObject);
+        SubjectObject[] subjectArray = paperInfo.getSubjectArray();
+        if (subjectUtil.addGZPaper(subjectArray, uuid, IMGS_DIR) == 0) {
+            return new ResponseResult<>(0, "图片上传失败", null);
         }
-
         paperInfo.setId(uuid);
         paperInfo.setCreateBy(loginUserUtil.getLoginUserID());
         paperInfoMapper.insert(paperInfo);
@@ -121,7 +108,7 @@ public class PaperServiceImpl extends ServiceImpl<PaperInfoMapper, PaperInfo>
     }
 
     @Override
-    public ResponseResult<?> submitPaper(PaperRecord paperRecord) {
+    public ResponseResult<?> submitPaper(@NotNull PaperRecord paperRecord) {
         int score = 0;
         String id = paperRecord.getId();
         Long userId = loginUserUtil.getLoginUserID();
@@ -139,29 +126,34 @@ public class PaperServiceImpl extends ServiceImpl<PaperInfoMapper, PaperInfo>
         return new ResponseResult<>(1, "提交成功", score);
     }
 
+    @Override
+    public ResponseResult<?> getPaperImgs(String uuid, int id) {
+        String imgsPath = IMGS_DIR + uuid + "/";
+        String pattern = "subject_" + id + "_\\d";
+        String[] imgs = new File(imgsPath).list();
+        List<String> result = new ArrayList<>();
+        if (imgs != null) {
+            for (String tmp : imgs) {
+                if (tmp.matches(pattern)) {
+                    result.add(imageUtil.ImageToBase64(imgsPath + tmp));
+                }
+            }
+        }
+
+        return new ResponseResult<>(1, null, result);
+    }
+
     @Transactional
     @Override
-    public ResponseResult<?> updateGZPaper(String uuid, PaperInfo paperInfo) {
+    public ResponseResult<?> updateGZPaper(String uuid, @NotNull PaperInfo paperInfo) {
         paperInfoMapper.deleteGZPaper(uuid);
         paperInfoMapper.addGZPaper(uuid);
         paperInfo.setId(uuid);
         paperInfoMapper.updateById(paperInfo);
 
-        Subject[] subjectArray = paperInfo.getSubjectArray();
-        for (int i = 0; i < subjectArray.length; i++) {
-            GZSubjectObject gzSubjectObject = GZSubjectObject.builder()
-                    .uuid(uuid)
-                    .id(i)
-                    .type(subjectArray[i].getType())
-                    .subject(subjectArray[i].getSubject())
-                    .optionA(String.join("", subjectArray[i].getItems()[0].getText()))
-                    .optionB(String.join("", subjectArray[i].getItems()[1].getText()))
-                    .optionC(String.join("", subjectArray[i].getItems()[2].getText()))
-                    .optionD(String.join("", subjectArray[i].getItems()[3].getText()))
-                    .answer(String.join("", subjectArray[i].getAnswer()))
-                    .build();
-
-            paperInfoMapper.insertGZSubject(gzSubjectObject);
+        SubjectObject[] subjectArray = paperInfo.getSubjectArray();
+        if (subjectUtil.addGZPaper(subjectArray, uuid, IMGS_DIR) == 0) {
+            return new ResponseResult<>(0, "图片上传失败", null);
         }
 
         return new ResponseResult<>(1, "更新成功", null);

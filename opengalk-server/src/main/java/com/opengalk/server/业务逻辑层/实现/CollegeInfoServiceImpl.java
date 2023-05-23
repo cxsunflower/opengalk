@@ -4,12 +4,12 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.opengalk.server.业务逻辑层.CollegeInfoService;
-import com.opengalk.server.实体类.CollegeInfo;
 import com.opengalk.server.响应类.ResponseResult;
+import com.opengalk.server.实体类.CollegeInfo;
 import com.opengalk.server.数据访问层.CollegeInfoMapper;
-import jakarta.annotation.Resource;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,7 +27,7 @@ public class CollegeInfoServiceImpl extends ServiceImpl<CollegeInfoMapper, Colle
     private final CollegeInfoMapper collegeInfoMapper;
 
     @Override
-    public ResponseResult<?> getCollegeList(Integer currentPage, Integer pageSize, String condition, String keyword) {
+    public ResponseResult<?> getCollegeList(Integer currentPage, Integer pageSize, String condition, @NotNull String keyword) {
         Page<CollegeInfo> page = new Page<>(currentPage, pageSize);
         QueryWrapper<CollegeInfo> queryWrapper = new QueryWrapper<>();
 
@@ -64,7 +64,7 @@ public class CollegeInfoServiceImpl extends ServiceImpl<CollegeInfoMapper, Colle
 
     @Transactional
     @Override
-    public ResponseResult<?> addCollege(CollegeInfo collegeInfo) {
+    public ResponseResult<?> addCollege(@NotNull CollegeInfo collegeInfo) {
         log.info(collegeInfo.toString());
         QueryWrapper<CollegeInfo> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("college_name", collegeInfo.getCollegeName());
@@ -83,7 +83,7 @@ public class CollegeInfoServiceImpl extends ServiceImpl<CollegeInfoMapper, Colle
 
     @Transactional
     @Override
-    public ResponseResult<?> updateCollegeInfo(CollegeInfo collegeInfo) {
+    public ResponseResult<?> updateCollegeInfo(@NotNull CollegeInfo collegeInfo) {
         CollegeInfo updateCollegeInfo = CollegeInfo.builder()
                 .id(collegeInfo.getId())
                 .collegeName(collegeInfo.getCollegeName())

@@ -1,8 +1,8 @@
-import axios, {AxiosResponse} from 'axios'
+import axios, {AxiosResponse} from 'axios';
 import router from "../router";
 import {getToken} from "./TokenUtil";
 
-export const baseURL = "http://localhost:8081"
+export const baseURL = "http://localhost:8081";
 
 const request = axios.create({
     baseURL: baseURL,
@@ -19,23 +19,23 @@ request.interceptors.request.use(
             //设置请求头
             requestConfig.headers['Content-Type'] = 'application/json;charset=utf-8';
 
-            const setToken = (requestConfig.headers || {}).isToken === false
+            const setToken = (requestConfig.headers || {}).isToken === false;
             if (getToken() && !setToken) {
-                requestConfig.headers.token = getToken()
+                requestConfig.headers.token = getToken();
             }
 
             if (requestConfig.headers.token == null) {
-                router.push("/login").then()
+                router.push("/login").then();
             }
         }
-        return requestConfig
+        return requestConfig;
     },
 
     (error: any) => {
-        console.log('错误：' + error)
-        return Promise.reject(error)
+        console.log('错误：' + error);
+        return Promise.reject(error);
     }
-)
+);
 
 // response 拦截器
 // 可以在接口响应后统一处理结果
@@ -44,9 +44,9 @@ request.interceptors.response.use(
         return response;
     },
     (error: any) => {
-        console.log('错误：' + error)
-        return Promise.reject(error)
+        console.log('错误：' + error);
+        return Promise.reject(error);
     }
-)
+);
 
-export default request
+export default request;

@@ -1,14 +1,16 @@
 package com.opengalk.server.配置类;
 
 import com.opengalk.server.过滤器.JavaWebTokenFilter;
-import lombok.NonNull;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,6 +26,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Collections;
 
+@Slf4j
 @EnableMethodSecurity
 @Configuration
 @RequiredArgsConstructor
@@ -39,13 +42,15 @@ public class SpringSecurityConfig {
 
     private final LogoutSuccessHandler logoutSuccessHandler;
 
+    private final CorsConfigurationSource corsConfigurationSource;
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(@NonNull AuthenticationConfiguration authenticationConfiguration) throws Exception {
+    public AuthenticationManager authenticationManager(@NotNull AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
@@ -61,12 +66,12 @@ public class SpringSecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(@NotNull HttpSecurity http) throws Exception {
         return http
-                .cors()
-                .and()
+                // 跨域配置
+                .cors(corsCustomizer -> corsCustomizer.configurationSource(corsConfigurationSource))
                 // 不使用csrf防护
-                .csrf().disable()
+                .csrf(AbstractHttpConfigurer::disable)
                 // 登陆
                 .formLogin(
                         formLoginCustomizer -> formLoginCustomizer
@@ -98,5 +103,4 @@ public class SpringSecurityConfig {
                 .addFilterBefore(javaWebTokenFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
-
 }

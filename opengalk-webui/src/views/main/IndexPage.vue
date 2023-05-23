@@ -1,22 +1,22 @@
 <template>
   <div class="div-back">
-    <el-carousel :interval="4000" type="card" height="200px">
+    <el-carousel :interval="4000" height="200px" type="card">
       <el-carousel-item v-for="item in 3" :key="item">
-        <h3 text="2xl" justify="center">{{ item }}</h3>
+        <h3 justify="center" text="2xl">{{ item }}</h3>
       </el-carousel-item>
     </el-carousel>
 
     <el-row :gutter="10">
       <el-col
-          style="margin-bottom: 10px"
           v-for="(value,key) in form"
           :key="key"
           :span="8"
+          style="margin-bottom: 10px"
       >
         <el-card :body-style="{ padding: '3px'}">
           <img
               id="image"
-           alt="" src=""/>
+              alt="" src=""/>
           <div style="padding: 14px;text-align: center">
             <div style="padding: 0 0 15px 0">{{ value.name }}</div>
           </div>
@@ -27,14 +27,14 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref} from "vue";
+import {onMounted, ref} from "vue";
 import request from "../../utils/RequestUtil";
 
 onMounted(() => {
-  request.get("/index").then()
-})
+  request.get("/index").then();
+});
 
-const form = ref([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11])
+const form = ref([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]);
 </script>
 
 <style scoped>

@@ -1,9 +1,8 @@
 package com.opengalk.server.控制层;
 
 import com.opengalk.server.业务逻辑层.实现.CollegeInfoServiceImpl;
-import com.opengalk.server.实体类.CollegeInfo;
 import com.opengalk.server.响应类.ResponseResult;
-import jakarta.annotation.Resource;
+import com.opengalk.server.实体类.CollegeInfo;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -47,7 +46,7 @@ public class CollegeManagementController {
     }
 
     @PutMapping("/updateCollegeInfo")
-    public ResponseResult<?> updateCollegeInfo(@RequestBody @Valid CollegeInfo collegeInfo){
+    public ResponseResult<?> updateCollegeInfo(@RequestBody @Valid CollegeInfo collegeInfo) {
         return collegeInfoService.updateCollegeInfo(collegeInfo);
 
     }

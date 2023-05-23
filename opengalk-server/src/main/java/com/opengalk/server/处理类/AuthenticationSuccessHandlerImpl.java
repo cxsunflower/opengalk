@@ -9,18 +9,16 @@ import com.opengalk.server.实体类.UserLoginAndLogoutRecord;
 import com.opengalk.server.工具类.RedisUtil;
 import com.opengalk.server.工具类.ResponseUtil;
 import com.opengalk.server.数据访问层.UserLoginAndLogoutRecordMapper;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -38,9 +36,8 @@ public class AuthenticationSuccessHandlerImpl implements AuthenticationSuccessHa
 
     private final VerifyCodeServiceImpl verifyCodeService;
 
-    // TODO qq微信登陆
     @Override
-    public void onAuthenticationSuccess(@NonNull HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+    public void onAuthenticationSuccess(@NotNull HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
         ResponseResult<?> result = verifyCodeService.verifiedResponse(request.getParameter("uuid"), request.getParameter("verificationCode"));
 
         if (!ObjectUtils.isEmpty(result)) {
@@ -54,14 +51,12 @@ public class AuthenticationSuccessHandlerImpl implements AuthenticationSuccessHa
         Long id = loginUser.getId();
         String account = loginUser.getAccount();
         Integer authority = loginUser.getAuthority();
-        Map<String, Object> payload = new HashMap<>(16) {
-            {
-                put("id", id);
-                put("account", account);
-                put("authority", authority);
-                put("expire_time", System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 15);
-            }
-        };
+
+        Map<String, Object> payload = new HashMap<>();
+        payload.put("id", id);
+        payload.put("account", account);
+        payload.put("authority", authority);
+        payload.put("expire_time", System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 15);
         // 用户id作为键
         String redisKey = String.valueOf(id);
 

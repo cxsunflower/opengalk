@@ -4,7 +4,7 @@
     <el-form ref="registerFormRef" :model="registerForm" :rules="registerRules" class="register-form">
       <h3 class="title">注 册</h3>
       <el-form-item prop="account">
-        <el-input v-model="registerForm.account" type="text" auto-complete="off" placeholder="账号">
+        <el-input v-model="registerForm.account" auto-complete="off" placeholder="账号" type="text">
           <template #prefix>
             <el-icon>
               <User/>
@@ -15,9 +15,9 @@
       <el-form-item prop="password">
         <el-input
             v-model="registerForm.password"
-            type="password"
             auto-complete="off"
             placeholder="密码"
+            type="password"
         >
           <template #prefix>
             <el-icon>
@@ -29,9 +29,9 @@
       <el-form-item prop="confirmPassword">
         <el-input
             v-model="registerForm.confirmPassword"
-            type="password"
             auto-complete="off"
             placeholder="确认密码"
+            type="password"
         >
           <template #prefix>
             <el-icon>
@@ -40,7 +40,7 @@
           </template>
         </el-input>
       </el-form-item>
-      <el-form-item prop="verificationCode" v-if="verifyEnabled">
+      <el-form-item v-if="verifyEnabled" prop="verificationCode">
         <el-input
             v-model="registerForm.verificationCode"
             auto-complete="off"
@@ -54,21 +54,21 @@
           </template>
         </el-input>
         <div class="register-code">
-          <img :src="verificationCodeUrl" class="register-code-img" @click="flushVerificationCode" alt=""/>
+          <img :src="verificationCodeUrl" alt="" class="register-code-img" @click="flushVerificationCode"/>
         </div>
       </el-form-item>
       <el-form-item style="width:100%;">
         <el-button
             :loading="loading"
-            type="primary"
             style="width:100%;"
+            type="primary"
             @click="handleRegister(registerFormRef)"
         >
           <span v-if="!loading">注 册</span>
           <span v-else>注 册 中...</span>
         </el-button>
         <div style="float: right;">
-          <router-link class="link-type" :to="'/login'">使用已有账户登录</router-link>
+          <router-link :to="'/login'" class="link-type">使用已有账户登录</router-link>
         </div>
       </el-form-item>
     </el-form>
@@ -91,25 +91,25 @@ const registerForm = ref({
   confirmPassword: ref(),
   verificationCode: ref(),
   uuid: ref()
-})
+});
 
 const registerFormRef = ref<FormInstance>();
 
-const verificationCodeUrl = ref('')
-const verifyEnabled = ref(true)
-const loading = ref(false)
+const verificationCodeUrl = ref('');
+const verifyEnabled = ref(true);
+const loading = ref(false);
 
 onMounted(() => {
-  flushVerificationCode()
-})
+  flushVerificationCode();
+});
 
 const flushVerificationCode = () => {
-  registerForm.value.verificationCode = ref()
+  registerForm.value.verificationCode = ref();
   getVerificationCode().then(result => {
-    verificationCodeUrl.value = result[0]
-    registerForm.value.uuid = result[1]
-  })
-}
+    verificationCodeUrl.value = result[0];
+    registerForm.value.uuid = result[1];
+  });
+};
 
 const clean = () => {
   registerForm.value = {
@@ -118,17 +118,17 @@ const clean = () => {
     confirmPassword: ref(),
     verificationCode: ref(),
     uuid: ref()
-  }
-}
+  };
+};
 //自定义验证
 const validator = (rule: any, value: any, callback: any) => {
-  console.log(value + "," + registerForm.value.password)
+  console.log(value + "," + registerForm.value.password);
   if (value !== registerForm.value.password) {
-    callback(new Error())
+    callback(new Error());
   } else {
-    callback()
+    callback();
   }
-}
+};
 
 const registerRules = reactive<FormRules>({
   account: [
@@ -144,29 +144,29 @@ const registerRules = reactive<FormRules>({
     {validator: validator, message: "两次密码输入不一致"},
   ],
   verificationCode: [{required: true, message: "请输入验证码", trigger: "blur"}],
-})
+});
 
 const handleRegister = async (registerFormRef: FormInstance | undefined) => {
   if (!registerFormRef) {
-    return
+    return;
   }
 
   await registerFormRef.validate((valid) => {
     if (valid) {
       request.post("/register", registerForm.value).then(result => {
-        showMessage(result)
+        showMessage(result);
         if (result.data.响应状态 === 1) {
-          router.push("/login")
+          router.push("/login");
         } else if (result.data.响应状态 === 2) {
-          flushVerificationCode()
+          flushVerificationCode();
         } else {
-          clean()
-          flushVerificationCode()
+          clean();
+          flushVerificationCode();
         }
-      })
+      });
     }
-  })
-}
+  });
+};
 
 </script>
 

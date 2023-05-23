@@ -44,6 +44,11 @@ public class PaperController {
         return new ResponseResult<>(0, null, null);
     }
 
+    @GetMapping("/getPaperImgs")
+    public ResponseResult<?> getPaperImgs(String uuid, @Min(0) @Max(99) Integer id) {
+        return paperService.getPaperImgs(uuid, id);
+    }
+
     @PostMapping("/submitGZPaper")
     public ResponseResult<?> submitGZPaper(@RequestBody @Valid PaperRecord paperRecord) {
         return paperService.submitPaper(paperRecord);

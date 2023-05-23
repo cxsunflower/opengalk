@@ -20,11 +20,12 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @TableName user_info
  */
-@TableName(value = "user_info",schema = "\"user\"")
+@TableName(value = "user_info", schema = "\"user\"")
 @Data
 @Builder
 @NoArgsConstructor
@@ -131,11 +132,9 @@ public class UserInfo implements UserDetails, Serializable {
     public Collection<? extends GrantedAuthority> getAuthorities() {
 
         if (StringUtils.hasText(String.valueOf(authority))) {
-            return new ArrayList<SimpleGrantedAuthority>() {
-                {
-                    add(new SimpleGrantedAuthority(String.valueOf(authority)));
-                }
-            };
+            List<SimpleGrantedAuthority> list = new ArrayList<>();
+            list.add(new SimpleGrantedAuthority(String.valueOf(authority)));
+            return list;
         }
 
         return null;

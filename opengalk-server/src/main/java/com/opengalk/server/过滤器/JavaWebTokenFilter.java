@@ -1,12 +1,16 @@
 package com.opengalk.server.过滤器;
 
+import cn.hutool.core.exceptions.ExceptionUtil;
 import cn.hutool.jwt.JWTUtil;
-import jakarta.annotation.Resource;
+import com.opengalk.server.响应类.ResponseResult;
+import com.opengalk.server.实体类.UserInfo;
+import com.opengalk.server.工具类.RedisUtil;
+import com.opengalk.server.工具类.ResponseUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.NonNull;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -15,10 +19,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
-import com.opengalk.server.响应类.ResponseResult;
-import com.opengalk.server.实体类.UserInfo;
-import com.opengalk.server.工具类.RedisUtil;
-import com.opengalk.server.工具类.ResponseUtil;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
@@ -38,9 +38,9 @@ public class JavaWebTokenFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(
-            @NonNull HttpServletRequest request,
-            @NonNull HttpServletResponse response,
-            @NonNull FilterChain filterChain)
+            @NotNull HttpServletRequest request,
+            @NotNull HttpServletResponse response,
+            @NotNull FilterChain filterChain)
             throws ServletException, IOException {
         // 获取token
         String token = request.getHeader("token");
@@ -54,6 +54,7 @@ public class JavaWebTokenFilter extends OncePerRequestFilter {
         try {
             id = JWTUtil.parseToken(token).getPayload().getClaim("id").toString();
         } catch (Exception e) {
+            log.error(ExceptionUtil.stacktraceToString(e));
             responseUtil.renderResponse(response, new ResponseResult<>(0, "非法token", null));
             return;
         }
@@ -68,7 +69,7 @@ public class JavaWebTokenFilter extends OncePerRequestFilter {
         }
 
         if (!token.equals(loginUser.getToken())) {
-            responseUtil.renderResponse(response, new ResponseResult<>(0, "可疑行为", null));
+            responseUtil.renderResponse(response, new ResponseResult<>(0, "疑似篡改token", null));
             return;
         }
 

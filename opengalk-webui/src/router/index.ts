@@ -1,4 +1,4 @@
-import {createRouter, createWebHistory} from 'vue-router'
+import {createRouter, createWebHistory} from 'vue-router';
 import {getAuthorityByToken, getToken} from "../utils/TokenUtil";
 
 //路由
@@ -44,30 +44,30 @@ const routes = [
         component: () => import('../views/RegisterPage.vue'),
     },
 
-]
+];
 
 const router = createRouter({
     history: createWebHistory(),
     routes: routes,
-})
+});
 
-let flag = 0
+let flag = 0;
 router.beforeEach(async (to, from, next) => {
     router.addRoute({
         path: '/:catchAll(.*)',
         name: '404',
         component: () => import('../views/components/EmptyPage.vue')
-    })
+    });
 
-    const token = getToken()
+    const token = getToken();
 
     if ((to.path === '/login' || to.path === '/register') && !token) {
-        next()
+        next();
     }
 
     if (token) {
         if (to.path === '/login') {
-            next('/')
+            next('/');
         }
 
         if (flag == 0) {
@@ -76,9 +76,15 @@ router.beforeEach(async (to, from, next) => {
                 path: '/GZPaper',
                 name: 'GZPaper',
                 component: () => import('../views/paper/GZPaperPage.vue'),
-            })
+            });
 
-            const authority = getAuthorityByToken()
+            router.addRoute({
+                path: '/XCPaper',
+                name: 'XCPaper',
+                component: () => import('../views/paper/XCPaperPage.vue'),
+            });
+
+            const authority = getAuthorityByToken();
 
             if (authority <= 1) {
                 router.addRoute(
@@ -88,21 +94,35 @@ router.beforeEach(async (to, from, next) => {
                         name: 'PaperManagement',
                         component: () => import('../views/main/PaperManagementPage.vue')
                     }
-                )
+                );
                 router.addRoute(
                     {
                         path: '/addGZPaper',
                         name: 'AddGZPaper',
-                        component: () => import('../views/addgzpaperlayout/AddPaperLayoutPage.vue')
+                        component: () => import('../views/addgzpaperlayout/AddGZPaperLayoutPage.vue')
                     }
-                )
+                );
+                router.addRoute(
+                    {
+                        path: '/addXCPaper',
+                        name: 'AddXCPaper',
+                        component: () => import('../views/addxcpaperlayout/AddXCPaperLayoutPage.vue')
+                    }
+                );
                 router.addRoute(
                     {
                         path: '/viewGZpaper',
                         name: 'ViewGZPaper',
-                        component: () => import('../views/viewgzpaperlayout/ViewPaperLayoutPage.vue')
+                        component: () => import('../views/viewgzpaperlayout/ViewGZPaperLayoutPage.vue')
                     }
-                )
+                );
+                router.addRoute(
+                    {
+                        path: '/viewXCpaper',
+                        name: 'ViewXCPaper',
+                        component: () => import('../views/viewxcpaperlayout/ViewXCPaperLayoutPage.vue')
+                    }
+                );
             }
 
             if (authority == 0) {
@@ -113,7 +133,7 @@ router.beforeEach(async (to, from, next) => {
                         name: 'UserManagement',
                         component: () => import('../views/main/UserManagementPage.vue')
                     }
-                )
+                );
                 router.addRoute(
                     'Layout',
                     {
@@ -121,17 +141,17 @@ router.beforeEach(async (to, from, next) => {
                         name: 'CollegeManagement',
                         component: () => import('../views/main/CollegeManagementPage.vue')
                     }
-                )
+                );
             }
-            flag++
-            next({...to, replace: true})
+            flag++;
+            next({...to, replace: true});
         } else {
-            next()
+            next();
         }
 
     } else {
-        next('/login')
+        next('/login');
     }
-})
+});
 
 export default router;

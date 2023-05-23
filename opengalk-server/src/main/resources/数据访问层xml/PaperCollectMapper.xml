@@ -4,4 +4,20 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.opengalk.server.数据访问层.PaperCollectMapper">
 
+    <select id="getCollectPaperId" resultType="java.lang.String">
+        select uuid
+        from "paper".paper_collect
+        where user_id = #{id}
+    </select>
+
+    <select id="getCollectList" resultType="PaperCollect">
+        select c.uuid, c.subject_id as subjectId, i.name, p.subject
+        from "paper".paper_collect as c,
+             "paper".paper_info as i,
+             paper."${uuid}" as p
+        where c.subject_id = p.id
+          and c.uuid = i.id
+          and c.user_id = #{id}
+    </select>
+
 </mapper>

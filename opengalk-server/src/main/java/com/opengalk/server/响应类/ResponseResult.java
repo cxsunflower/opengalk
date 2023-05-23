@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 public class ResponseResult<T> {
 
     /**
-     *  响应状态（0错误，1正确，2验证码出错）
+     * 响应状态（0错误，1正确，2验证码出错）
      */
     private Integer 响应状态;
 
