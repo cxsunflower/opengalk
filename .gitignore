@@ -8,7 +8,8 @@ build/
 logs
 ### 用户头像文件夹 ###
 user_avatar
-
+### 试卷图片文件夹 ###
+paper_imgs
 ### STS ###
 .apt_generated
 .classpath
