@@ -1,6 +1,6 @@
-<div align="center"><h3>开源公安联考机考web版系统</h3></div>
+<div style="text-align: center"><h3>开源公安联考机考web版系统</h3></div>
 
-<div align="center">
+<div style="text-align: center">
 <a href='https://gitee.com/xiangrikuicx/opengalk/stargazers'><img src='https://gitee.com/xiangrikuicx/opengalk/badge/star.svg?theme=white' alt='star'></img></a>
 <a href='https://gitee.com/xiangrikuicx/opengalk/members'><img src='https://gitee.com/xiangrikuicx/opengalk/badge/fork.svg?theme=white' alt='fork'></img></a>  
 </div>
@@ -138,16 +138,20 @@ opengalk
 
 ## 版本控制
 
-该项目使用Git进行版本管理。
+该项目使用Git进行版本管理。  
+该项目有两个分支
+- master
+- develop
+
 ### 如何参与开源项目
 
 贡献使开源社区成为一个学习、激励和创造的绝佳场所。你所作的任何贡献都是**非常感谢**的。
 
 1. fork 该仓库
-2. 创建并切换到新分支(`git checkout -b develop/xxxxx`)
-3. 提交 (`git commit -m "yyyyyy"`)
-4. 推送 (`git push origin develop/xxxxx`)
-5. 打开pull request
+2. 创建并切换到新分支(`git checkout -b new_branch`)
+3. 提交 (`git commit -m "your_message"`)
+4. 推送 (`git push origin new_branch`)
+5. 打开pull request，选择合并develop分支
 
 ## 作者
 
@@ -160,3 +164,5 @@ cx
 该项目签署了木兰宽松许可证， 第2版授权许可，详情请参阅 [LICENSE](http://license.coscl.org.cn/MulanPSL2)
 
 ## 鸣谢
+三更草堂 https://space.bilibili.com/663528522  
+遇见狂神说 https://space.bilibili.com/95256449
