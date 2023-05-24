@@ -1,4 +1,5 @@
 import {Selection, Subject, SubjectDTO, SubjectObject} from "../data";
+import request from "./RequestUtil";
 
 /**
  * 将一个个题目字符串拆解/组合成题目对象
@@ -119,15 +120,26 @@ export const subjectToArray = (allSubjects: string): SubjectObject[] => {
 /**
  * 将题目对象转为字符串数组
  * 一坨大便
+ *
  * @param subjectArray
+ * @param uuid
  */
-export const arrayToSubject = (subjectArray: SubjectDTO[]): string => {
+export const arrayToSubject = async (subjectArray: SubjectDTO[], uuid: string): Promise<string> => {
     let allSubjects = '';
     for (let i = 0; i < subjectArray.length; i++) {
         const tmp = subjectArray[i];
-        allSubjects += '<p>' + tmp.subject + '</p>';
+        allSubjects += '<p>' + tmp.subject;
         if (tmp.hasImgs == 1) {
-
+            await request.get('/paper/getPaperImgs', {
+                params: {
+                    uuid: uuid,
+                    id: i,
+                }
+            }).then(result => {
+                for (const img of result.data.响应数据) {
+                    allSubjects += '<img src="data:image/jpg;base64,' + img + '" alt=""/></p>';
+                }
+            });
         }
         allSubjects += '<p>A、' + tmp.optionA + '</p>'
             + '<p>B、' + tmp.optionB + '</p>'
