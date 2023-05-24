@@ -328,7 +328,7 @@ const correct = async () => {
     correctText: correctText.value,
   };
 
-  await request.post(requestUrl + '/correct', correctForm).then((result: any) => {
+  await request.post(requestUrl + '/correct', correctForm).then(result => {
     showMessage(result);
     if (result.data.响应状态 === 1) {
       correctDialogVisible.value = false;

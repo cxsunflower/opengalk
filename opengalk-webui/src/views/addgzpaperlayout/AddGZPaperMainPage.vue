@@ -178,20 +178,23 @@ onMounted(async () => {
     await request.get(requestUrl + '/getPaper/' + uuid).then(result => {
       uploadForm.value.name = result.data.响应数据.name;
       uploadForm.value.remark = result.data.响应数据.remark;
-      allSubjects.value = arrayToSubject(result.data.响应数据.subjectArray);
+      arrayToSubject(result.data.响应数据.subjectArray, uuid).then(result => {
+        allSubjects.value = result;
+      });
     });
   }
 });
 
 watch(allSubjects, () => {
   const result = htmlToText(allSubjects.value);
+  console.log(result)
   uploadForm.value.subjectArray = subjectToArray(result);
 });
 
 const htmlToText = (html: string): string => {
   const $ = cheerio.load(html);
   let result = '';
-  console.log($.html())
+  console.log($.html());
 
   $('p' as any).each((index, element) => {
     const paragraph = $(element);
@@ -204,16 +207,14 @@ const htmlToText = (html: string): string => {
     });
     result += $(element).text() + '\n';
     for (let i = 0; i < imgSrcList.length; i++) {
-      result += imgSrcList[i] + '\n';
+      result += imgSrcList[i];
     }
 
-    // 由于受</br>影响，可能会出现把</br>识别为一道题
     if (paragraph.html() == "&nbsp;") {
       result += '\n\n';
     }
 
   });
-  console.log(result)
   return result;
 };
 
