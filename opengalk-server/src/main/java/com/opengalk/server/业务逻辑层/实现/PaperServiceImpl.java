@@ -31,7 +31,7 @@ import java.util.*;
 public class PaperServiceImpl extends ServiceImpl<PaperInfoMapper, PaperInfo>
         implements PaperService {
 
-    private final static String IMGS_DIR = System.getProperty("user.dir") + "/paper_imgs/";
+    private static final String IMGS_DIR = System.getProperty("user.dir") + "/paper_imgs/";
     private final PaperInfoMapper paperInfoMapper;
     private final PaperRecordMapper paperRecordMapper;
     private final LoginUserUtil loginUserUtil;
@@ -45,14 +45,14 @@ public class PaperServiceImpl extends ServiceImpl<PaperInfoMapper, PaperInfo>
 
         queryWrapper.like(condition, keyword);
         if (loginUserUtil.getLoginUser().getAuthority() > 0) {
-            queryWrapper.eq("create_by", loginUserUtil.getLoginUserID());
+            queryWrapper.eq("create_by", loginUserUtil.getLoginUserId());
         }
         return new ResponseResult<>(1, null, paperInfoMapper.selectPage(page, queryWrapper));
     }
 
     @Override
     public ResponseResult<?> getPaperList(Integer type) {
-        return new ResponseResult<>(1, null, paperInfoMapper.getPaperList(loginUserUtil.getLoginUserID(), type));
+        return new ResponseResult<>(1, null, paperInfoMapper.getPaperList(loginUserUtil.getLoginUserId(), type));
     }
 
     @Override
@@ -94,7 +94,7 @@ public class PaperServiceImpl extends ServiceImpl<PaperInfoMapper, PaperInfo>
     @Override
     public ResponseResult<?> addGZPaper(@NotNull PaperInfo paperInfo) {
         log.info(paperInfo.toString());
-        String uuid = UUID.fastUUID().toString().replaceAll("-", "");
+        String uuid = UUID.fastUUID().toString().replace("-", "");
         paperInfoMapper.addGZPaper(uuid);
 
         SubjectObject[] subjectArray = paperInfo.getSubjectArray();
@@ -102,7 +102,7 @@ public class PaperServiceImpl extends ServiceImpl<PaperInfoMapper, PaperInfo>
             return new ResponseResult<>(0, "图片上传失败", null);
         }
         paperInfo.setId(uuid);
-        paperInfo.setCreateBy(loginUserUtil.getLoginUserID());
+        paperInfo.setCreateBy(loginUserUtil.getLoginUserId());
         paperInfoMapper.insert(paperInfo);
         return new ResponseResult<>(1, "上传成功", null);
     }
@@ -111,7 +111,7 @@ public class PaperServiceImpl extends ServiceImpl<PaperInfoMapper, PaperInfo>
     public ResponseResult<?> submitPaper(@NotNull PaperRecord paperRecord) {
         int score = 0;
         String id = paperRecord.getId();
-        Long userId = loginUserUtil.getLoginUserID();
+        Long userId = loginUserUtil.getLoginUserId();
         String[] rightAnswerArray = paperInfoMapper.getAnswerById(id);
         String[] answerArray = paperRecord.getAnswer().split(",");
         for (int i = 0; i < rightAnswerArray.length; i++) {

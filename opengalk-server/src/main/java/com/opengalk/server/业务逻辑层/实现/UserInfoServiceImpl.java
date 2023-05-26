@@ -40,7 +40,7 @@ import java.io.File;
 public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
         implements UserInfoService {
 
-    private final static String FILE_DIR = System.getProperty("user.dir") + "/user_avatar/";
+    private static final String FILE_DIR = System.getProperty("user.dir") + "/user_avatar/";
     private final UserInfoMapper userInfoMapper;
     private final UserUpdateRecordMapper userUpdateRecordMapper;
     private final UserUpdateRecordService userUpdateRecordService;
@@ -118,7 +118,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
 
     @Override
     public ResponseResult<?> getUserInfo() {
-        Long id = loginUserUtil.getLoginUserID();
+        Long id = loginUserUtil.getLoginUserId();
         log.info("获取用户信息id:" + id);
         if (ObjectUtils.isEmpty(id)) {
             return new ResponseResult<>(0, null, null);
@@ -135,7 +135,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
         queryWrapper.eq("account", userInfo.getAccount());
 
         if (userInfoMapper.selectOne(queryWrapper) == null) {
-            Long id = loginUserUtil.getLoginUserID();
+            Long id = loginUserUtil.getLoginUserId();
             if (ObjectUtils.isEmpty(id)) {
                 return new ResponseResult<>(0, null, null);
             }
@@ -191,11 +191,11 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
                     "password",
                     oldPassword,
                     newPassword,
-                    loginUserUtil.getLoginUserID(),
+                    loginUserUtil.getLoginUserId(),
                     "修改密码"
             );
             // 目前只有管理员能更新权限
-            record.setUpdateBy(loginUserUtil.getLoginUserID());
+            record.setUpdateBy(loginUserUtil.getLoginUserId());
             if (userUpdateRecordMapper.insert(record) == 1) {
                 return new ResponseResult<>(1, "更新密码成功", null);
             }
@@ -206,7 +206,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
 
     @Override
     public ResponseResult<?> updatePersonalPassword(@NotNull UpdatePasswordForm updatePasswordForm) {
-        Long id = loginUserUtil.getLoginUserID();
+        Long id = loginUserUtil.getLoginUserId();
 
         QueryWrapper<UserInfo> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("id", id);
@@ -235,7 +235,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
     @Transactional
     @Override
     public ResponseResult<?> updateUserInfo(UserInfo userInfo) {
-        Long id = loginUserUtil.getLoginUserID();
+        Long id = loginUserUtil.getLoginUserId();
         return updateUserInfoById(userInfo, id);
     }
 
@@ -275,7 +275,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
                     "用户信息",
                     JSONUtil.toJsonStr(userInfo1),
                     JSONUtil.toJsonStr(updateUser),
-                    loginUserUtil.getLoginUserID(),
+                    loginUserUtil.getLoginUserId(),
                     "修改个人信息"
             );
             if (userUpdateRecordMapper.insert(record) == 1) {
@@ -295,7 +295,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
                     "用户信息",
                     null,
                     null,
-                    loginUserUtil.getLoginUserID(),
+                    loginUserUtil.getLoginUserId(),
                     "删除账号"
             );
             if (userUpdateRecordMapper.insert(record) == 1) {
@@ -307,11 +307,9 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
 
     @Override
     public ResponseResult<?> uploadAvatar(MultipartFile file) {
-        Long id = loginUserUtil.getLoginUserID();
+        Long id = loginUserUtil.getLoginUserId();
         // 获取上传临时文件夹的路径
         String filePath = FILE_DIR + id;
-        System.out.println(filePath);
-
         File fileDir = new File(filePath);
 
         // 如果没有文件夹则建一个
@@ -332,7 +330,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
 
     @Override
     public ResponseResult<?> getAvatar() {
-        Long id = loginUserUtil.getLoginUserID();
+        Long id = loginUserUtil.getLoginUserId();
         String filePath = FILE_DIR + id;
         return new ResponseResult<>(0, null, imageUtil.ImageToBase64(filePath));
     }
