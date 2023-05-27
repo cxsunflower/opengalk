@@ -112,6 +112,7 @@ import {showMessage} from "../../utils/MessageUtil";
 import {useRoute} from "vue-router";
 import {Document, Upload} from "@element-plus/icons-vue";
 import {SubjectObject} from "../../data";
+import {htmlToText} from "../../utils/EditorUtil";
 
 const requestUrl = '/paperManagement';
 const uploadFormRef = ref<FormInstance>();
@@ -136,22 +137,25 @@ const uploadRules = reactive<FormRules>({
   ],
 });
 let addOrUpdate = 0;
-let uuid = <any>'';
+let uuid = '';
 
 watch(allSubjects, () => {
-  uploadForm.value.subjectArray = subjectToArray(allSubjects.value);
+  const result = htmlToText(allSubjects.value);
+  console.log(result)
+  uploadForm.value.subjectArray = subjectToArray(result);
 });
-
 onMounted(async () => {
   const route = useRoute();
-  uuid = route.query.uuid;
+  uuid = route.query.uuid as string;
   if (uuid != null) {
     addOrUpdate = 1;
     buttonName.value = '更新试卷';
-    await request.get(requestUrl + '/getPaper/' + uuid).then((result: any) => {
+    await request.get(requestUrl + '/getPaper/' + uuid).then(async (result: any) => {
       uploadForm.value.name = result.data.响应数据.name;
       uploadForm.value.remark = result.data.响应数据.remark;
-      allSubjects.value = arrayToSubject(result.data.响应数据.subjectArray);
+      await arrayToSubject(result.data.响应数据.subjectArray, uuid).then(result => {
+        allSubjects.value = result
+      });
     });
   }
 });
