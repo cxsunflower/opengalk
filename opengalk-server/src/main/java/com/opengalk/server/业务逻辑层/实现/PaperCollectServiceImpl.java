@@ -33,7 +33,7 @@ public class PaperCollectServiceImpl extends ServiceImpl<PaperCollectMapper, Pap
     @Override
     public ResponseResult<?> collect(@NotNull PaperCollect paperCollect) {
         String uuid = paperCollect.getUuid();
-        Long userId = loginUserUtil.getLoginUserID();
+        Long userId = loginUserUtil.getLoginUserId();
         Integer subjectId = paperCollect.getSubjectId();
 
         String id = userId + "_" + uuid + "_" + subjectId;
@@ -55,7 +55,7 @@ public class PaperCollectServiceImpl extends ServiceImpl<PaperCollectMapper, Pap
     @Override
     public ResponseResult<?> getCollectList() {
         List<PaperCollect> list = new ArrayList<>();
-        Long id = loginUserUtil.getLoginUserID();
+        Long id = loginUserUtil.getLoginUserId();
         String[] uuid = paperCollectMapper.getCollectPaperId(id);
         for (String tmp : uuid) {
             Collections.addAll(list, paperCollectMapper.getCollectList(tmp, id));

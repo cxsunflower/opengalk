@@ -6,26 +6,28 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 
+/**
+ * @author cx
+ */
 @Component
 public class LoginUserUtil {
 
     /**
      * 获取登陆用户
      *
-     * @return LoginUserDetails
+     * @return UserInfo
      */
     public UserInfo getLoginUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (ObjectUtils.isEmpty(authentication))
-            return null;
-        return (UserInfo) authentication.getPrincipal();
+        return ObjectUtils.isEmpty(authentication) ? null : (UserInfo) authentication.getPrincipal();
     }
 
-    public Long getLoginUserID() {
+    /**
+     *
+     * @return id
+     */
+    public Long getLoginUserId() {
         UserInfo loginUser = this.getLoginUser();
-        if (ObjectUtils.isEmpty(loginUser)) {
-            return null;
-        }
-        return loginUser.getId();
+        return ObjectUtils.isEmpty(loginUser) ? null : loginUser.getId();
     }
 }

@@ -29,7 +29,7 @@ public class PaperCorrectServiceImpl extends ServiceImpl<PaperCorrectMapper, Pap
     @Override
     public ResponseResult<?> correct(@NotNull PaperCorrect paperCorrect) {
         String uuid = paperCorrect.getUuid();
-        Long userId = loginUserUtil.getLoginUserID();
+        Long userId = loginUserUtil.getLoginUserId();
         Integer subjectId = paperCorrect.getSubjectId();
 
         String id = userId + "_" + uuid + "_" + subjectId;

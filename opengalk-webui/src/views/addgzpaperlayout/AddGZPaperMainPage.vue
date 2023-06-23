@@ -131,6 +131,7 @@ import Editor from '@tinymce/tinymce-vue';
 import "../../../public/static/tinymce/tinymce.min.js";
 import "../../../public/static/tinymce/tinymce.d.ts";
 import {SubjectObject} from "../../data";
+import {htmlToText} from "../../utils/EditorUtil";
 
 const requestUrl = '/paperManagement';
 const uploadFormRef = ref<FormInstance>();
@@ -190,33 +191,6 @@ watch(allSubjects, () => {
   console.log(result)
   uploadForm.value.subjectArray = subjectToArray(result);
 });
-
-const htmlToText = (html: string): string => {
-  const $ = cheerio.load(html);
-  let result = '';
-  console.log($.html());
-
-  $('p' as any).each((index, element) => {
-    const paragraph = $(element);
-    const imgSrcList: string[] = [];
-    paragraph.find('img').each((imgIndex, imgElement) => {
-      const src = $(imgElement).attr('src');
-      if (src) {
-        imgSrcList.push(src);
-      }
-    });
-    result += $(element).text() + '\n';
-    for (let i = 0; i < imgSrcList.length; i++) {
-      result += imgSrcList[i];
-    }
-
-    if (paragraph.html() == "&nbsp;") {
-      result += '\n\n';
-    }
-
-  });
-  return result;
-};
 
 // 不发送请求
 const uploadImage = () => {

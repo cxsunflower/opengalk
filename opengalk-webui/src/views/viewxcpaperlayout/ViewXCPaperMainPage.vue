@@ -140,10 +140,11 @@
 import {Star, ZoomIn} from "@element-plus/icons-vue";
 import {onMounted, ref, watch} from "vue";
 import {formatSubjectType} from "../../utils/FormatterUtil";
+import {SubjectObject} from "../../data";
 
 const answer = ref('');
 const answerArray = ref([]);
-let paperSubjects = <any>[];
+let paperSubjects = <SubjectObject[]>[];
 const subject = ref('');
 const currentIndex = ref(0);
 const currentType = ref('');
@@ -167,8 +168,8 @@ watch(currentIndex, () => {
 });
 
 onMounted(() => {
-  paperSubjects = JSON.parse(localStorage.getItem('viewGZPaperData') as string)._value.subjectArray;
-  console.log(paperSubjects.value);
+  paperSubjects = JSON.parse(localStorage.getItem('viewXCPaperData') as string)._value.subjectArray;
+  console.log(paperSubjects);
   alterSubject(1);
 });
 
@@ -177,7 +178,7 @@ const alterSubject = (i: number) => {
   const currentSubject = paperSubjects[i - 1];
   console.log(paperSubjects[i - 1]);
   if (currentSubject != undefined) {
-    subject.value = currentSubject.subject;
+    subject.value = currentSubject.subject.content;
     currentType.value = formatSubjectType(currentSubject.type);
     optionA.value = currentSubject.items[0].text;
     optionB.value = currentSubject.items[1].text;
